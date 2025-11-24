@@ -9,6 +9,8 @@ import { LoadingScreen } from "@/components/ErrorBoundary";
 import { SuperAdminProvider } from "@/contexts/SuperAdminContext";
 
 // IDN.GA Pages
+const Home = lazy(() => import("./pages/Home"));
+const Auth = lazy(() => import("./pages/Auth"));
 const Splash = lazy(() => import("./pages/Splash"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -51,7 +53,9 @@ const App = () => (
           <SuperAdminProvider>
             <Suspense fallback={<LoadingScreen />}>
               <Routes>
-                <Route path="/" element={<Splash />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/splash" element={<Splash />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
