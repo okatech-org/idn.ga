@@ -2,67 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* === IDN.GA DESIGN SYSTEM === */
+/* Palette inspirée du drapeau gabonais */
 
 @layer base {
   :root {
-    /* === DESIGN NEOMORPHIQUE ASTED === */
-    /* Arrière-plans neomorphiques - Nuances de gris clairs avec plus de contraste */
-    --background: 0 0% 85%;
-    --foreground: 0 0% 8%;
+    /* Couleurs principales du Gabon */
+    --background: 0 0% 96%;
+    --foreground: 0 0% 10%;
     
-    --card: 0 0% 95%;
-    --card-foreground: 0 0% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
     
-    --popover: 0 0% 95%;
-    --popover-foreground: 0 0% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
     
-    /* Gris moyen-foncé pour couleur principale - plus de contraste */
-    --primary: 0 0% 35%;
+    /* Vert gabonais - Couleur primaire */
+    --primary: 145 100% 31%;
     --primary-foreground: 0 0% 100%;
     
-    /* Gris foncé pour secondaire - plus de contraste */
-    --secondary: 0 0% 25%;
-    --secondary-foreground: 0 0% 100%;
+    /* Jaune gabonais - Couleur secondaire */
+    --secondary: 48 100% 54%;
+    --secondary-foreground: 0 0% 10%;
     
-    /* Gris moyen pour accent - plus de contraste */
-    --accent: 0 0% 45%;
-    --accent-foreground: 0 0% 8%;
+    /* Bleu - Couleur accent */
+    --accent: 207 100% 50%;
+    --accent-foreground: 0 0% 100%;
     
-    --muted: 0 0% 75%;
-    --muted-foreground: 0 0% 35%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
     
-    /* Rouge pour alertes critiques */
+    /* Rouge pour erreurs */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    /* Orange pour alertes moyennes */
+    /* Orange pour warnings */
     --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 8%;
+    --warning-foreground: 0 0% 10%;
     
-    /* Vert pour statut OK */
+    /* Vert pour succès */
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
     
-    --border: 0 0% 70%;
-    --input: 0 0% 78%;
-    --ring: 0 0% 35%;
+    --border: 0 0% 85%;
+    --input: 0 0% 92%;
+    --ring: 145 100% 31%;
     
-    --radius: 1rem;
+    --radius: 0.75rem;
     
-    /* === OMBRES NEOMORPHIQUES - Plus de contraste === */
-    --neo-shadow-sm: 4px 4px 8px rgba(150, 150, 150, 0.5), -4px -4px 8px rgba(255, 255, 255, 1);
-    --neo-shadow-md: 8px 8px 16px rgba(140, 140, 140, 0.6), -8px -8px 16px rgba(255, 255, 255, 1);
-    --neo-shadow-lg: 12px 12px 24px rgba(130, 130, 130, 0.7), -12px -12px 24px rgba(255, 255, 255, 1);
-    --neo-shadow-inset: inset 4px 4px 8px rgba(150, 150, 150, 0.5), inset -4px -4px 8px rgba(255, 255, 255, 1);
-    --neo-shadow-inset-lg: inset 8px 8px 16px rgba(140, 140, 140, 0.6), inset -8px -8px 16px rgba(255, 255, 255, 1);
+    /* Ombres modernes */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
     
-    /* Gradients en nuances de gris avec plus de contraste */
-    --gradient-primary: linear-gradient(135deg, hsl(0 0% 35%), hsl(0 0% 50%));
-    --gradient-secondary: linear-gradient(135deg, hsl(0 0% 25%), hsl(0 0% 40%));
-    --gradient-gold: linear-gradient(135deg, hsl(0 0% 45%), hsl(0 0% 60%));
+    /* Gradients gabonais */
+    --gradient-primary: linear-gradient(135deg, hsl(145 100% 31%), hsl(145 100% 40%));
+    --gradient-secondary: linear-gradient(135deg, hsl(48 100% 54%), hsl(48 100% 64%));
+    --gradient-hero: linear-gradient(135deg, hsl(145 100% 31%), hsl(207 100% 50%));
     
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -79,39 +76,39 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 8%;
+    --background: 0 0% 10%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 12%;
+    --card: 0 0% 14%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 12%;
+    --popover: 0 0% 14%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 0% 60%;
+    --primary: 145 100% 31%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 45%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 48 100% 54%;
+    --secondary-foreground: 0 0% 10%;
 
-    --accent: 0 0% 70%;
-    --accent-foreground: 0 0% 8%;
+    --accent: 207 100% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --muted: 0 0% 18%;
+    --muted: 0 0% 20%;
     --muted-foreground: 0 0% 65%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
     
     --warning: 35 90% 60%;
-    --warning-foreground: 0 0% 8%;
+    --warning-foreground: 0 0% 10%;
     
     --success: 150 55% 50%;
     --success-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 60%;
+    --border: 0 0% 22%;
+    --input: 0 0% 22%;
+    --ring: 145 100% 31%;
 
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 98%;
@@ -122,12 +119,11 @@ All colors MUST be HSL.
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 0 0% 70%;
 
-    /* Ombres néomorphiques pour mode sombre */
-    --neo-shadow-sm: 4px 4px 8px rgba(0, 0, 0, 0.5), -4px -4px 8px rgba(255, 255, 255, 0.05);
-    --neo-shadow-md: 8px 8px 16px rgba(0, 0, 0, 0.6), -8px -8px 16px rgba(255, 255, 255, 0.08);
-    --neo-shadow-lg: 12px 12px 24px rgba(0, 0, 0, 0.7), -12px -12px 24px rgba(255, 255, 255, 0.1);
-    --neo-shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.5), inset -4px -4px 8px rgba(255, 255, 255, 0.05);
-    --neo-shadow-inset-lg: inset 8px 8px 16px rgba(0, 0, 0, 0.6), inset -8px -8px 16px rgba(255, 255, 255, 0.08);
+    /* Ombres mode sombre */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
