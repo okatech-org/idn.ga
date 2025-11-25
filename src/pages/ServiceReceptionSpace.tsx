@@ -219,7 +219,7 @@ const ServiceReceptionSpace = () => {
   };
 
   // Tool call handler for iAsted
-  const handleToolCall = useCallback((toolName: string, args: any) => {
+  const handleToolCall = useCallback(async (toolName: string, args: any) => {
     console.log(`🔧 [ServiceReceptionSpace] Tool call: ${toolName}`, args);
     switch (toolName) {
       case 'control_ui':
@@ -228,7 +228,6 @@ const ServiceReceptionSpace = () => {
         else if (args.action === 'set_theme_light') setTheme("light");
         else if (args.action === 'set_volume') toast({ title: "Volume", description: `Volume ajusté` });
         else if (args.action === 'set_speech_rate') {
-          if (args.value && openaiRTC) openaiRTC.setSpeechRate(parseFloat(args.value));
           toast({ title: "Vitesse", description: `Vitesse ajustée` });
         }
         break;
@@ -302,9 +301,10 @@ const ServiceReceptionSpace = () => {
       default:
         console.log('[ServiceReceptionSpace] Tool call not handled:', toolName);
     }
+    return { success: true };
   }, [toast, theme, setTheme]);
 
-  const openaiRTC = useRealtimeVoiceWebRTC(handleToolCall);
+  const openaiRTC = useRealtimeVoiceWebRTC({ userRole: 'reception', userGender: 'male', onToolCall: handleToolCall });
 
   // Stats
   const stats = {

@@ -255,7 +255,7 @@ export const SuperAdminProvider: React.FC<SuperAdminProviderProps> = ({ children
         }
     }, [navigate, toast, originRoute, isAdmin]);
 
-    const openaiRTC = useRealtimeVoiceWebRTC(handleToolCall);
+    const openaiRTC = useRealtimeVoiceWebRTC({ userRole: role || 'admin', userGender: 'male', onToolCall: handleToolCall });
 
     const handleNavigation = useCallback((query: string) => {
         handleToolCall('global_navigate', { query });
@@ -287,13 +287,10 @@ export const SuperAdminProvider: React.FC<SuperAdminProviderProps> = ({ children
                 <div className="fixed bottom-6 right-6 z-[9999]" style={{ pointerEvents: 'auto' }}>
                     <IAstedButtonFull
                         onClick={async () => {
-                            if (openaiRTC.isConnected) {
+                            if (openaiRTC.status === 'connected') {
                                 openaiRTC.disconnect();
                             } else {
-                                // Generate contextual system prompt based on current user and space
-                                const systemPrompt = generateSystemPrompt(userContext);
-                                console.log(`🎯 [iAsted Global] Connexion pour ${role} dans ${currentSpaceName}`);
-                                await openaiRTC.connect(selectedVoice, systemPrompt);
+                                await openaiRTC.connect();
                             }
                         }}
                         onDoubleClick={() => {
@@ -301,9 +298,9 @@ export const SuperAdminProvider: React.FC<SuperAdminProviderProps> = ({ children
                             setIsChatOpen(true);
                         }}
                         audioLevel={openaiRTC.audioLevel}
-                        voiceListening={openaiRTC.voiceState === 'listening'}
-                        voiceSpeaking={openaiRTC.voiceState === 'speaking'}
-                        voiceProcessing={openaiRTC.voiceState === 'connecting' || openaiRTC.voiceState === 'thinking'}
+                        voiceListening={openaiRTC.voiceMode === 'listening'}
+                        voiceSpeaking={openaiRTC.voiceMode === 'speaking'}
+                        voiceProcessing={openaiRTC.status === 'connecting' || openaiRTC.voiceMode === 'thinking'}
                         pulsing={securityOverrideActive}
                     />
                 </div>,

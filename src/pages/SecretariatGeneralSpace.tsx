@@ -225,7 +225,7 @@ const SecretariatGeneralSpace = () => {
   };
 
   // Tool call handler for iAsted
-  const handleToolCall = useCallback((toolName: string, args: any) => {
+  const handleToolCall = useCallback(async (toolName: string, args: any) => {
     console.log(`🔧 [SecretariatGeneralSpace] Tool call: ${toolName}`, args);
     switch (toolName) {
       case 'control_ui':
@@ -234,7 +234,6 @@ const SecretariatGeneralSpace = () => {
         else if (args.action === 'set_theme_light') setTheme("light");
         else if (args.action === 'set_volume') toast({ title: "Volume", description: `Volume ajusté` });
         else if (args.action === 'set_speech_rate') {
-          if (args.value && openaiRTC) openaiRTC.setSpeechRate(parseFloat(args.value));
           toast({ title: "Vitesse", description: `Vitesse ajustée` });
         }
         break;
@@ -304,9 +303,10 @@ const SecretariatGeneralSpace = () => {
       default:
         console.log('[SecretariatGeneralSpace] Tool call not handled:', toolName);
     }
+    return { success: true };
   }, [toast, theme, setTheme]);
 
-  const openaiRTC = useRealtimeVoiceWebRTC(handleToolCall);
+  const openaiRTC = useRealtimeVoiceWebRTC({ userRole: 'secretariat', userGender: 'male', onToolCall: handleToolCall });
 
   // Helper functions
   const getStatusBadge = (status: string) => {
@@ -903,18 +903,17 @@ const SecretariatGeneralSpace = () => {
         {userContext.hasIAstedAccess && (
           <IAstedButtonFull
             onClick={async () => {
-              if (openaiRTC.isConnected) {
+              if (openaiRTC.status === 'connected') {
                 openaiRTC.disconnect();
               } else {
-                const systemPrompt = generateSystemPrompt(userContext);
-                await openaiRTC.connect(selectedVoice, systemPrompt);
+                await openaiRTC.connect();
               }
             }}
             onDoubleClick={() => setIastedOpen(true)}
             audioLevel={openaiRTC.audioLevel}
-            voiceListening={openaiRTC.voiceState === 'listening'}
-            voiceSpeaking={openaiRTC.voiceState === 'speaking'}
-            voiceProcessing={openaiRTC.voiceState === 'connecting' || openaiRTC.voiceState === 'thinking'}
+            voiceListening={openaiRTC.voiceMode === 'listening'}
+            voiceSpeaking={openaiRTC.voiceMode === 'speaking'}
+            voiceProcessing={openaiRTC.status === 'connecting' || openaiRTC.voiceMode === 'thinking'}
           />
         )}
 
