@@ -31,6 +31,7 @@ import BiometricLogin from "@/pages/auth/BiometricLogin";
 
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { SuperAdminFloatingButton } from "@/components/admin/SuperAdminFloatingButton";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +84,7 @@ const App = () => (
             </Routes>
 
             {/* Global Components like iAsted Button can be placed here if they need to persist */}
+            <SuperAdminFloatingButton />
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>
