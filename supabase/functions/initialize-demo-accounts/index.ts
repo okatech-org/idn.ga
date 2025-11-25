@@ -9,7 +9,7 @@ interface DemoAccount {
   email: string;
   password: string;
   role: string;
-  appRoles: ('admin' | 'president' | 'dgss' | 'dgr' | 'minister' | 'user' | 'cabinet_private' | 'sec_gen' | 'protocol' | 'courrier' | 'reception')[];
+  appRoles: ('admin' | 'president' | 'dgss' | 'dgr' | 'minister' | 'user' | 'cabinet_private' | 'sec_gen' | 'protocol' | 'courrier' | 'reception' | 'identity_controller' | 'system_admin' | 'citizen')[];
 }
 
 const demoAccounts: DemoAccount[] = [
@@ -60,6 +60,24 @@ const demoAccounts: DemoAccount[] = [
     password: 'Reception2025!',
     role: 'Service Réception',
     appRoles: ['reception'],
+  },
+  {
+    email: 'idn.admin@gabon.ga',
+    password: 'IDNAdmin2025!',
+    role: 'Administrateur Système IDN.GA',
+    appRoles: ['system_admin', 'identity_controller'],
+  },
+  {
+    email: 'controleur.idn@gabon.ga',
+    password: 'Controleur2025!',
+    role: 'Contrôleur d\'Identité IDN.GA',
+    appRoles: ['identity_controller'],
+  },
+  {
+    email: 'citoyen.test@gabon.ga',
+    password: 'Citoyen2025!',
+    role: 'Citoyen Test',
+    appRoles: ['citizen'],
   },
 ];
 

@@ -101,6 +101,24 @@ export const ROUTE_MAP: RouteInfo[] = [
         path: '/demo',
         aliases: ['demo', 'démo', 'démonstration', 'page demo', 'page démo', 'essai'],
         description: 'Page de démonstration'
+    },
+    {
+        path: '/idn-admin-space',
+        aliases: ['idn', 'identite numerique', 'identité numérique', 'idn.ga', 'admin idn', 'système idn'],
+        role: 'system_admin',
+        description: 'Administration du Système IDN.GA'
+    },
+    {
+        path: '/idn-controller-space',
+        aliases: ['contrôleur identité', 'controleur identite', 'vérification identité', 'contrôle documents'],
+        role: 'identity_controller',
+        description: 'Espace Contrôleur d\'Identité IDN.GA'
+    },
+    {
+        path: '/citizen-space',
+        aliases: ['espace citoyen', 'mes documents', 'mon identité', 'demandes documents'],
+        role: 'citizen',
+        description: 'Espace Citoyen - Mes Documents d\'Identité'
     }
 ];
 
