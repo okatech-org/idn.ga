@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: idn_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-idn_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-idn_password}
+      POSTGRES_DB: ${POSTGRES_DB:-idn_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - idn_network
+
+  mongo:
+    image: mongo:6.0
+    container_name: idn_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-idn_mongo_user}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-idn_mongo_password}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - idn_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: idn_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - idn_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: idn_keycloak
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    command: start-dev
+    ports:
+      - "8080:8080"
+    networks:
+      - idn_network
+
+  # backend:
+  #   build: .
+  #   container_name: idn_backend
+  #   command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - POSTGRES_URL=postgresql://${POSTGRES_USER:-idn_user}:${POSTGRES_PASSWORD:-idn_password}@postgres:5432/${POSTGRES_DB:-idn_db}
+  #     - MONGODB_URL=mongodb://${MONGO_USER:-idn_mongo_user}:${MONGO_PASSWORD:-idn_mongo_password}@mongo:27017
+  #     - REDIS_URL=redis://redis:6379/0
+  #   depends_on:
+  #     - postgres
+  #     - mongo
+  #     - redis
+  #   networks:
+  #     - idn_network
+
+networks:
+  idn_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongo_data:
+  redis_data:

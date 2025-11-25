@@ -2,72 +2,91 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { Suspense, lazy } from "react";
-import { ThemeProvider } from "next-themes";
-import { LoadingScreen } from "@/components/ErrorBoundary";
-import { SuperAdminProvider } from "@/contexts/SuperAdminContext";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Splash from "./pages/onboarding/Splash";
+import ProfileSelection from "./pages/onboarding/ProfileSelection";
+import KYCVerification from "./pages/onboarding/KYCVerification";
+import SelfieVerification from "./pages/onboarding/SelfieVerification";
+import PinCreation from "./pages/onboarding/PinCreation";
+import Success from "./pages/onboarding/Success";
+import Dashboard from "./pages/dashboard/Home";
+import DocumentList from "./pages/documents/DocumentList";
+import DocumentDetail from "./pages/documents/DocumentDetail";
+import AddDocument from "./pages/documents/AddDocument";
+import DigitalID from "./pages/id-card/DigitalID";
+import CVDashboard from "./pages/cv/CVDashboard";
+import EditCV from "./pages/cv/EditCV";
+import GeneralSettings from "./pages/settings/GeneralSettings";
+import SecuritySettings from "./pages/settings/SecuritySettings";
+import NotificationCenter from "./pages/notifications/NotificationCenter";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminUsers from "@/pages/admin/AdminUsers";
+import AdminReports from "@/pages/admin/AdminReports";
+import AdminSettings from "@/pages/admin/AdminSettings";
+import ControllerDashboard from "@/pages/admin/ControllerDashboard";
+import DemoPage from "./pages/DemoPage";
+import IAstedPage from "./pages/IAstedPage";
+import Login from "@/pages/auth/Login";
+import BiometricLogin from "@/pages/auth/BiometricLogin";
 
-// IDN.GA Pages
-const Home = lazy(() => import("./pages/Home"));
-const Auth = lazy(() => import("./pages/Auth"));
-const Splash = lazy(() => import("./pages/Splash"));
-const Onboarding = lazy(() => import("./pages/Onboarding"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Demo = lazy(() => import("./pages/Demo"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+import { ThemeProvider } from "@/context/ThemeContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 
-// Configuration optimisée de React Query avec cache intelligent
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // Cache les données pendant 5 minutes par défaut
-      staleTime: 5 * 60 * 1000,
-      // Garde les données en cache pendant 10 minutes même si non utilisées
-      gcTime: 10 * 60 * 1000,
-      // Réessayer 1 fois en cas d'échec
-      retry: 1,
-      // Ne pas refetch automatiquement au focus de la fenêtre (économise les appels)
-      refetchOnWindowFocus: false,
-      // Ne pas refetch automatiquement au reconnect
-      refetchOnReconnect: false,
-      // Refetch en arrière-plan uniquement si les données sont stale
-      refetchOnMount: true,
-    },
-    mutations: {
-      // Retry les mutations une fois en cas d'échec
-      retry: 1,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true
-        }}>
-          <SuperAdminProvider>
-            <Suspense fallback={<LoadingScreen />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/splash" element={<Splash />} />
-                <Route path="/onboarding" element={<Onboarding />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/demo" element={<Demo />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </SuperAdminProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+  // Force refresh
+  <ThemeProvider>
+    <LanguageProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              {/* Onboarding */}
+              <Route path="/" element={<Splash />} />
+              <Route path="/onboarding/profile" element={<ProfileSelection />} />
+              <Route path="/onboarding/kyc" element={<KYCVerification />} />
+              <Route path="/onboarding/selfie" element={<SelfieVerification />} />
+              <Route path="/onboarding/pin" element={<PinCreation />} />
+              <Route path="/onboarding/success" element={<Success />} />
+
+              {/* Authentication */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/biometric-login" element={<BiometricLogin />} />
+
+              {/* Dashboard & Main App */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/documents" element={<DocumentList />} />
+              <Route path="/documents/:id" element={<DocumentDetail />} />
+              <Route path="/documents/add" element={<AddDocument />} />
+              <Route path="/id-card" element={<DigitalID />} />
+              <Route path="/cv" element={<CVDashboard />} />
+              <Route path="/cv/edit" element={<EditCV />} />
+              <Route path="/settings" element={<GeneralSettings />} />
+              <Route path="/settings/security" element={<SecuritySettings />} />
+              <Route path="/notifications" element={<NotificationCenter />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/reports" element={<AdminReports />} />
+              <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="/admin/verifications" element={<AdminDashboard />} /> {/* Reusing Dashboard for now as queue is there */}
+              <Route path="/controller" element={<ControllerDashboard />} />
+              <Route path="/demo" element={<DemoPage />} />
+
+              {/* iAsted - Keeping the existing route for reference/testing */}
+              <Route path="/iasted" element={<IAstedPage />} />
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+
+            {/* Global Components like iAsted Button can be placed here if they need to persist */}
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </LanguageProvider>
   </ThemeProvider>
 );
 

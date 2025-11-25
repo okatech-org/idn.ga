@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Mic, MessageCircle, Brain } from 'lucide-react';
+import { useIAsted } from '@/context/IAstedContext';
 
 interface IAstedButtonProps {
   voiceListening?: boolean;
@@ -13,7 +14,9 @@ interface IAstedButtonProps {
   audioLevel?: number; // 0 to 1
   size?: 'sm' | 'md' | 'lg'; // Button size variant
   isInterfaceOpen?: boolean;
+  fixedPosition?: boolean; // New prop to control positioning
 }
+
 
 interface Shockwave {
   id: number;
@@ -28,26 +31,11 @@ const styles = `
 /* Styling de base avec perspective améliorée */
 .perspective-container {
   perspective: 1500px;
-  position: fixed;
   z-index: 9999;
 }
 
-.perspective-container.grabbing {
-  cursor: grabbing !important;
-}
-
-.thick-matter-button.grabbing {
-  cursor: grabbing !important;
-}
-
-.perspective {
-  perspective: 1200px;
-  position: relative;
-  transform-style: preserve-3d;
-}
-
-/* Style pour le bouton avec matière épaisse et battement de cœur global AMÉLIORÉ */
 .thick-matter-button {
+
   transform-style: preserve-3d;
   border-radius: 50%;
   will-change: transform, box-shadow, border-radius, filter;
@@ -1138,16 +1126,22 @@ const styles = `
 `;
 
 export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
-  onClick,
-  onDoubleClick,
-  className = '',
   voiceListening = false,
   voiceSpeaking = false,
   voiceProcessing = false,
   pulsing = false,
+  onClick,
+  onSingleClick,
+  onDoubleClick,
+  className = '',
   audioLevel = 0,
-  size = 'md' // Default size
+  size = 'md',
+  isInterfaceOpen = false,
+  fixedPosition = true,
 }) => {
+  const { toggle, isOpen } = useIAsted();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [shockwaves, setShockwaves] = useState<Shockwave[]>([]);
   const [isClicked, setIsClicked] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -1155,7 +1149,6 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const dragStartPos = useRef<Position>({ x: 0, y: 0 });
   const buttonPosition = useRef<Position>({ x: 0, y: 0 });
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
@@ -1193,10 +1186,15 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
 
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.style.left = `${position.x}px`;
-      containerRef.current.style.top = `${position.y}px`;
+      if (fixedPosition) {
+        containerRef.current.style.left = `${position.x}px`;
+        containerRef.current.style.top = `${position.y}px`;
+      } else {
+        containerRef.current.style.left = '';
+        containerRef.current.style.top = '';
+      }
     }
-  }, [position]);
+  }, [position, fixedPosition]);
 
   const voiceStateClass = voiceListening ? 'voice-listening' : voiceSpeaking ? 'voice-speaking' : '';
 
@@ -1230,7 +1228,11 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
       // Premier clic - attendre pour voir s'il y a un double clic
       clickTimer.current = setTimeout(() => {
         // Simple clic confirmé
-        onClick();
+        if (onClick) {
+          onClick();
+        } else {
+          toggle();
+        }
         clickCount.current = 0;
       }, 300); // Délai de 300ms pour détecter le double clic
     } else if (clickCount.current === 2) {
@@ -1238,12 +1240,13 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
       if (clickTimer.current) {
         clearTimeout(clickTimer.current);
       }
-      onDoubleClick();
+      onDoubleClick && onDoubleClick();
       clickCount.current = 0;
     }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (!fixedPosition) return; // Disable drag if not fixed
     setIsActive(true);
 
     if (containerRef.current) {
@@ -1256,6 +1259,7 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
   };
 
   const handleMouseUp = () => {
+    if (!fixedPosition) return;
     setIsActive(false);
     setIsDragging(false);
 
@@ -1266,6 +1270,7 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
   };
 
   const handleMouseLeave = () => {
+    if (!fixedPosition) return;
     setIsActive(false);
     setIsDragging(false);
 
@@ -1276,7 +1281,7 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isActive) return;
+    if (!fixedPosition || !isActive) return;
 
     const deltaX = e.movementX;
     const deltaY = e.movementY;
@@ -1308,6 +1313,7 @@ export const IAstedButtonFull: React.FC<IAstedButtonProps> = ({
       <div
         ref={containerRef}
         className={`perspective-container ${isDragging ? 'grabbing' : ''}`}
+        style={{ position: fixedPosition ? 'fixed' : 'relative' }}
         onMouseMove={handleMouseMove}
       >
         <div className="perspective">
