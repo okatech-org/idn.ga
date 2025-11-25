@@ -74,7 +74,7 @@ const DemoPage = () => {
     ];
 
     return (
-        <MainLayout showNav={false}>
+        <MainLayout showNav={false} showAgent={false}>
             <div className="min-h-screen bg-neutral-light/50 dark:bg-background p-6 pb-24 relative">
 
                 {/* Language Switcher Positioned Absolute Top Right */}

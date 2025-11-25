@@ -4,7 +4,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import IAstedButtonFull from '../iasted/IAstedButtonFull';
 import { useTheme } from '@/context/ThemeContext';
 
-export default function UserSpaceLayout({ children, showSidebar = true }: { children: React.ReactNode; showSidebar?: boolean }) {
+export default function UserSpaceLayout({
+    children,
+    showSidebar = true,
+    showAgent = true
+}: {
+    children: React.ReactNode;
+    showSidebar?: boolean;
+    showAgent?: boolean;
+}) {
     const navigate = useNavigate();
     const location = useLocation();
     const { theme, toggleTheme } = useTheme();
@@ -135,12 +143,14 @@ export default function UserSpaceLayout({ children, showSidebar = true }: { chil
                                 </div>
 
                                 {/* Central Dock for iAsted Button */}
-                                <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 w-20 h-20 flex items-center justify-center pointer-events-none">
-                                    {/* The button itself needs pointer-events-auto */}
-                                    <div className="pointer-events-auto transform scale-90">
-                                        <IAstedButtonFull fixedPosition={false} size="md" />
+                                {showAgent && (
+                                    <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 w-20 h-20 flex items-center justify-center pointer-events-none">
+                                        {/* The button itself needs pointer-events-auto */}
+                                        <div className="pointer-events-auto transform scale-90">
+                                            <IAstedButtonFull fixedPosition={false} size="md" />
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                             </div>
                         </div>
@@ -148,10 +158,13 @@ export default function UserSpaceLayout({ children, showSidebar = true }: { chil
                 )}
 
                 {/* iAsted Agent - Persistent (Desktop Only) */}
-                <div className="hidden md:block fixed bottom-6 right-6 z-50">
-                    <IAstedButtonFull />
-                </div>
+                {showAgent && (
+                    <div className="hidden md:block fixed bottom-6 right-6 z-50">
+                        <IAstedButtonFull />
+                    </div>
+                )}
             </div>
         </div>
     );
 }
+

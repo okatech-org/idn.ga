@@ -3,8 +3,19 @@ import UserSpaceLayout from "./UserSpaceLayout";
 import { useLocation } from "react-router-dom";
 import { IAstedProvider } from "@/context/IAstedContext";
 import IAstedOverlay from "@/components/iasted/IAstedOverlay";
+import IAstedInterface from "@/components/iasted/IAstedInterface";
 
-export const MainLayout = ({ children }: { children: ReactNode }) => {
+interface MainLayoutProps {
+    children: ReactNode;
+    showNav?: boolean;
+    showAgent?: boolean;
+}
+
+export const MainLayout = ({
+    children,
+    showNav = true,
+    showAgent = true
+}: MainLayoutProps) => {
     const location = useLocation();
     const isAuthPage = location.pathname.startsWith("/auth") || location.pathname === "/";
 
@@ -14,10 +25,11 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
 
     return (
         <IAstedProvider>
-            <UserSpaceLayout>
+            <UserSpaceLayout showSidebar={showNav} showAgent={showAgent}>
                 {children}
             </UserSpaceLayout>
-            <IAstedOverlay />
+            {showAgent && <IAstedInterface userRole="admin" />} {/* Hardcoded role for demo */}
+            {showAgent && <IAstedOverlay />}
         </IAstedProvider>
     );
 };
