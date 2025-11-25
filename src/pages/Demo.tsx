@@ -84,78 +84,6 @@ const Demo = () => {
 
   const demoAccounts: DemoAccount[] = [
     {
-      role: "Président de la République",
-      level: "Super-Admin",
-      email: "president@presidence.ga",
-      password: "President2025!",
-      description: "**Accès total et illimité** à l'ensemble de la plateforme.\n\n**Attributions :**\n• Vision complète « Le Gabon en un coup d'œil »\n• Accès à toutes les synthèses stratégiques\n• Consultation de tous les indicateurs nationaux (économie, sécurité, santé, éducation)\n• Accès aux bases de connaissances classifiées\n• Supervision de l'action gouvernementale\n\n**Missions :**\n• Prise de décision stratégique au plus haut niveau\n• Orientation de la politique nationale\n• Arbitrage des conflits interministériels\n• Validation des projets structurants",
-      icon: <Shield className="h-6 w-6" />,
-      color: "from-accent to-accent/80",
-    },
-    {
-      role: "Directeur de Cabinet",
-      level: "Opérations",
-      email: "directeur.cabinet@presidence.ga",
-      password: "Cabinet2025!",
-      description: "**Coordination de l'action gouvernementale** et exécution des directives présidentielles.\n\n**Attributions :**\n• Préparation de l'ordre du jour du Conseil des Ministres\n• Suivi de l'exécution des instructions présidentielles\n• Coordination interministérielle\n• Accès total aux données opérationnelles\n• Gestion des dossiers prioritaires\n\n**Missions :**\n• Interface principale entre la Présidence et le Gouvernement\n• Monitoring des projets gouvernementaux\n• Reporting régulier au Président\n• Résolution des blocages administratifs",
-      icon: <Users className="h-6 w-6" />,
-      color: "from-primary to-primary/80",
-    },
-    {
-      role: "Directeur de Cabinet Privé",
-      level: "Privé & Confidentiel",
-      email: "cabinet.prive@presidence.ga",
-      password: "Prive2025!",
-      description: "**Gestion de l'agenda personnel** et des affaires privées du Président.\n\n**Attributions :**\n• Organisation des audiences privées\n• Gestion de la correspondance personnelle\n• Messagerie cryptée pour affaires réservées\n• Coordination des déplacements privés\n• Interface avec les personnalités nationales et internationales\n\n**Missions :**\n• Protection de la vie privée présidentielle\n• Organisation des rencontres confidentielles\n• Gestion du réseau relationnel du Président\n• Filtrage et priorisation des sollicitations",
-      icon: <Lock className="h-6 w-6" />,
-      color: "from-secondary to-secondary/80",
-    },
-    {
-      role: "Secrétariat Général",
-      level: "Légal & Administratif",
-      email: "secretariat.general@presidence.ga",
-      password: "SecGen2025!",
-      description: "**Le Greffe de la République** - Gardien de la légalité et des archives nationales.\n\n**Attributions :**\n• Gestion du circuit de signature des actes présidentiels\n• Publication au Journal Officiel\n• Conservation des archives présidentielles\n• Validation juridique des textes\n• Gestion du sceau de la République\n\n**Missions :**\n• Authentification des actes officiels\n• Conseil juridique à la Présidence\n• Archivage et traçabilité documentaire\n• Veille juridique et constitutionnelle",
-      icon: <FileText className="h-6 w-6" />,
-      color: "from-primary/80 to-primary/60",
-    },
-    {
-      role: "DGSS (Renseignement)",
-      level: "Renseignement Stratégique",
-      email: "dgss@presidence.ga",
-      password: "DGSS2025!",
-      description: "**Direction Générale des Services Spéciaux** - Veille stratégique et sécuritaire.\n\n**Attributions :**\n• Analyse des menaces internes et externes\n• Accès aux bases de données sécuritaires\n• Monitoring des risques pour la stabilité nationale\n• Coordination avec services de renseignement\n• Évaluations confidentielles\n\n**Missions :**\n• Protection de la sécurité de l'État\n• Détection précoce des menaces\n• Production de notes de synthèse classifiées\n• Conseil stratégique en matière de sécurité nationale",
-      icon: <Shield className="h-6 w-6" />,
-      color: "from-destructive to-destructive/80",
-    },
-    {
-      role: "Directeur de Protocole",
-      level: "Agenda & Cérémonial",
-      email: "protocole@presidence.ga",
-      password: "Proto2025!",
-      description: "**Gestion du protocole d'État** et organisation des événements officiels.\n\n**Attributions :**\n• Gestion de l'agenda officiel du Président\n• Organisation des visites d'État\n• Coordination des cérémonies nationales\n• Gestion logistique des événements présidentiels\n• Relations avec le corps diplomatique\n\n**Missions :**\n• Respect des usages protocolaires\n• Organisation impeccable des cérémonies\n• Coordination avec services de sécurité\n• Valorisation de l'image présidentielle",
-      icon: <Calendar className="h-6 w-6" />,
-      color: "from-secondary/80 to-secondary/60",
-    },
-    {
-      role: "Service Courriers",
-      level: "GED - Entrée",
-      email: "courriers@presidence.ga",
-      password: "Courrier2025!",
-      description: "**Gestion Électronique des Documents** - Porte d'entrée du flux documentaire.\n\n**Attributions :**\n• Réception et numérisation du courrier entrant\n• Indexation et classification documentaire\n• Dispatch vers les services compétents\n• Traçabilité du circuit documentaire\n• Archivage numérique\n\n**Missions :**\n• Assurer le traitement rapide du courrier\n• Garantir la traçabilité totale\n• Optimiser les délais de réponse\n• Maintenir l'organisation documentaire",
-      icon: <Mail className="h-6 w-6" />,
-      color: "from-muted to-muted/80",
-    },
-    {
-      role: "Service Réception",
-      level: "Accueil & Accréditation",
-      email: "reception@presidence.ga",
-      password: "Reception2025!",
-      description: "**Accueil et gestion des visiteurs** au sein de la Présidence.\n\n**Attributions :**\n• Enregistrement des visiteurs\n• Gestion des accréditations\n• Traitement des demandes d'audience\n• Contrôle des accès au palais présidentiel\n• Coordination avec la sécurité\n\n**Missions :**\n• Premier contact avec la Présidence\n• Filtrage et orientation des visiteurs\n• Gestion des plannings de réception\n• Respect des procédures de sécurité",
-      icon: <UserCheck className="h-6 w-6" />,
-      color: "from-muted to-muted/80",
-    },
-    {
       role: "Administrateur Système IDN.GA",
       level: "Système IDN",
       email: "idn.admin@gabon.ga",
@@ -490,9 +418,9 @@ const Demo = () => {
       <main className="container mx-auto px-6 pb-12">
         {/* Introduction */}
         <div className="max-w-4xl mx-auto mb-12 text-center">
-          <h2 className="text-4xl font-bold mb-4">Comptes de Démonstration</h2>
+          <h2 className="text-4xl font-bold mb-4">Comptes de Démonstration IDN.GA</h2>
           <p className="text-lg text-muted-foreground mb-6">
-            Explorez l'application avec différents rôles et niveaux d'accès. Chaque compte offre
+            Explorez le système d'identité numérique gabonais avec différents rôles. Chaque compte offre
             une vue et des fonctionnalités spécifiques selon les responsabilités du poste.
           </p>
           <div className="flex flex-col gap-3 items-center">
