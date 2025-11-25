@@ -165,7 +165,44 @@ export const ROLE_CONTEXTS: Record<AppRole, RoleContext | null> = {
     minister: null,
     user: null,
     courrier: null,
-    reception: null
+    reception: null,
+    // IDN.GA roles
+    identity_controller: {
+        role: 'identity_controller',
+        defaultTitle: {
+            male: 'Monsieur le Contrôleur',
+            female: 'Madame la Contrôleuse'
+        },
+        tone: 'professional',
+        accessLevel: 'high',
+        availableTools: [
+            'control_ui',
+            'navigate_app',
+            'verify_identity',
+            'manage_documents',
+            'review_requests'
+        ],
+        contextDescription: 'Vous assistez le Contrôleur d\'Identité pour la vérification des documents et l\'émission de pièces d\'identité'
+    },
+    system_admin: {
+        role: 'system_admin',
+        defaultTitle: {
+            male: 'Administrateur IDN.GA',
+            female: 'Administratrice IDN.GA'
+        },
+        tone: 'professional',
+        accessLevel: 'full',
+        availableTools: [
+            'control_ui',
+            'navigate_app',
+            'manage_all_citizens',
+            'manage_all_documents',
+            'view_statistics',
+            'system_configuration'
+        ],
+        contextDescription: 'Vous êtes l\'Administrateur Système IDN.GA avec accès complet au système d\'identité numérique'
+    },
+    citizen: null  // Les citoyens n'ont pas accès à iAsted
 };
 
 export interface SpaceContext {

@@ -196,6 +196,66 @@ export type Database = {
         }
         Relationships: []
       }
+      citizens: {
+        Row: {
+          address: Json | null
+          created_at: string
+          date_of_birth: string
+          email: string | null
+          father_name: string | null
+          first_name: string
+          gender: string
+          id: string
+          last_name: string
+          maiden_name: string | null
+          mother_name: string | null
+          nip: string
+          phone_number: string | null
+          place_of_birth: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address?: Json | null
+          created_at?: string
+          date_of_birth: string
+          email?: string | null
+          father_name?: string | null
+          first_name: string
+          gender: string
+          id?: string
+          last_name: string
+          maiden_name?: string | null
+          mother_name?: string | null
+          nip: string
+          phone_number?: string | null
+          place_of_birth: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: Json | null
+          created_at?: string
+          date_of_birth?: string
+          email?: string | null
+          father_name?: string | null
+          first_name?: string
+          gender?: string
+          id?: string
+          last_name?: string
+          maiden_name?: string | null
+          mother_name?: string | null
+          nip?: string
+          phone_number?: string | null
+          place_of_birth?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       conseil_ministres_sessions: {
         Row: {
           agenda_summary: string | null
@@ -570,6 +630,77 @@ export type Database = {
           },
         ]
       }
+      document_requests: {
+        Row: {
+          assigned_to: string | null
+          citizen_id: string
+          completed_at: string | null
+          created_at: string
+          details: Json | null
+          document_type: string
+          expected_completion_date: string | null
+          id: string
+          priority: string
+          reason: string | null
+          request_type: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          submitted_at: string
+          supporting_documents: Json | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          citizen_id: string
+          completed_at?: string | null
+          created_at?: string
+          details?: Json | null
+          document_type: string
+          expected_completion_date?: string | null
+          id?: string
+          priority?: string
+          reason?: string | null
+          request_type: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string
+          supporting_documents?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          citizen_id?: string
+          completed_at?: string | null
+          created_at?: string
+          details?: Json | null
+          document_type?: string
+          expected_completion_date?: string | null
+          id?: string
+          priority?: string
+          reason?: string | null
+          request_type?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string
+          supporting_documents?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_requests_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "citizens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_templates: {
         Row: {
           created_at: string
@@ -820,6 +951,71 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      identity_documents: {
+        Row: {
+          biometric_data: Json | null
+          citizen_id: string
+          created_at: string
+          created_by: string | null
+          document_number: string
+          document_type: string
+          expiry_date: string | null
+          file_path: string | null
+          file_url: string | null
+          id: string
+          issue_date: string
+          issuing_authority: string
+          issuing_location: string
+          security_features: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          biometric_data?: Json | null
+          citizen_id: string
+          created_at?: string
+          created_by?: string | null
+          document_number: string
+          document_type: string
+          expiry_date?: string | null
+          file_path?: string | null
+          file_url?: string | null
+          id?: string
+          issue_date: string
+          issuing_authority: string
+          issuing_location: string
+          security_features?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          biometric_data?: Json | null
+          citizen_id?: string
+          created_at?: string
+          created_by?: string | null
+          document_number?: string
+          document_type?: string
+          expiry_date?: string | null
+          file_path?: string | null
+          file_url?: string | null
+          id?: string
+          issue_date?: string
+          issuing_authority?: string
+          issuing_location?: string
+          security_features?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "identity_documents_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "citizens"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       incoming_mails: {
         Row: {
@@ -2328,6 +2524,56 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      verification_logs: {
+        Row: {
+          document_id: string | null
+          document_number: string
+          document_type: string
+          id: string
+          metadata: Json | null
+          notes: string | null
+          verification_method: string
+          verification_result: string
+          verified_at: string
+          verified_by: string | null
+          verifier_organization: string | null
+        }
+        Insert: {
+          document_id?: string | null
+          document_number: string
+          document_type: string
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          verification_method: string
+          verification_result: string
+          verified_at?: string
+          verified_by?: string | null
+          verifier_organization?: string | null
+        }
+        Update: {
+          document_id?: string | null
+          document_number?: string
+          document_type?: string
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          verification_method?: string
+          verification_result?: string
+          verified_at?: string
+          verified_by?: string | null
+          verifier_organization?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_logs_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "identity_documents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vip_contacts: {
         Row: {
