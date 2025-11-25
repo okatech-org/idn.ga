@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '@/hooks/useUserContext';
@@ -90,10 +90,23 @@ export const SuperAdminFloatingButton: React.FC = () => {
 
     const openaiRTC = useRealtimeVoiceWebRTC({ userRole: role || 'admin', userGender: 'male', onToolCall: handleToolCall });
 
+    // Debug logs
+    useEffect(() => {
+        console.log('🔵 [SuperAdminFloatingButton] Mount/Update:', { isLoading, role, profile });
+    }, [isLoading, role, profile]);
+
     // Only show for admin and president roles
-    if (isLoading || (role !== 'admin' && role !== 'president')) {
+    if (isLoading) {
+        console.log('⏳ [SuperAdminFloatingButton] Loading...');
         return null;
     }
+
+    if (role !== 'admin' && role !== 'president') {
+        console.log('❌ [SuperAdminFloatingButton] Access denied. Role:', role);
+        return null;
+    }
+
+    console.log('✅ [SuperAdminFloatingButton] Rendering button for role:', role);
 
     // Portal: inject into document.body with fixed positioning
     return ReactDOM.createPortal(
