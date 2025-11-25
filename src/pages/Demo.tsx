@@ -155,6 +155,33 @@ const Demo = () => {
       icon: <UserCheck className="h-6 w-6" />,
       color: "from-muted to-muted/80",
     },
+    {
+      role: "Administrateur Système IDN.GA",
+      level: "Système IDN",
+      email: "idn.admin@gabon.ga",
+      password: "IDNAdmin2025!",
+      description: "**Administration complète du système IDN.GA** - Gestion de l'identité numérique nationale.\n\n**Attributions :**\n• Gestion de tous les citoyens inscrits\n• Supervision de tous les documents d'identité\n• Accès aux statistiques globales\n• Configuration du système\n• Gestion des contrôleurs d'identité\n\n**Missions :**\n• Assurer la fiabilité du système d'identité\n• Superviser les opérations quotidiennes\n• Garantir la sécurité des données\n• Optimiser les processus",
+      icon: <Shield className="h-6 w-6" />,
+      color: "from-primary to-primary/80",
+    },
+    {
+      role: "Contrôleur d'Identité",
+      level: "Émission & Vérification",
+      email: "controleur.idn@gabon.ga",
+      password: "Controleur2025!",
+      description: "**Traitement des demandes de documents** et vérification d'identité.\n\n**Attributions :**\n• Traiter les demandes de CNI, passeports, actes de naissance\n• Vérifier l'identité des demandeurs\n• Émettre les documents officiels\n• Valider les pièces justificatives\n• Enregistrer les vérifications\n\n**Missions :**\n• Assurer la conformité des demandes\n• Détecter les fraudes potentielles\n• Garantir la qualité des documents émis\n• Respecter les délais de traitement",
+      icon: <UserCheck className="h-6 w-6" />,
+      color: "from-secondary to-secondary/80",
+    },
+    {
+      role: "Citoyen Test",
+      level: "Utilisateur",
+      email: "citoyen.test@gabon.ga",
+      password: "Citoyen2025!",
+      description: "**Espace citoyen** pour consulter ses documents et faire des demandes.\n\n**Attributions :**\n• Consulter mes documents d'identité\n• Faire une demande de nouveau document\n• Suivre l'état de mes demandes\n• Télécharger mes documents numériques\n• Mettre à jour mes informations\n\n**Missions :**\n• Gérer son identité numérique\n• Effectuer des demandes en ligne\n• Suivre l'avancement des dossiers",
+      icon: <Users className="h-6 w-6" />,
+      color: "from-muted to-muted/80",
+    },
   ];
 
   const handleLogin = async (email: string, password: string) => {
@@ -184,8 +211,8 @@ const Demo = () => {
         let destination = "/dashboard";
 
         if (roles && roles.length > 0) {
-          // Hiérarchie des rôles: president > admin > autres
-          const roleHierarchy: AppRole[] = ['president', 'admin', 'dgss', 'dgr', 'cabinet_private', 'sec_gen', 'minister', 'protocol', 'courrier', 'reception', 'user'];
+          // Hiérarchie des rôles: president > admin > system_admin > identity_controller > autres
+          const roleHierarchy: AppRole[] = ['president', 'admin', 'system_admin', 'identity_controller', 'dgss', 'dgr', 'cabinet_private', 'sec_gen', 'minister', 'protocol', 'courrier', 'reception', 'citizen', 'user'];
           const userRoles = roles.map(r => r.role as AppRole);
           
           // Trouver le rôle le plus élevé dans la hiérarchie
@@ -197,6 +224,15 @@ const Demo = () => {
               break;
             case 'admin':
               destination = "/admin-space";
+              break;
+            case 'system_admin':
+              destination = "/idn-admin-space";
+              break;
+            case 'identity_controller':
+              destination = "/idn-controller-space";
+              break;
+            case 'citizen':
+              destination = "/citizen-space";
               break;
             case 'dgss':
               destination = "/dgss-space";
