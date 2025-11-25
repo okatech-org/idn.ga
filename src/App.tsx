@@ -14,6 +14,7 @@ const Auth = lazy(() => import("./pages/Auth"));
 const Splash = lazy(() => import("./pages/Splash"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Demo = lazy(() => import("./pages/Demo"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Configuration optimisée de React Query avec cache intelligent
@@ -58,6 +59,7 @@ const App = () => (
                 <Route path="/splash" element={<Splash />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/demo" element={<Demo />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
