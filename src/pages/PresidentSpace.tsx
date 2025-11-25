@@ -190,39 +190,41 @@ export default function PresidentSpace() {
   const lastOpenedSectionRef = useRef<keyof typeof expandedSections | null>(null);
 
   // Hook pour la conversation OpenAI WebRTC
-  const openaiRTC = useRealtimeVoiceWebRTC((toolName, args) => {
-    console.log(`🔧 [PresidentSpace] Tool call: ${toolName}`, args);
-    switch (toolName) {
-      case 'control_ui':
-        console.log('🎛️ [PresidentSpace] Contrôle UI demandé:', args);
-        if (args.action === 'toggle_theme') {
-          const newTheme = theme === 'dark' ? 'light' : 'dark';
-          console.log(`🎨 Basculement thème: ${theme} -> ${newTheme}`);
-          setTheme(newTheme);
-          toast({ title: "Thème", description: `Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé` });
-          return { success: true, message: `Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé` };
-        } else if (args.action === 'set_theme_dark') {
-          console.log('🎨 Activation mode sombre');
-          setTheme("dark");
-          toast({ title: "Thème", description: "Mode sombre activé" });
-          return { success: true, message: "Mode sombre activé" };
-        } else if (args.action === 'set_theme_light') {
-          console.log('🎨 Activation mode clair');
-          setTheme("light");
-          toast({ title: "Thème", description: "Mode clair activé" });
-          return { success: true, message: "Mode clair activé" };
-        } else if (args.action === 'toggle_sidebar') {
-          window.dispatchEvent(new CustomEvent('iasted-sidebar-toggle'));
-          return { success: true, message: 'Menu latéral basculé' };
-        } else if (args.action === 'set_volume') {
-          toast({ title: "Volume", description: `Volume ajusté à ${args.value || 'niveau demandé'}` });
-          return { success: true, message: 'Volume ajusté' };
-        } else if (args.action === 'set_speech_rate') {
-          if (args.value) openaiRTC.setSpeechRate(parseFloat(args.value));
-          toast({ title: "Vitesse", description: `Vitesse de parole ajustée` });
-          return { success: true, message: 'Vitesse ajustée' };
-        }
-        return { success: false, message: 'Action UI non reconnue' };
+  const openaiRTC = useRealtimeVoiceWebRTC({
+    userRole: 'president',
+    userGender: 'male',
+    onToolCall: async (toolName, args) => {
+      console.log(`🔧 [PresidentSpace] Tool call: ${toolName}`, args);
+      switch (toolName) {
+        case 'control_ui':
+          console.log('🎛️ [PresidentSpace] Contrôle UI demandé:', args);
+          if (args.action === 'toggle_theme') {
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            console.log(`🎨 Basculement thème: ${theme} -> ${newTheme}`);
+            setTheme(newTheme);
+            toast({ title: "Thème", description: `Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé` });
+            return { success: true, message: `Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé` };
+          } else if (args.action === 'set_theme_dark') {
+            console.log('🎨 Activation mode sombre');
+            setTheme("dark");
+            toast({ title: "Thème", description: "Mode sombre activé" });
+            return { success: true, message: "Mode sombre activé" };
+          } else if (args.action === 'set_theme_light') {
+            console.log('🎨 Activation mode clair');
+            setTheme("light");
+            toast({ title: "Thème", description: "Mode clair activé" });
+            return { success: true, message: "Mode clair activé" };
+          } else if (args.action === 'toggle_sidebar') {
+            window.dispatchEvent(new CustomEvent('iasted-sidebar-toggle'));
+            return { success: true, message: 'Menu latéral basculé' };
+          } else if (args.action === 'set_volume') {
+            toast({ title: "Volume", description: `Volume ajusté à ${args.value || 'niveau demandé'}` });
+            return { success: true, message: 'Volume ajusté' };
+          } else if (args.action === 'set_speech_rate') {
+            toast({ title: "Vitesse", description: `Vitesse de parole ajustée` });
+            return { success: true, message: 'Vitesse ajustée' };
+          }
+          return { success: false, message: 'Action UI non reconnue' };
 
       case 'change_voice':
         console.log('🎙️ [PresidentSpace] Changement de voix demandé:', args);
@@ -342,7 +344,9 @@ export default function PresidentSpace() {
         setIastedOpen(false);
         return { success: true, message: 'Conversation arrêtée' };
     }
-  });
+    return { success: true };
+  }
+});
 
   // Initialiser la voix depuis le localStorage
   useEffect(() => {

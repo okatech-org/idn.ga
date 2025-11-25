@@ -21,7 +21,7 @@ export const SuperAdminFloatingButton: React.FC = () => {
     const [originRoute, setOriginRoute] = useState<string | null>(null);
     const [securityOverrideActive, setSecurityOverrideActive] = useState(false);
 
-    const handleToolCall = useCallback((toolName: string, args: any) => {
+    const handleToolCall = useCallback(async (toolName: string, args: any) => {
         switch (toolName) {
             case 'global_navigate':
                 // Intelligent route resolution
@@ -85,9 +85,10 @@ export const SuperAdminFloatingButton: React.FC = () => {
             default:
                 console.log('[Super Admin Global] Tool call forwardé:', toolName, args);
         }
+        return { success: true };
     }, [navigate, toast, originRoute]);
 
-    const openaiRTC = useRealtimeVoiceWebRTC(handleToolCall);
+    const openaiRTC = useRealtimeVoiceWebRTC({ userRole: role || 'admin', userGender: 'male', onToolCall: handleToolCall });
 
     // Only show for admin and president roles
     if (isLoading || (role !== 'admin' && role !== 'president')) {
@@ -99,24 +100,10 @@ export const SuperAdminFloatingButton: React.FC = () => {
         <div className="fixed bottom-6 right-6 z-[9999]" style={{ pointerEvents: 'auto' }}>
             <IAstedButtonFull
                 onClick={async () => {
-                    if (openaiRTC.isConnected) {
+                    if (openaiRTC.status === 'connected') {
                         openaiRTC.disconnect();
                     } else {
-                        const userContext = {
-                            profile,
-                            role,
-                            roleContext: null,
-                            spaceContext: {
-                                spaceName: 'Global',
-                                displayName: 'Super Admin Global',
-                                description: "navigation globale omnipresente"
-                            },
-                            hasIAstedAccess: true,
-                            userId: profile?.user_id || null,
-                            isLoading: false
-                        };
-                        const systemPrompt = generateSystemPrompt(userContext);
-                        await openaiRTC.connect(selectedVoice, systemPrompt);
+                        await openaiRTC.connect();
                     }
                 }}
                 onDoubleClick={() => {
@@ -127,9 +114,9 @@ export const SuperAdminFloatingButton: React.FC = () => {
                     });
                 }}
                 audioLevel={openaiRTC.audioLevel}
-                voiceListening={openaiRTC.voiceState === 'listening'}
-                voiceSpeaking={openaiRTC.voiceState === 'speaking'}
-                voiceProcessing={openaiRTC.voiceState === 'connecting' || openaiRTC.voiceState === 'thinking'}
+                voiceListening={openaiRTC.voiceMode === 'listening'}
+                voiceSpeaking={openaiRTC.voiceMode === 'speaking'}
+                voiceProcessing={openaiRTC.status === 'connecting' || openaiRTC.voiceMode === 'thinking'}
                 pulsing={securityOverrideActive}
             />
         </div>,

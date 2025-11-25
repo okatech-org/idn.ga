@@ -28,13 +28,18 @@ const IAstedPage = () => {
   const [selectedVoiceId, setSelectedVoiceId] = useState<'echo' | 'ash' | 'shimmer'>('ash');
 
   // OpenAI Realtime Hook
-  const openaiRTC = useRealtimeVoiceWebRTC((toolName, args) => {
-    console.log(`🔧 [IAstedPage] Tool call: ${toolName}`, args);
+  const openaiRTC = useRealtimeVoiceWebRTC({
+    userRole: isPresident ? 'president' : 'minister',
+    userGender: 'male',
+    onToolCall: async (toolName, args) => {
+      console.log(`🔧 [IAstedPage] Tool call: ${toolName}`, args);
 
-    if (toolName === 'change_voice' && args.voice_id) {
-      console.log('🎙️ [IAstedPage] Changement de voix demandé:', args.voice_id);
-      setSelectedVoiceId(args.voice_id as any);
-      toast.success(`Voix modifiée : ${args.voice_id === 'ash' ? 'Homme (Ash)' : args.voice_id === 'shimmer' ? 'Femme (Shimmer)' : 'Standard (Echo)'}`);
+      if (toolName === 'change_voice' && args.voice_id) {
+        console.log('🎙️ [IAstedPage] Changement de voix demandé:', args.voice_id);
+        setSelectedVoiceId(args.voice_id as any);
+        toast.success(`Voix modifiée : ${args.voice_id === 'ash' ? 'Homme (Ash)' : args.voice_id === 'shimmer' ? 'Femme (Shimmer)' : 'Standard (Echo)'}`);
+      }
+      return { success: true };
     }
   });
 
@@ -111,11 +116,7 @@ const IAstedPage = () => {
 
   const handleStartConversation = async () => {
     try {
-      const systemPrompt = isPresident
-        ? "Vous êtes iAsted, l'assistant stratégique du Président. Vous êtes concis, précis et professionnel."
-        : "Vous êtes iAsted, l'assistant ministériel. Vous aidez à la gestion des dossiers et à la prise de décision.";
-
-      await openaiRTC.connect(selectedVoiceId, systemPrompt);
+      await openaiRTC.connect();
       setActiveTab('conversation');
     } catch (error) {
       console.error('Erreur démarrage:', error);
@@ -129,11 +130,11 @@ const IAstedPage = () => {
   };
 
   // Derived states for UI
-  const isListening = openaiRTC.voiceState === 'listening';
-  const isThinking = openaiRTC.voiceState === 'thinking' || openaiRTC.voiceState === 'processing'; // 'processing' might be the actual state name in hook, checking hook definition would be ideal but assuming standard mapping
-  const isSpeaking = openaiRTC.voiceState === 'speaking';
-  const isIdle = openaiRTC.voiceState === 'idle';
-  const isActive = openaiRTC.isConnected;
+  const isListening = openaiRTC.voiceMode === 'listening';
+  const isThinking = openaiRTC.voiceMode === 'thinking';
+  const isSpeaking = openaiRTC.voiceMode === 'speaking';
+  const isIdle = openaiRTC.voiceMode === 'idle';
+  const isActive = openaiRTC.status === 'connected';
 
   return (
     <div className="min-h-screen bg-background">
@@ -235,8 +236,8 @@ const IAstedPage = () => {
                   </div>
                 </div>
 
-                <div className="h-[500px]">
-                  <ChatDock messages={openaiRTC.messages} />
+                <div className="h-[500px] bg-muted/10 rounded-lg flex items-center justify-center">
+                  <p className="text-muted-foreground">Conversation vocale en cours...</p>
                 </div>
               </CardContent>
             </Card>

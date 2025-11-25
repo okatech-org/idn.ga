@@ -52,21 +52,23 @@ const CabinetDirectorSpace = () => {
   const queryClient = useQueryClient();
 
   // Hook OpenAI WebRTC
-  const openaiRTC = useRealtimeVoiceWebRTC((toolName, args) => {
-    console.log(`🔧 [CabinetDirectorSpace] Tool call: ${toolName}`, args);
-    switch (toolName) {
-      case 'control_ui':
-        if (args.action === 'toggle_theme') toggleTheme();
-        else if (args.action === 'set_theme_dark') setTheme("dark");
-        else if (args.action === 'set_theme_light') setTheme("light");
-        else if (args.action === 'set_volume') toast({ title: "Volume", description: `Volume ajusté` });
-        else if (args.action === 'set_speech_rate') {
-          if (args.value) openaiRTC.setSpeechRate(parseFloat(args.value));
-          toast({ title: "Vitesse", description: `Vitesse ajustée` });
-        }
-        break;
+  const openaiRTC = useRealtimeVoiceWebRTC({
+    userRole: 'cabinet_director',
+    userGender: 'male',
+    onToolCall: async (toolName, args) => {
+      console.log(`🔧 [CabinetDirectorSpace] Tool call: ${toolName}`, args);
+      switch (toolName) {
+        case 'control_ui':
+          if (args.action === 'toggle_theme') toggleTheme();
+          else if (args.action === 'set_theme_dark') setTheme("dark");
+          else if (args.action === 'set_theme_light') setTheme("light");
+          else if (args.action === 'set_volume') toast({ title: "Volume", description: `Volume ajusté` });
+          else if (args.action === 'set_speech_rate') {
+            toast({ title: "Vitesse", description: `Vitesse ajustée` });
+          }
+          break;
 
-      case 'change_voice':
+        case 'change_voice':
         if (args.voice_id) {
           setSelectedVoice(args.voice_id as any);
           toast({ title: "Voix modifiée", description: `Voix changée pour ${args.voice_id}` });
@@ -123,7 +125,9 @@ const CabinetDirectorSpace = () => {
         setIastedOpen(false);
         break;
     }
-  });
+    return { success: true };
+  }
+});
 
   const [mounted, setMounted] = useState(false);
   const [iastedOpen, setIastedOpen] = useState(false);
@@ -1149,23 +1153,17 @@ const CabinetDirectorSpace = () => {
         {userContext.hasIAstedAccess && (
           <IAstedButtonFull
             onClick={async () => {
-              if (openaiRTC.isConnected) {
+              if (openaiRTC.status === 'connected') {
                 openaiRTC.disconnect();
               } else {
-                // Générer le prompt système personnalisé basé sur le contexte utilisateur
-                const systemPrompt = userContext.roleContext
-                  ? generateSystemPrompt(userContext)
-                  : IASTED_SYSTEM_PROMPT
-                    .replace('{{USER_TITLE}}', "Directeur de Cabinet")
-                    .replace('{{CURRENT_TIME_OF_DAY}}', new Date().getHours() < 18 ? "journée" : "soirée");
-                await openaiRTC.connect(selectedVoice, systemPrompt);
+                await openaiRTC.connect();
               }
             }}
             onDoubleClick={() => setIastedOpen(true)}
             audioLevel={openaiRTC.audioLevel}
-            voiceListening={openaiRTC.voiceState === 'listening'}
-            voiceSpeaking={openaiRTC.voiceState === 'speaking'}
-            voiceProcessing={openaiRTC.voiceState === 'connecting' || openaiRTC.voiceState === 'thinking'}
+            voiceListening={openaiRTC.voiceMode === 'listening'}
+            voiceSpeaking={openaiRTC.voiceMode === 'speaking'}
+            voiceProcessing={openaiRTC.status === 'connecting' || openaiRTC.voiceMode === 'thinking'}
           />
         )}
 
