@@ -2477,6 +2477,9 @@ export type Database = {
         | "courrier"
         | "reception"
         | "protocol"
+        | "identity_controller"
+        | "system_admin"
+        | "citizen"
       document_action:
         | "deposited"
         | "scanned"
@@ -2643,6 +2646,9 @@ export const Constants = {
         "courrier",
         "reception",
         "protocol",
+        "identity_controller",
+        "system_admin",
+        "citizen",
       ],
       document_action: [
         "deposited",
