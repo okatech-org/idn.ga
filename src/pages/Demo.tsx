@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleFeedbackModal } from "@/components/RoleFeedbackModal";
-import emblemGabon from "@/assets/emblem_gabon.png";
+import sceauGabon from "@/assets/sceau_gabon.png";
 import { usePrefetch } from "@/hooks/usePrefetch";
 import { useTheme } from "next-themes";
 import type { Database } from "@/integrations/supabase/types";
@@ -387,8 +387,8 @@ const Demo = () => {
               <div className="flex items-center gap-3">
                 <div className="neu-raised w-12 h-12 rounded-full flex items-center justify-center p-2">
                   <img
-                    src={emblemGabon}
-                    alt="Emblème de la République Gabonaise"
+                    src={sceauGabon}
+                    alt="Sceau de la République Gabonaise"
                     className="w-full h-full object-contain"
                   />
                 </div>
