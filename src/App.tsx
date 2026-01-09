@@ -28,6 +28,8 @@ import DemoPage from "./pages/DemoPage";
 import IAstedPage from "./pages/IAstedPage";
 import Login from "@/pages/auth/Login";
 import BiometricLogin from "@/pages/auth/BiometricLogin";
+import OAuthAuthorize from "@/pages/oauth/Authorize";
+import DeveloperPortal from "@/pages/oauth/DeveloperPortal";
 
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -78,6 +80,10 @@ const App = () => (
 
               {/* iAsted - Keeping the existing route for reference/testing */}
               <Route path="/iasted" element={<IAstedPage />} />
+
+              {/* OAuth 2.0 / OpenID Connect */}
+              <Route path="/oauth/authorize" element={<OAuthAuthorize />} />
+              <Route path="/developers" element={<DeveloperPortal />} />
 
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />

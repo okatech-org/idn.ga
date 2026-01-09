@@ -196,6 +196,65 @@ export type Database = {
         }
         Relationships: []
       }
+      citizen_diplomas: {
+        Row: {
+          citizen_id: string
+          created_at: string
+          diploma_number: string | null
+          diploma_type: string
+          expiry_date: string | null
+          file_url: string | null
+          id: string
+          institution: string
+          issue_date: string
+          metadata: Json | null
+          title: string
+          updated_at: string
+          verification_hash: string | null
+          verification_status: string
+        }
+        Insert: {
+          citizen_id: string
+          created_at?: string
+          diploma_number?: string | null
+          diploma_type: string
+          expiry_date?: string | null
+          file_url?: string | null
+          id?: string
+          institution: string
+          issue_date: string
+          metadata?: Json | null
+          title: string
+          updated_at?: string
+          verification_hash?: string | null
+          verification_status?: string
+        }
+        Update: {
+          citizen_id?: string
+          created_at?: string
+          diploma_number?: string | null
+          diploma_type?: string
+          expiry_date?: string | null
+          file_url?: string | null
+          id?: string
+          institution?: string
+          issue_date?: string
+          metadata?: Json | null
+          title?: string
+          updated_at?: string
+          verification_hash?: string | null
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "citizen_diplomas_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "citizens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       citizens: {
         Row: {
           address: Json | null
@@ -1684,6 +1743,350 @@ export type Database = {
           poste?: string
           status?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      oauth_access_logs: {
+        Row: {
+          action: string
+          client_id: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          ip_address: string | null
+          scopes_granted: string[] | null
+          scopes_requested: string[] | null
+          success: boolean
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          client_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: string | null
+          scopes_granted?: string[] | null
+          scopes_requested?: string[] | null
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          client_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: string | null
+          scopes_granted?: string[] | null
+          scopes_requested?: string[] | null
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oauth_access_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      oauth_access_tokens: {
+        Row: {
+          citizen_id: string | null
+          client_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          revoked_at: string | null
+          scopes: string[]
+          token: string
+          user_id: string
+        }
+        Insert: {
+          citizen_id?: string | null
+          client_id: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          revoked_at?: string | null
+          scopes?: string[]
+          token?: string
+          user_id: string
+        }
+        Update: {
+          citizen_id?: string | null
+          client_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          revoked_at?: string | null
+          scopes?: string[]
+          token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oauth_access_tokens_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "citizens"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_access_tokens_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      oauth_authorization_codes: {
+        Row: {
+          citizen_id: string | null
+          client_id: string
+          code: string
+          code_challenge: string | null
+          code_challenge_method: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          redirect_uri: string
+          scopes: string[]
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          citizen_id?: string | null
+          client_id: string
+          code?: string
+          code_challenge?: string | null
+          code_challenge_method?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          redirect_uri: string
+          scopes?: string[]
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          citizen_id?: string | null
+          client_id?: string
+          code?: string
+          code_challenge?: string | null
+          code_challenge_method?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          redirect_uri?: string
+          scopes?: string[]
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oauth_authorization_codes_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "citizens"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_authorization_codes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      oauth_clients: {
+        Row: {
+          allowed_scopes: string[]
+          client_description: string | null
+          client_id: string
+          client_logo_url: string | null
+          client_name: string
+          client_secret: string
+          client_website: string | null
+          created_at: string
+          grant_types: string[]
+          id: string
+          is_active: boolean
+          is_confidential: boolean
+          is_verified: boolean
+          owner_id: string | null
+          redirect_uris: string[]
+          updated_at: string
+        }
+        Insert: {
+          allowed_scopes?: string[]
+          client_description?: string | null
+          client_id?: string
+          client_logo_url?: string | null
+          client_name: string
+          client_secret?: string
+          client_website?: string | null
+          created_at?: string
+          grant_types?: string[]
+          id?: string
+          is_active?: boolean
+          is_confidential?: boolean
+          is_verified?: boolean
+          owner_id?: string | null
+          redirect_uris?: string[]
+          updated_at?: string
+        }
+        Update: {
+          allowed_scopes?: string[]
+          client_description?: string | null
+          client_id?: string
+          client_logo_url?: string | null
+          client_name?: string
+          client_secret?: string
+          client_website?: string | null
+          created_at?: string
+          grant_types?: string[]
+          id?: string
+          is_active?: boolean
+          is_confidential?: boolean
+          is_verified?: boolean
+          owner_id?: string | null
+          redirect_uris?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      oauth_consents: {
+        Row: {
+          citizen_id: string | null
+          client_id: string
+          granted_at: string
+          id: string
+          revoked_at: string | null
+          scopes: string[]
+          user_id: string
+        }
+        Insert: {
+          citizen_id?: string | null
+          client_id: string
+          granted_at?: string
+          id?: string
+          revoked_at?: string | null
+          scopes?: string[]
+          user_id: string
+        }
+        Update: {
+          citizen_id?: string | null
+          client_id?: string
+          granted_at?: string
+          id?: string
+          revoked_at?: string | null
+          scopes?: string[]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oauth_consents_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "citizens"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_consents_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      oauth_refresh_tokens: {
+        Row: {
+          access_token_id: string
+          client_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          revoked_at: string | null
+          token: string
+          user_id: string
+        }
+        Insert: {
+          access_token_id: string
+          client_id: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          revoked_at?: string | null
+          token?: string
+          user_id: string
+        }
+        Update: {
+          access_token_id?: string
+          client_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          revoked_at?: string | null
+          token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oauth_refresh_tokens_access_token_id_fkey"
+            columns: ["access_token_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_access_tokens"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_refresh_tokens_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      oauth_scope_definitions: {
+        Row: {
+          category: string
+          description: string
+          display_name: string
+          id: string
+          is_sensitive: boolean
+          requires_verification: boolean
+          scope_name: string
+          sort_order: number
+        }
+        Insert: {
+          category: string
+          description: string
+          display_name: string
+          id?: string
+          is_sensitive?: boolean
+          requires_verification?: boolean
+          scope_name: string
+          sort_order?: number
+        }
+        Update: {
+          category?: string
+          description?: string
+          display_name?: string
+          id?: string
+          is_sensitive?: boolean
+          requires_verification?: boolean
+          scope_name?: string
+          sort_order?: number
         }
         Relationships: []
       }
