@@ -4,7 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, MessageCircle, History, Settings, Activity } from 'lucide-react';
+import { ArrowLeft, MessageCircle, History, Settings, Activity, Sparkles } from 'lucide-react';
+import UserSpaceLayout from '@/components/layout/UserSpaceLayout';
 import { useRealtimeVoiceWebRTC } from '@/hooks/useRealtimeVoiceWebRTC';
 import { ChatDock } from '@/components/ChatDock';
 import { VoiceSettings } from '@/components/VoiceSettings';
@@ -137,175 +138,170 @@ const IAstedPage = () => {
   const isActive = openaiRTC.status === 'connected';
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-6 py-8">
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate(-1)}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour
-          </Button>
-
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              <MessageCircle className="w-8 h-8" />
-              iAsted - Assistant Vocal Intelligent
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              {isPresident
-                ? 'Monsieur le Président, votre assistant stratégique'
-                : 'Excellence, votre assistant ministériel'}
-            </p>
+    <UserSpaceLayout>
+      <div className="h-full flex flex-col gap-3">
+        {/* Header */}
+        <div className="flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-foreground">iAsted</h1>
+              <p className="text-[10px] text-muted-foreground">
+                Assistant vocal intelligent
+              </p>
+            </div>
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="conversation">
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Conversation
-            </TabsTrigger>
-            <TabsTrigger value="history">
-              <History className="w-4 h-4 mr-2" />
-              Historique
-            </TabsTrigger>
-            <TabsTrigger value="settings">
-              <Settings className="w-4 h-4 mr-2" />
-              Paramètres
-            </TabsTrigger>
-          </TabsList>
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">
 
-          <TabsContent value="conversation" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Conversation Vocale</CardTitle>
-                <CardDescription>
-                  Parlez avec iAsted en temps réel (OpenAI Realtime)
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${isIdle ? 'bg-gray-400' :
-                        isListening ? 'bg-green-500 animate-pulse' :
-                          isThinking ? 'bg-yellow-500 animate-pulse' :
-                            isSpeaking ? 'bg-blue-500 animate-pulse' :
-                              'bg-gray-400'
-                        }`} />
-                      <span className="text-sm font-medium">
-                        {isIdle ? 'Inactif' :
-                          isListening ? 'Écoute...' :
-                            isThinking ? 'Réflexion...' :
-                              isSpeaking ? 'Parle...' :
-                                'Connexion...'}
-                      </span>
-                    </div>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="conversation">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Conversation
+              </TabsTrigger>
+              <TabsTrigger value="history">
+                <History className="w-4 h-4 mr-2" />
+                Historique
+              </TabsTrigger>
+              <TabsTrigger value="settings">
+                <Settings className="w-4 h-4 mr-2" />
+                Paramètres
+              </TabsTrigger>
+            </TabsList>
 
-                    {isActive && (
+            <TabsContent value="conversation" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Conversation Vocale</CardTitle>
+                  <CardDescription>
+                    Parlez avec iAsted en temps réel (OpenAI Realtime)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-primary transition-all"
-                            style={{ width: `${openaiRTC.audioLevel}%` }}
-                          />
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {Math.round(openaiRTC.audioLevel)}%
+                        <div className={`w-3 h-3 rounded-full ${isIdle ? 'bg-gray-400' :
+                          isListening ? 'bg-green-500 animate-pulse' :
+                            isThinking ? 'bg-yellow-500 animate-pulse' :
+                              isSpeaking ? 'bg-blue-500 animate-pulse' :
+                                'bg-gray-400'
+                          }`} />
+                        <span className="text-sm font-medium">
+                          {isIdle ? 'Inactif' :
+                            isListening ? 'Écoute...' :
+                              isThinking ? 'Réflexion...' :
+                                isSpeaking ? 'Parle...' :
+                                  'Connexion...'}
                         </span>
                       </div>
-                    )}
-                  </div>
 
-                  <div className="flex gap-2">
-                    {!isActive ? (
-                      <Button onClick={handleStartConversation}>
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Démarrer
-                      </Button>
-                    ) : (
-                      <>
-                        <Button variant="destructive" onClick={handleStopConversation}>
-                          Terminer
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div className="h-[500px] bg-muted/10 rounded-lg flex items-center justify-center">
-                  <p className="text-muted-foreground">Conversation vocale en cours...</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="history" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Historique des Conversations</CardTitle>
-                <CardDescription>
-                  Consultez vos sessions précédentes
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loadingSessions ? (
-                  <div className="flex items-center justify-center py-12">
-                    <Activity className="w-8 h-8 animate-spin text-primary" />
-                  </div>
-                ) : sessions.length === 0 ? (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <History className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>Aucune conversation enregistrée</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {sessions.map((session) => (
-                      <Card key={session.id} className="cursor-pointer hover:bg-muted/50">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="font-semibold">{session.title}</h3>
-                              <p className="text-sm text-muted-foreground">
-                                {new Date(session.started_at).toLocaleString('fr-FR')}
-                                {session.ended_at && (
-                                  <> - {new Date(session.ended_at).toLocaleString('fr-FR')}</>
-                                )}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {session.message_count} messages
-                              </p>
-                            </div>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                toast.info('Fonctionnalité à venir');
-                              }}
-                            >
-                              Voir
-                            </Button>
+                      {isActive && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary transition-all"
+                              style={{ width: `${openaiRTC.audioLevel}%` }}
+                            />
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+                          <span className="text-xs text-muted-foreground">
+                            {Math.round(openaiRTC.audioLevel)}%
+                          </span>
+                        </div>
+                      )}
+                    </div>
 
-          <TabsContent value="settings" className="space-y-4">
-            <VoiceSettings />
-          </TabsContent>
-        </Tabs>
+                    <div className="flex gap-2">
+                      {!isActive ? (
+                        <Button onClick={handleStartConversation}>
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Démarrer
+                        </Button>
+                      ) : (
+                        <>
+                          <Button variant="destructive" onClick={handleStopConversation}>
+                            Terminer
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="h-[500px] bg-muted/10 rounded-lg flex items-center justify-center">
+                    <p className="text-muted-foreground">Conversation vocale en cours...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="history" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Historique des Conversations</CardTitle>
+                  <CardDescription>
+                    Consultez vos sessions précédentes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingSessions ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Activity className="w-8 h-8 animate-spin text-primary" />
+                    </div>
+                  ) : sessions.length === 0 ? (
+                    <div className="text-center py-12 text-muted-foreground">
+                      <History className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>Aucune conversation enregistrée</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {sessions.map((session) => (
+                        <Card key={session.id} className="cursor-pointer hover:bg-muted/50">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h3 className="font-semibold">{session.title}</h3>
+                                <p className="text-sm text-muted-foreground">
+                                  {new Date(session.started_at).toLocaleString('fr-FR')}
+                                  {session.ended_at && (
+                                    <> - {new Date(session.ended_at).toLocaleString('fr-FR')}</>
+                                  )}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {session.message_count} messages
+                                </p>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  toast.info('Fonctionnalité à venir');
+                                }}
+                              >
+                                Voir
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="settings" className="space-y-4">
+              <VoiceSettings />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-    </div>
+    </UserSpaceLayout>
   );
 };
 
 export default IAstedPage;
-

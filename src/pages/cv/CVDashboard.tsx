@@ -1,123 +1,140 @@
 import { useNavigate } from "react-router-dom";
 import { Download, Share2, Briefcase, GraduationCap, Award, ChevronRight, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import UserSpaceLayout from "@/components/layout/UserSpaceLayout";
 import SmartScoreRing from "@/components/cv/SmartScoreRing";
-import AISuggestionCard from "@/components/cv/AISuggestionCard";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const CVDashboard = () => {
     const navigate = useNavigate();
     const completionScore = 78;
 
+    const sections = [
+        { icon: Briefcase, title: "Expériences", count: "2 postes", color: "text-orange-500", bg: "bg-orange-500/10" },
+        { icon: GraduationCap, title: "Formation", count: "3 diplômes", color: "text-blue-500", bg: "bg-blue-500/10" },
+        { icon: Award, title: "Compétences", count: "8 skills", color: "text-purple-500", bg: "bg-purple-500/10" },
+        { icon: FileText, title: "Infos", count: "100%", color: "text-green-500", bg: "bg-green-500/10" }
+    ];
+
+    const suggestions = [
+        { title: "Ajoutez vos diplômes", desc: "2x plus d'offres", impact: "+15%" },
+        { title: "Validez vos compétences", desc: "Certifier anglais", impact: "+10%" }
+    ];
+
     return (
         <UserSpaceLayout>
-            <div className="space-y-8 pb-24 max-w-4xl mx-auto">
+            <div className="h-full flex flex-col gap-4">
                 {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-foreground">Mon CV Intelligent</h1>
-                        <p className="text-sm text-muted-foreground">Gérez et optimisez votre profil professionnel</p>
-                    </div>
-                    <div className="flex space-x-3">
-                        <Button variant="outline" size="icon" className="neu-raised rounded-full w-10 h-10">
-                            <Share2 size={18} />
-                        </Button>
-                        <Button variant="outline" size="icon" className="neu-raised rounded-full w-10 h-10">
-                            <Download size={18} />
-                        </Button>
-                    </div>
-                </div>
-
-                {/* Score & Suggestions Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Score Card */}
-                    <div className="neu-raised p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-4 md:col-span-1">
-                        <SmartScoreRing score={completionScore} size={140} />
-                        <div>
-                            <h3 className="font-bold text-lg text-foreground">Niveau Expert</h3>
-                            <p className="text-xs text-muted-foreground">Votre profil est très attractif pour les recruteurs.</p>
-                        </div>
-                    </div>
-
-                    {/* Suggestions Column */}
-                    <div className="md:col-span-2 space-y-4">
-                        <h3 className="font-semibold text-foreground ml-1">Recommandations</h3>
-                        <div className="grid gap-4">
-                            <AISuggestionCard
-                                title="Ajoutez vos diplômes"
-                                description="Les profils avec une formation détaillée reçoivent 2x plus d'offres."
-                                impact="+15% Score"
-                                onApply={() => navigate("/cv/edit")}
-                            />
-                            <AISuggestionCard
-                                title="Validez vos compétences"
-                                description="Faites certifier votre niveau d'anglais par notre partenaire."
-                                impact="+10% Score"
-                                onApply={() => navigate("/cv/edit")}
-                            />
-                        </div>
+                <div className="flex items-center justify-between shrink-0">
+                    <h1 className="text-lg font-bold text-foreground">iCV</h1>
+                    <div className="flex gap-2">
+                        <button className={cn(
+                            "p-2 rounded-lg",
+                            "bg-white/60 dark:bg-white/5",
+                            "border border-slate-200/60 dark:border-white/10",
+                            "hover:border-primary/30"
+                        )}>
+                            <Share2 className="w-4 h-4 text-muted-foreground" />
+                        </button>
+                        <button className={cn(
+                            "p-2 rounded-lg",
+                            "bg-white/60 dark:bg-white/5",
+                            "border border-slate-200/60 dark:border-white/10",
+                            "hover:border-primary/30"
+                        )}>
+                            <Download className="w-4 h-4 text-muted-foreground" />
+                        </button>
                     </div>
                 </div>
 
-                {/* Sections Grid */}
-                <div>
-                    <h3 className="font-semibold text-foreground mb-4 ml-1">Sections du CV</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <SectionCard
-                            icon={Briefcase}
-                            title="Expériences Professionnelles"
-                            count="2 postes renseignés"
-                            color="text-orange-600 dark:text-orange-400"
-                            bg="bg-orange-50 dark:bg-orange-900/20"
+                {/* Main Content - 2 columns */}
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
+                    {/* Left: Score + Suggestions */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={cn(
+                            "p-4 rounded-2xl flex flex-col items-center",
+                            "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
+                            "border border-slate-200/60 dark:border-white/10"
+                        )}
+                    >
+                        <SmartScoreRing score={completionScore} size={100} />
+                        <h3 className="font-bold text-sm text-foreground mt-2">Niveau Expert</h3>
+                        <p className="text-[10px] text-muted-foreground text-center">Profil attractif</p>
+
+                        <div className="w-full mt-3 pt-3 border-t border-slate-200/60 dark:border-white/10 space-y-2">
+                            <p className="text-[9px] font-semibold text-muted-foreground uppercase">Suggestions</p>
+                            {suggestions.map((s, i) => (
+                                <div
+                                    key={i}
+                                    onClick={() => navigate("/cv/edit")}
+                                    className={cn(
+                                        "p-2 rounded-lg cursor-pointer transition-all",
+                                        "bg-slate-100/50 dark:bg-white/5",
+                                        "hover:bg-slate-200/50 dark:hover:bg-white/10"
+                                    )}
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-medium text-foreground">{s.title}</span>
+                                        <span className="text-[9px] font-bold text-green-500">{s.impact}</span>
+                                    </div>
+                                    <p className="text-[9px] text-muted-foreground">{s.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Right: Sections Grid */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="lg:col-span-2 flex flex-col gap-4"
+                    >
+                        <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">Sections du CV</p>
+                        <div className="flex-1 grid grid-cols-2 gap-2 content-start">
+                            {sections.map((section, index) => (
+                                <motion.div
+                                    key={section.title}
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    onClick={() => navigate("/cv/edit")}
+                                    className={cn(
+                                        "p-3 rounded-xl cursor-pointer transition-all",
+                                        "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
+                                        "border border-slate-200/60 dark:border-white/10",
+                                        "hover:border-primary/30 hover:scale-[1.02]",
+                                        "flex items-center gap-3 group"
+                                    )}
+                                >
+                                    <div className={cn("p-2 rounded-lg shrink-0 transition-transform group-hover:scale-110", section.bg)}>
+                                        <section.icon className={cn("w-4 h-4", section.color)} />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="font-medium text-sm text-foreground">{section.title}</h4>
+                                        <p className="text-[10px] text-muted-foreground">{section.count}</p>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:translate-x-0.5 transition-transform" />
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* Edit Button */}
+                        <button
                             onClick={() => navigate("/cv/edit")}
-                        />
-                        <SectionCard
-                            icon={GraduationCap}
-                            title="Formation & Diplômes"
-                            count="3 diplômes renseignés"
-                            color="text-blue-600 dark:text-blue-400"
-                            bg="bg-blue-50 dark:bg-blue-900/20"
-                            onClick={() => navigate("/cv/edit")}
-                        />
-                        <SectionCard
-                            icon={Award}
-                            title="Compétences & Certifications"
-                            count="8 compétences ajoutées"
-                            color="text-purple-600 dark:text-purple-400"
-                            bg="bg-purple-50 dark:bg-purple-900/20"
-                            onClick={() => navigate("/cv/edit")}
-                        />
-                        <SectionCard
-                            icon={FileText}
-                            title="Informations Personnelles"
-                            count="Complété à 100%"
-                            color="text-green-600 dark:text-green-400"
-                            bg="bg-green-50 dark:bg-green-900/20"
-                            onClick={() => navigate("/cv/edit")}
-                        />
-                    </div>
+                            className={cn(
+                                "w-full py-2.5 rounded-xl font-medium text-sm transition-all",
+                                "bg-primary text-white hover:bg-primary/90"
+                            )}
+                        >
+                            Modifier mon CV
+                        </button>
+                    </motion.div>
                 </div>
             </div>
         </UserSpaceLayout>
     );
 };
-
-const SectionCard = ({ icon: Icon, title, count, color, bg, onClick }: any) => (
-    <div
-        className="neu-raised p-4 rounded-xl flex items-center justify-between cursor-pointer hover:text-primary transition-all active:neu-inset group"
-        onClick={onClick}
-    >
-        <div className="flex items-center space-x-4">
-            <div className={`p-3 rounded-xl ${bg} ${color} group-hover:scale-110 transition-transform`}>
-                <Icon size={24} />
-            </div>
-            <div>
-                <h4 className="font-bold text-sm text-foreground">{title}</h4>
-                <p className="text-xs text-muted-foreground">{count}</p>
-            </div>
-        </div>
-        <ChevronRight className="text-muted-foreground group-hover:translate-x-1 transition-transform" size={20} />
-    </div>
-);
 
 export default CVDashboard;

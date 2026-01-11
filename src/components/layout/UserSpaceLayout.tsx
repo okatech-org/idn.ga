@@ -1,8 +1,9 @@
 import React from 'react';
-import { Sun, Moon, Settings, LogOut, LayoutDashboard, FileText, User, Shield } from 'lucide-react';
+import { Sun, Moon, Settings, LogOut, LayoutDashboard, FileText, User, Shield, CreditCard, FolderLock, Mail, Sparkles } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import IAstedButtonFull from '../iasted/IAstedButtonFull';
 import { useTheme } from '@/context/ThemeContext';
+import { IAstedProvider } from '@/context/IAstedContext';
 
 export default function UserSpaceLayout({
     children,
@@ -21,150 +22,155 @@ export default function UserSpaceLayout({
     const isActive = (path: string) => location.pathname === path;
 
     return (
-        <div className="min-h-screen bg-background p-4 md:p-6 transition-colors duration-300">
-            <div className="flex gap-6 max-w-[1600px] mx-auto relative">
+        <IAstedProvider>
+            <div className="min-h-screen bg-background p-4 md:p-6 transition-colors duration-300">
+                <div className="flex gap-6 max-w-[1600px] mx-auto relative">
 
-                {/* SIDEBAR DÉTACHÉE */}
-                {showSidebar && (
-                    <aside className="neu-card w-60 flex-shrink-0 p-6 hidden md:flex flex-col min-h-[calc(100vh-3rem)] overflow-hidden">
-                        {/* Logo */}
-                        <div className="flex items-center gap-3 mb-8 cursor-pointer" onClick={() => navigate('/')}>
-                            <div className="neu-raised w-12 h-12 rounded-full flex items-center justify-center p-2 text-primary">
-                                <span className="font-bold text-lg">ID</span>
+                    {/* SIDEBAR DÉTACHÉE (Glassmorphism & Floating) */}
+                    {showSidebar && (
+                        <aside className="hidden md:flex flex-col w-64 glass-card h-[calc(100vh-3rem)] sticky top-6 overflow-hidden border border-white/20">
+                            {/* Logo */}
+                            <div className="flex items-center gap-4 p-6 cursor-pointer border-b border-white/10" onClick={() => navigate('/')}>
+                                <div className="glass w-12 h-12 rounded-2xl flex items-center justify-center p-2 text-primary shadow-glow-primary/50">
+                                    <span className="font-bold text-xl tracking-tight">ID</span>
+                                </div>
+                                <div>
+                                    <div className="font-bold text-md tracking-wider">IDN.GA</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Espace Citoyen</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="font-bold text-sm">IDN.GA</div>
-                                <div className="text-xs text-muted-foreground">Espace Utilisateur</div>
+
+                            {/* Navigation */}
+                            <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
+                                {[
+                                    { path: '/dashboard', icon: LayoutDashboard, label: 'iProfil' },
+                                    { path: '/documents', icon: FileText, label: 'iDocument' },
+                                    { path: '/iboite', icon: Mail, label: 'iBoîte' },
+                                    { path: '/icarte', icon: CreditCard, label: 'iCarte' },
+                                    { path: '/cv', icon: User, label: 'iCV' },
+                                    { path: '/iasted', icon: Sparkles, label: 'iAsted' },
+                                    { path: '/settings', icon: Settings, label: 'Paramètres' },
+                                ].map((item) => (
+                                    <button
+                                        key={item.path}
+                                        onClick={() => navigate(item.path)}
+                                        className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-300 group
+                                            ${isActive(item.path)
+                                                ? 'bg-primary/20 text-primary shadow-glow-primary/30 translate-x-1'
+                                                : 'hover:bg-white/5 hover:translate-x-1 text-muted-foreground hover:text-foreground'
+                                            }`}
+                                    >
+                                        <item.icon className={`w-5 h-5 transition-transform duration-300 ${isActive(item.path) ? 'scale-110' : 'group-hover:scale-110'}`} />
+                                        {item.label}
+                                        {isActive(item.path) && (
+                                            <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary shadow-glow-primary animate-pulse" />
+                                        )}
+                                    </button>
+                                ))}
+                            </nav>
+
+                            {/* Footer Sidebar */}
+                            <div className="p-4 border-t border-white/10 space-y-2 bg-black/5">
+                                <button
+                                    onClick={toggleTheme}
+                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-medium hover:bg-white/5 transition-all"
+                                >
+                                    {isDark ? <Sun className="w-4 h-4 text-warning" /> : <Moon className="w-4 h-4 text-indigo-400" />}
+                                    {isDark ? 'Mode clair' : 'Mode sombre'}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/')}
+                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-medium text-destructive hover:bg-destructive/10 transition-all"
+                                >
+                                    <LogOut className="w-4 h-4" /> Déconnexion
+                                </button>
+                            </div>
+                        </aside>
+                    )}
+
+                    {/* CONTENU PRINCIPAL (Glassmorphic) */}
+                    <main className="flex-1 min-w-0 mb-20 md:mb-0 relative">
+                        <div className="glass-card p-6 md:p-10 min-h-[calc(100vh-3rem)] relative overflow-hidden backdrop-blur-xl border border-white/10">
+                            {/* Decorative Glow */}
+                            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+                            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/10 blur-[120px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/2" />
+
+                            <div className="relative z-10">
+                                {children}
                             </div>
                         </div>
+                    </main>
 
-                        {/* Navigation */}
-                        <nav className="space-y-3 flex-1">
-                            <button
-                                onClick={() => navigate('/dashboard')}
-                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold transition-all ${isActive('/dashboard') ? 'neu-inset text-primary' : 'neu-raised hover:shadow-neo-md'}`}
-                            >
-                                <LayoutDashboard className="w-4 h-4" />
-                                Tableau de bord
-                            </button>
-                            <button
-                                onClick={() => navigate('/documents')}
-                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold transition-all ${isActive('/documents') ? 'neu-inset text-primary' : 'neu-raised hover:shadow-neo-md'}`}
-                            >
-                                <FileText className="w-4 h-4" />
-                                Mes Documents
-                            </button>
-                            <button
-                                onClick={() => navigate('/cv')}
-                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold transition-all ${isActive('/cv') ? 'neu-inset text-primary' : 'neu-raised hover:shadow-neo-md'}`}
-                            >
-                                <User className="w-4 h-4" />
-                                Mon CV
-                            </button>
-                            <button
-                                onClick={() => navigate('/settings')}
-                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold transition-all ${isActive('/settings') ? 'neu-inset text-primary' : 'neu-raised hover:shadow-neo-md'}`}
-                            >
-                                <Settings className="w-4 h-4" />
-                                Paramètres
-                            </button>
-                        </nav>
+                    {/* MOBILE BOTTOM NAV */}
+                    {showSidebar && (
+                        <div className="fixed bottom-0 left-0 right-0 md:hidden z-40">
+                            {/* Background Container with Neomorphic Style */}
+                            <div className="bg-background/95 backdrop-blur-md border-t border-white/20 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pb-safe">
+                                <div className="flex justify-between items-center px-6 h-16 relative">
 
-                        {/* Footer Sidebar */}
-                        <div className="mt-auto pt-4 border-t border-border/20 space-y-3">
-                            <button
-                                onClick={toggleTheme}
-                                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm neu-raised hover:shadow-neo-md transition-all"
-                            >
-                                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                                {isDark ? 'Mode clair' : 'Mode sombre'}
-                            </button>
-                            <button
-                                onClick={() => navigate('/')}
-                                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-destructive neu-raised hover:shadow-neo-md transition-all"
-                            >
-                                <LogOut className="w-4 h-4" /> Déconnexion
-                            </button>
-                        </div>
-                    </aside>
-                )}
-
-                {/* CONTENU PRINCIPAL */}
-                <main className="flex-1 min-w-0 mb-20 md:mb-0">
-                    <div className="neu-card p-4 md:p-8 min-h-[calc(100vh-3rem)] relative overflow-hidden">
-                        {children}
-                    </div>
-                </main>
-
-                {/* MOBILE BOTTOM NAV */}
-                {showSidebar && (
-                    <div className="fixed bottom-0 left-0 right-0 md:hidden z-40">
-                        {/* Background Container with Neomorphic Style */}
-                        <div className="bg-background/95 backdrop-blur-md border-t border-white/20 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pb-safe">
-                            <div className="flex justify-between items-center px-6 h-16 relative">
-
-                                {/* Left Icons */}
-                                <div className="flex space-x-8">
-                                    <button
-                                        onClick={() => navigate('/dashboard')}
-                                        className={`flex flex-col items-center justify-center space-y-1 ${isActive('/dashboard') ? 'text-primary' : 'text-muted-foreground'}`}
-                                    >
-                                        <LayoutDashboard size={24} strokeWidth={isActive('/dashboard') ? 2.5 : 2} />
-                                        {isActive('/dashboard') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
-                                    </button>
-                                    <button
-                                        onClick={() => navigate('/documents')}
-                                        className={`flex flex-col items-center justify-center space-y-1 ${isActive('/documents') ? 'text-primary' : 'text-muted-foreground'}`}
-                                    >
-                                        <FileText size={24} strokeWidth={isActive('/documents') ? 2.5 : 2} />
-                                        {isActive('/documents') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
-                                    </button>
-                                </div>
-
-                                {/* Center Space for iAsted */}
-                                <div className="w-16 h-16"></div>
-
-                                {/* Right Icons */}
-                                <div className="flex space-x-8">
-                                    <button
-                                        onClick={() => navigate('/cv')}
-                                        className={`flex flex-col items-center justify-center space-y-1 ${isActive('/cv') ? 'text-primary' : 'text-muted-foreground'}`}
-                                    >
-                                        <User size={24} strokeWidth={isActive('/cv') ? 2.5 : 2} />
-                                        {isActive('/cv') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
-                                    </button>
-                                    <button
-                                        onClick={() => navigate('/settings')}
-                                        className={`flex flex-col items-center justify-center space-y-1 ${isActive('/settings') ? 'text-primary' : 'text-muted-foreground'}`}
-                                    >
-                                        <Settings size={24} strokeWidth={isActive('/settings') ? 2.5 : 2} />
-                                        {isActive('/settings') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
-                                    </button>
-                                </div>
-
-                                {/* Central Dock for iAsted Button */}
-                                {showAgent && (
-                                    <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 w-20 h-20 flex items-center justify-center pointer-events-none">
-                                        {/* The button itself needs pointer-events-auto */}
-                                        <div className="pointer-events-auto transform scale-90">
-                                            <IAstedButtonFull fixedPosition={false} size="md" />
-                                        </div>
+                                    {/* Left Icons */}
+                                    <div className="flex space-x-8">
+                                        <button
+                                            onClick={() => navigate('/dashboard')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/dashboard') ? 'text-primary' : 'text-muted-foreground'}`}
+                                        >
+                                            <LayoutDashboard size={24} strokeWidth={isActive('/dashboard') ? 2.5 : 2} />
+                                            {isActive('/dashboard') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                        </button>
+                                        <button
+                                            onClick={() => navigate('/documents')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/documents') ? 'text-primary' : 'text-muted-foreground'}`}
+                                        >
+                                            <FileText size={24} strokeWidth={isActive('/documents') ? 2.5 : 2} />
+                                            {isActive('/documents') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                        </button>
                                     </div>
-                                )}
 
+                                    {/* Center Space for iAsted */}
+                                    <div className="w-16 h-16"></div>
+
+                                    {/* Right Icons */}
+                                    <div className="flex space-x-8">
+                                        <button
+                                            onClick={() => navigate('/cv')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/cv') ? 'text-primary' : 'text-muted-foreground'}`}
+                                        >
+                                            <User size={24} strokeWidth={isActive('/cv') ? 2.5 : 2} />
+                                            {isActive('/cv') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                        </button>
+                                        <button
+                                            onClick={() => navigate('/settings')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/settings') ? 'text-primary' : 'text-muted-foreground'}`}
+                                        >
+                                            <Settings size={24} strokeWidth={isActive('/settings') ? 2.5 : 2} />
+                                            {isActive('/settings') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                        </button>
+                                    </div>
+
+                                    {/* Central Dock for iAsted Button */}
+                                    {showAgent && (
+                                        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 w-20 h-20 flex items-center justify-center pointer-events-none">
+                                            {/* The button itself needs pointer-events-auto */}
+                                            <div className="pointer-events-auto transform scale-90">
+                                                <IAstedButtonFull fixedPosition={false} size="md" />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {/* iAsted Agent - Persistent (Desktop Only) */}
-                {showAgent && (
-                    <div className="hidden md:block fixed bottom-6 right-6 z-50">
-                        <IAstedButtonFull />
-                    </div>
-                )}
+                    {/* iAsted Agent - Persistent (Desktop Only) */}
+                    {showAgent && (
+                        <div className="hidden md:block fixed bottom-6 right-6 z-50">
+                            <IAstedButtonFull />
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </IAstedProvider>
     );
 }
 
