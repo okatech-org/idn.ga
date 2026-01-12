@@ -18,6 +18,7 @@ import DocumentVault from "./pages/documents/DocumentVault";
 import DigitalID from "./pages/id-card/DigitalID";
 import CVDashboard from "./pages/cv/CVDashboard";
 import EditCV from "./pages/cv/EditCV";
+import ICVPage from "./pages/cv/iCVPage";
 import GeneralSettings from "./pages/settings/GeneralSettings";
 import SecuritySettings from "./pages/settings/SecuritySettings";
 import NotificationCenter from "./pages/notifications/NotificationCenter";
@@ -27,13 +28,24 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminReports from "@/pages/admin/AdminReports";
 import AdminSettings from "@/pages/admin/AdminSettings";
-import ControllerDashboard from "@/pages/admin/ControllerDashboard";
+import ControllerDashboardLegacy from "@/pages/admin/ControllerDashboard";
+import ControllerSpace from "./pages/ControllerSpace";
 import DemoPage from "./pages/DemoPage";
 import IAstedPage from "./pages/IAstedPage";
 import Login from "@/pages/auth/Login";
 import BiometricLogin from "@/pages/auth/BiometricLogin";
 import OAuthAuthorize from "@/pages/oauth/Authorize";
 import DeveloperPortal from "@/pages/oauth/DeveloperPortal";
+
+// New Controller Pages
+import {
+  ControllerLayout,
+  ControllerDashboard,
+  ControllerQueuePage,
+  ControllerHistoryPage,
+  ControllerScannerPage,
+  ControllerSettingsPage
+} from "./pages/controller";
 
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -70,8 +82,9 @@ const App = () => (
               <Route path="/documents/add" element={<AddDocument />} />
               <Route path="/documents/request" element={<RequestDocument />} />
               <Route path="/id-card" element={<DigitalID />} />
-              <Route path="/cv" element={<CVDashboard />} />
-              <Route path="/cv/edit" element={<EditCV />} />
+              <Route path="/icv" element={<ICVPage />} />
+              <Route path="/icv/edit" element={<ICVPage />} />
+              <Route path="/icv/dashboard" element={<CVDashboard />} />
               <Route path="/settings" element={<GeneralSettings />} />
               <Route path="/settings/security" element={<SecuritySettings />} />
               <Route path="/notifications" element={<NotificationCenter />} />
@@ -82,8 +95,20 @@ const App = () => (
               <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/admin/reports" element={<AdminReports />} />
               <Route path="/admin/settings" element={<AdminSettings />} />
-              <Route path="/admin/verifications" element={<AdminDashboard />} /> {/* Reusing Dashboard for now as queue is there */}
-              <Route path="/controller" element={<ControllerDashboard />} />
+              <Route path="/admin/verifications" element={<AdminDashboard />} />
+
+              {/* New Controller Space with nested routes */}
+              <Route path="/controller" element={<ControllerLayout />}>
+                <Route index element={<ControllerDashboard />} />
+                <Route path="queue" element={<ControllerQueuePage />} />
+                <Route path="history" element={<ControllerHistoryPage />} />
+                <Route path="scanner" element={<ControllerScannerPage />} />
+                <Route path="settings" element={<ControllerSettingsPage />} />
+              </Route>
+
+              {/* Legacy routes */}
+              <Route path="/controller-legacy" element={<ControllerDashboardLegacy />} />
+              <Route path="/controller-old" element={<ControllerSpace />} />
               <Route path="/demo" element={<DemoPage />} />
 
               {/* iAsted - Keeping the existing route for reference/testing */}
@@ -107,3 +132,4 @@ const App = () => (
 );
 
 export default App;
+

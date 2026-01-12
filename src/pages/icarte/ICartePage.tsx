@@ -312,11 +312,11 @@ const ICartePage = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between shrink-0">
                     <div>
-                        <h1 className="text-lg font-bold text-foreground">iCarte</h1>
-                        <p className="text-xs text-muted-foreground">Gérez vos cartes numériques</p>
+                        <h1 className="text-xl font-bold text-foreground">iCarte</h1>
+                        <p className="text-sm text-muted-foreground">Gérez vos cartes numériques</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                        <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
                             {featuredIds.length}/6 cartes en vedette
                         </span>
                     </div>
@@ -331,13 +331,14 @@ const ICartePage = () => {
                         animate={{ opacity: 1, x: 0 }}
                         className={cn(
                             "p-4 rounded-2xl flex flex-col overflow-hidden",
-                            "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
-                            "border border-slate-200/60 dark:border-white/10"
+                            "bg-white/95 dark:bg-white/5 backdrop-blur-sm",
+                            "border border-slate-300/80 dark:border-white/10",
+                            "shadow-sm dark:shadow-none"
                         )}
                     >
                         <div className="flex items-center justify-between mb-3 shrink-0">
-                            <p className="text-xs font-semibold text-foreground">Mes 6 cartes en vedette</p>
-                            <p className="text-[9px] text-muted-foreground">Glissez pour réordonner</p>
+                            <p className="text-sm font-semibold text-foreground">Mes 6 cartes en vedette</p>
+                            <p className="text-xs text-muted-foreground">Glissez pour réordonner</p>
                         </div>
 
                         <div className="flex-1 overflow-auto">
@@ -377,8 +378,8 @@ const ICartePage = () => {
                                             </div>
 
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-[11px] font-medium text-foreground truncate">{card.name}</p>
-                                                <p className="text-[9px] text-muted-foreground truncate">{card.subtitle}</p>
+                                                <p className="text-sm font-medium text-foreground truncate">{card.name}</p>
+                                                <p className="text-xs text-muted-foreground truncate">{card.subtitle}</p>
                                             </div>
 
                                             <div className="flex items-center gap-1 shrink-0">
@@ -416,13 +417,14 @@ const ICartePage = () => {
                         animate={{ opacity: 1, x: 0 }}
                         className={cn(
                             "p-4 rounded-2xl flex flex-col overflow-hidden",
-                            "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
-                            "border border-slate-200/60 dark:border-white/10"
+                            "bg-white/95 dark:bg-white/5 backdrop-blur-sm",
+                            "border border-slate-300/80 dark:border-white/10",
+                            "shadow-sm dark:shadow-none"
                         )}
                     >
                         <div className="flex items-center justify-between mb-3 shrink-0">
-                            <p className="text-xs font-semibold text-foreground">Toutes mes cartes</p>
-                            <p className="text-[9px] text-muted-foreground">{allCards.length} cartes</p>
+                            <p className="text-sm font-semibold text-foreground">Toutes mes cartes</p>
+                            <p className="text-xs text-muted-foreground">{allCards.length} cartes</p>
                         </div>
 
                         <div className="flex-1 overflow-auto space-y-2">
@@ -432,9 +434,9 @@ const ICartePage = () => {
                                     <div
                                         key={card.id}
                                         className={cn(
-                                            "flex items-center gap-3 p-2.5 rounded-xl",
-                                            "bg-slate-100/50 dark:bg-white/5",
-                                            "border border-slate-200/60 dark:border-white/10",
+                                            "flex items-center gap-3 p-3 rounded-xl",
+                                            "bg-slate-100/80 dark:bg-white/5",
+                                            "border border-slate-300/60 dark:border-white/10",
                                             isFeatured && "ring-2 ring-primary/30"
                                         )}
                                     >
@@ -452,8 +454,8 @@ const ICartePage = () => {
                                         </div>
 
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-[11px] font-medium text-foreground truncate">{card.name}</p>
-                                            <p className="text-[9px] text-muted-foreground truncate">{card.subtitle}</p>
+                                            <p className="text-sm font-medium text-foreground truncate">{card.name}</p>
+                                            <p className="text-xs text-muted-foreground truncate">{card.subtitle}</p>
                                         </div>
 
                                         <div className="flex items-center gap-1 shrink-0">
@@ -489,8 +491,8 @@ const ICartePage = () => {
                         </div>
 
                         {/* Add Card Section */}
-                        <div className="mt-3 pt-3 border-t border-slate-200/60 dark:border-white/10 shrink-0">
-                            <p className="text-[10px] font-semibold text-muted-foreground uppercase mb-2">Ajouter une carte</p>
+                        <div className="mt-3 pt-3 border-t border-slate-300/60 dark:border-white/10 shrink-0">
+                            <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">Ajouter une carte</p>
                             <div className="grid grid-cols-4 gap-1.5">
                                 {cardTemplates.map((template) => (
                                     <button
@@ -509,7 +511,7 @@ const ICartePage = () => {
                                         )}>
                                             <template.icon className="w-2.5 h-2.5 text-white" />
                                         </div>
-                                        <span className="text-[7px] text-muted-foreground truncate w-full text-center">{template.shortLabel}</span>
+                                        <span className="text-[9px] text-muted-foreground truncate w-full text-center">{template.shortLabel}</span>
                                     </button>
                                 ))}
                                 {/* Custom Card Button */}
@@ -525,7 +527,7 @@ const ICartePage = () => {
                                     <div className="w-5 h-5 rounded-md flex items-center justify-center bg-primary/20">
                                         <Palette className="w-2.5 h-2.5 text-primary" />
                                     </div>
-                                    <span className="text-[7px] text-primary font-medium">Personnalisée</span>
+                                    <span className="text-[9px] text-primary font-medium">Personnalisée</span>
                                 </button>
                             </div>
                         </div>

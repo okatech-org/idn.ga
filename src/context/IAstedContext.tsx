@@ -31,7 +31,7 @@ export const IAstedProvider = ({ children }: { children: ReactNode }) => {
             contextData = { path, type: 'admin_panel' };
         } else if (path.includes('/documents')) {
             contextData = { path, type: 'document_management' };
-        } else if (path.includes('/cv')) {
+        } else if (path.includes('/icv')) {
             contextData = { path, type: 'cv_editor' };
         }
 

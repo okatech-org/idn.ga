@@ -12,10 +12,12 @@ import {
     CreditCard as PayIcon,
     Printer,
     QrCode,
-    Download
+    Download,
+    ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import sceauGabon from "@/assets/sceau_gabon.png";
+import { useNavigate } from "react-router-dom";
 
 interface CardAction {
     icon: React.ElementType;
@@ -129,11 +131,14 @@ interface CompactWalletProps {
 }
 
 export default function CompactWallet({ cards = defaultCards, onCardClick }: CompactWalletProps) {
+    const navigate = useNavigate();
     const [selectedCard, setSelectedCard] = useState<string | null>(null);
     const [isFlipped, setIsFlipped] = useState(false);
 
-    // Take only first 6 cards for display
-    const displayCards = cards.slice(0, 6);
+    // Maximum 7 cards displayed, last one fully visible
+    const MAX_CARDS = 7;
+    const displayCards = cards.slice(0, MAX_CARDS);
+    const hasMoreCards = cards.length > MAX_CARDS;
 
     const handleCardClick = (cardId: string) => {
         if (selectedCard === cardId) {
@@ -152,11 +157,11 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
 
     // Card overlap offset - like real Apple Wallet
     // Each card shows its header (name + icon) before being covered by the next
-    const CARD_OVERLAP = 42; // Offset to show full card header with icon and text
-    const CARD_HEIGHT = 52; // Height of each card in stacked view
+    const CARD_OVERLAP = 44; // Offset to show full card header with icon and text
+    const CARD_HEIGHT = 56; // Height of each card in stacked view
     const selectedCardData = selectedCard ? displayCards.find(c => c.id === selectedCard) : null;
 
-    // Calculate total stack height
+    // Calculate total stack height - last card fully visible
     const stackHeight = CARD_HEIGHT + (displayCards.length - 1) * CARD_OVERLAP;
 
     return (
@@ -168,19 +173,19 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="flex items-center justify-between mb-2 shrink-0"
+                        className="flex items-center justify-between mb-3 shrink-0"
                     >
                         <button
                             onClick={handleBack}
                             className={cn(
-                                "flex items-center gap-1 text-[10px] font-medium",
+                                "flex items-center gap-1.5 text-xs font-medium",
                                 "text-muted-foreground hover:text-foreground transition-colors"
                             )}
                         >
-                            <ArrowLeft className="w-3 h-3" />
+                            <ArrowLeft className="w-4 h-4" />
                             Retour
                         </button>
-                        <span className="text-[9px] text-muted-foreground">
+                        <span className="text-xs text-muted-foreground">
                             Cliquez pour retourner
                         </span>
                     </motion.div>
@@ -257,8 +262,8 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                                             <div className="mt-2 space-y-0.5">
                                                 {Object.entries(card.data).map(([key, value]) => (
                                                     <div key={key} className="flex justify-between">
-                                                        <span className="text-[8px] uppercase opacity-50">{key}</span>
-                                                        <span className={cn("font-medium text-[9px]", key === "numero" && "font-mono")}>{value}</span>
+                                                        <span className="text-[10px] uppercase opacity-60">{key}</span>
+                                                        <span className={cn("font-medium text-xs", key === "numero" && "font-mono")}>{value}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -283,8 +288,8 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                                                 <div className="mt-2 space-y-0.5">
                                                     {Object.entries(card.backData).map(([key, value]) => (
                                                         <div key={key} className="flex justify-between">
-                                                            <span className="text-[8px] uppercase opacity-50">{key}</span>
-                                                            <span className="font-medium text-[9px]">{value}</span>
+                                                            <span className="text-[10px] uppercase opacity-60">{key}</span>
+                                                            <span className="font-medium text-xs">{value}</span>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -330,8 +335,8 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                                             </div>
                                         )}
                                         <div>
-                                            <p className="font-bold text-[11px] leading-tight">{card.name}</p>
-                                            <p className="text-[8px] opacity-70">{card.subtitle}</p>
+                                            <p className="font-bold text-sm leading-tight">{card.name}</p>
+                                            <p className="text-[10px] opacity-70">{card.subtitle}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -369,6 +374,25 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* "See more" link when there are more cards */}
+            {hasMoreCards && !selectedCard && (
+                <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onClick={() => navigate("/icarte")}
+                    className={cn(
+                        "mt-3 flex items-center justify-center gap-1.5 w-full py-2 rounded-lg",
+                        "bg-slate-100/80 dark:bg-white/10",
+                        "hover:bg-slate-200/80 dark:hover:bg-white/15",
+                        "text-sm font-medium text-primary",
+                        "transition-colors"
+                    )}
+                >
+                    Voir toutes les cartes ({cards.length})
+                    <ChevronRight className="w-4 h-4" />
+                </motion.button>
+            )}
         </div>
     );
 }

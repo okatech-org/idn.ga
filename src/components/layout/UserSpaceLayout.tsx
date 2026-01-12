@@ -47,7 +47,7 @@ export default function UserSpaceLayout({
                                     { path: '/documents', icon: FileText, label: 'iDocument' },
                                     { path: '/iboite', icon: Mail, label: 'iBoîte' },
                                     { path: '/icarte', icon: CreditCard, label: 'iCarte' },
-                                    { path: '/cv', icon: User, label: 'iCV' },
+                                    { path: '/icv', icon: User, label: 'iCV' },
                                     { path: '/iasted', icon: Sparkles, label: 'iAsted' },
                                     { path: '/settings', icon: Settings, label: 'Paramètres' },
                                 ].map((item) => (
@@ -132,11 +132,11 @@ export default function UserSpaceLayout({
                                     {/* Right Icons */}
                                     <div className="flex space-x-8">
                                         <button
-                                            onClick={() => navigate('/cv')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/cv') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            onClick={() => navigate('/icv')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/icv') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <User size={24} strokeWidth={isActive('/cv') ? 2.5 : 2} />
-                                            {isActive('/cv') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <User size={24} strokeWidth={isActive('/icv') ? 2.5 : 2} />
+                                            {isActive('/icv') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
                                         </button>
                                         <button
                                             onClick={() => navigate('/settings')}

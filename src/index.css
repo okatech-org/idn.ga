@@ -5,8 +5,8 @@
 @layer base {
   :root {
     /* === DESIGN NEOMORPHIQUE === */
-    --background: 0 0% 96%;
-    /* #F5F5F5 - Neutre clair */
+    --background: 0 0% 92%;
+    /* #EBEBEB - Fond gris accentué */
     --foreground: 0 0% 10%;
     /* #1A1A1A - Neutre foncé */
 
@@ -29,8 +29,8 @@
     /* #0072CE - Bleu Gabon */
     --accent-foreground: 0 0% 100%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 77%;
+    --muted-foreground: 0 0% 30%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -43,31 +43,32 @@
     /* #10B981 */
     --success-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    /* Enhanced contrast for light mode - darker borders for better block delimitation */
+    --border: 0 0% 70%;
+    --input: 0 0% 72%;
     --ring: 148 100% 31%;
     /* Primary color for rings */
 
     --radius: 0.75rem;
     /* 12px */
 
-    /* === OMBRES NEOMORPHIQUES === */
-    --neo-shadow-sm: 4px 4px 8px rgba(0, 0, 0, 0.05), -4px -4px 8px rgba(255, 255, 255, 1);
-    --neo-shadow-md: 8px 8px 16px rgba(0, 0, 0, 0.06), -8px -8px 16px rgba(255, 255, 255, 1);
-    --neo-shadow-lg: 12px 12px 24px rgba(0, 0, 0, 0.07), -12px -12px 24px rgba(255, 255, 255, 1);
-    --neo-shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.05), inset -4px -4px 8px rgba(255, 255, 255, 1);
-    --neo-shadow-inset-lg: inset 8px 8px 16px rgba(0, 0, 0, 0.06), inset -8px -8px 16px rgba(255, 255, 255, 1);
+    /* === OMBRES NEOMORPHIQUES - Enhanced visibility === */
+    --neo-shadow-sm: 4px 4px 10px rgba(0, 0, 0, 0.14), -4px -4px 10px rgba(255, 255, 255, 0.95);
+    --neo-shadow-md: 8px 8px 18px rgba(0, 0, 0, 0.16), -8px -8px 18px rgba(255, 255, 255, 0.95);
+    --neo-shadow-lg: 12px 12px 28px rgba(0, 0, 0, 0.20), -12px -12px 28px rgba(255, 255, 255, 0.95);
+    --neo-shadow-inset: inset 4px 4px 10px rgba(0, 0, 0, 0.14), inset -4px -4px 10px rgba(255, 255, 255, 0.95);
+    --neo-shadow-inset-lg: inset 8px 8px 18px rgba(0, 0, 0, 0.16), inset -8px -8px 18px rgba(255, 255, 255, 0.95);
 
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 0 0% 96%;
     --sidebar-foreground: 0 0% 10%;
     --sidebar-primary: 148 100% 31%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent: 0 0% 88%;
     --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 0 0% 90%;
+    --sidebar-border: 0 0% 70%;
     --sidebar-ring: 148 100% 31%;
   }
 
@@ -140,7 +141,7 @@
 
   /* === GLASSMORPHISM === */
   .glass {
-    @apply bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10;
+    @apply bg-white/85 dark:bg-black/20 backdrop-blur-md border border-slate-300/70 dark:border-white/10 shadow-sm;
   }
 
   .glass-card {
@@ -166,8 +167,7 @@
   }
 
   .glass-card:hover {
-    @apply bg-white/15 dark:bg-black/30 transform -translate-y-1 shadow-glow-primary;
-    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45), 0 0 20px -5px hsl(var(--primary) / 0.5);
+    @apply bg-white/95 dark:bg-black/30 transform -translate-y-1 shadow-lg border-slate-400/80 dark:border-white/20;
   }
 
   .glass-button {
@@ -221,10 +221,10 @@
   /* === CLASSES NEOMORPHIQUES ALTERNATIVES (neu-*) === */
   .neu-card {
     background: hsl(var(--card));
-    box-shadow: 4px 4px 8px rgba(150, 150, 150, 0.5), -4px -4px 8px rgba(255, 255, 255, 1), inset 1px 1px 2px rgba(255, 255, 255, 0.8), inset -1px -1px 2px rgba(150, 150, 150, 0.3);
+    box-shadow: 4px 4px 10px rgba(120, 120, 120, 0.25), -4px -4px 10px rgba(255, 255, 255, 1), inset 1px 1px 2px rgba(255, 255, 255, 0.8), inset -1px -1px 2px rgba(120, 120, 120, 0.2);
     border-radius: var(--radius);
     transition: var(--transition-smooth);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(200, 200, 200, 0.6);
   }
 
   .dark .neu-card {
@@ -234,10 +234,10 @@
 
   .neu-raised {
     background: hsl(var(--card));
-    box-shadow: 3px 3px 6px rgba(150, 150, 150, 0.4), -3px -3px 6px rgba(255, 255, 255, 0.9), inset 1px 1px 1px rgba(255, 255, 255, 0.7), inset -1px -1px 1px rgba(150, 150, 150, 0.25);
+    box-shadow: 3px 3px 8px rgba(120, 120, 120, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.95), inset 1px 1px 1px rgba(255, 255, 255, 0.7), inset -1px -1px 1px rgba(120, 120, 120, 0.15);
     border-radius: var(--radius);
     transition: var(--transition-fast);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(180, 180, 180, 0.5);
   }
 
   .dark .neu-raised {

@@ -302,9 +302,10 @@ const IDocumentPage = () => {
                 onClick={() => selectFolder(category)}
                 className={cn(
                     "relative p-4 rounded-2xl text-left transition-all group overflow-hidden",
-                    "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
-                    "border border-slate-200/60 dark:border-white/10",
-                    "hover:border-primary/30 hover:shadow-lg"
+                    "bg-white/95 dark:bg-white/5 backdrop-blur-sm",
+                    "border border-slate-300/80 dark:border-white/10",
+                    "hover:border-primary/30 hover:shadow-lg",
+                    "shadow-sm dark:shadow-none"
                 )}
             >
                 {/* Gradient background accent */}
@@ -326,14 +327,14 @@ const IDocumentPage = () => {
                     <h3 className="text-sm font-bold text-foreground mb-1">
                         {FOLDER_LABELS[category]}
                     </h3>
-                    <p className="text-[10px] text-muted-foreground line-clamp-1">
+                    <p className="text-xs text-muted-foreground line-clamp-1">
                         {FOLDER_DESCRIPTIONS[category]}
                     </p>
 
                     {/* Count badge */}
                     <div className="absolute top-0 right-0">
                         <span className={cn(
-                            "inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold",
+                            "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold",
                             count > 0
                                 ? "bg-primary text-primary-foreground"
                                 : "bg-muted text-muted-foreground"
@@ -358,9 +359,10 @@ const IDocumentPage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className={cn(
                     "group relative p-3 rounded-xl cursor-pointer transition-all",
-                    "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
-                    "border border-slate-200/60 dark:border-white/10",
-                    "hover:border-primary/30 hover:shadow-lg"
+                    "bg-white/95 dark:bg-white/5 backdrop-blur-sm",
+                    "border border-slate-300/80 dark:border-white/10",
+                    "hover:border-primary/30 hover:shadow-lg",
+                    "shadow-sm dark:shadow-none"
                 )}
                 onClick={() => setPreviewDoc(doc)}
             >
@@ -384,7 +386,7 @@ const IDocumentPage = () => {
                 </div>
 
                 {/* Info */}
-                <p className="text-[11px] font-medium text-foreground truncate">{doc.name}</p>
+                <p className="text-sm font-medium text-foreground truncate">{doc.name}</p>
                 <div className="flex items-center justify-between mt-1 gap-1 flex-wrap">
                     <StatusBadge status={doc.status} />
                     <ExpirationBadge date={doc.expiration_date} neverExpires={neverExpires} />
@@ -393,7 +395,7 @@ const IDocumentPage = () => {
                 {/* Side badge for recto/verso */}
                 {doc.side && (
                     <div className="absolute top-2 left-2">
-                        <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-black/50 text-white">
+                        <span className="text-[10px] font-bold px-2 py-1 rounded bg-black/50 text-white">
                             {doc.side === 'front' ? 'RECTO' : 'VERSO'}
                         </span>
                     </div>
@@ -463,10 +465,10 @@ const IDocumentPage = () => {
                             </div>
                         )}
                         <div>
-                            <h1 className="text-lg font-bold text-foreground">
+                            <h1 className="text-xl font-bold text-foreground">
                                 {selectedFolderId ? FOLDER_LABELS[selectedFolderId] : 'iDocument'}
                             </h1>
-                            <p className="text-[10px] text-muted-foreground">
+                            <p className="text-xs text-muted-foreground">
                                 {selectedFolderId
                                     ? `${folderStats[selectedFolderId]} document(s)`
                                     : `${localDocs.length} documents • ${Object.values(folderStats).filter(c => c > 0).length} dossiers`
@@ -494,7 +496,7 @@ const IDocumentPage = () => {
                         {/* AI Badge */}
                         <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20">
                             <Sparkles className="w-3 h-3 text-violet-500" />
-                            <span className="text-[9px] font-medium text-violet-600 dark:text-violet-400">IA Active</span>
+                            <span className="text-xs font-medium text-violet-600 dark:text-violet-400">IA Active</span>
                         </div>
 
                         {/* Notifications */}

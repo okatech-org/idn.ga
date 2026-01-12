@@ -147,8 +147,8 @@ const IAstedPage = () => {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">iAsted</h1>
-              <p className="text-[10px] text-muted-foreground">
+              <h1 className="text-xl font-bold text-foreground">iAsted</h1>
+              <p className="text-xs text-muted-foreground">
                 Assistant vocal intelligent
               </p>
             </div>

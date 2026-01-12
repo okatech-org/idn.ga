@@ -1,7 +1,8 @@
 // Supabase Edge Function for Document OCR with Gemini Vision API
 // Securely analyzes identity documents and extracts structured data
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+// deno-lint-ignore-file
+// @ts-nocheck - This file runs in Deno runtime, not Node.js
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -9,7 +10,7 @@ const corsHeaders = {
 }
 
 // Document types we can analyze
-type DocumentType =
+type OcrDocumentType =
     | 'cni'
     | 'passport'
     | 'birth_certificate'
@@ -37,7 +38,7 @@ interface ExtractedData {
 }
 
 interface AnalysisResult {
-    documentType: DocumentType
+    documentType: OcrDocumentType
     detectedSide?: 'front' | 'back'
     confidence: number
     extractedData: ExtractedData
@@ -48,7 +49,7 @@ interface AnalysisResult {
 }
 
 // Gemini prompt for document analysis
-const getAnalysisPrompt = (documentType?: DocumentType) => `
+const getAnalysisPrompt = (documentType?: OcrDocumentType) => `
 Tu es un expert en reconnaissance de documents d'identité gabonais et internationaux.
 Analyse cette image de document et extrait les informations suivantes au format JSON.
 
@@ -93,7 +94,7 @@ Réponds UNIQUEMENT avec un JSON valide dans ce format:
 }
 `
 
-serve(async (req) => {
+Deno.serve(async (req: Request) => {
     // Handle CORS preflight
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
@@ -210,10 +211,11 @@ serve(async (req) => {
             }
         )
 
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('[DocumentOCR] Function error:', error)
+        const errorMessage = error instanceof Error ? error.message : 'Erreur interne'
         return new Response(
-            JSON.stringify({ error: error.message || 'Erreur interne' }),
+            JSON.stringify({ error: errorMessage }),
             { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
     }
