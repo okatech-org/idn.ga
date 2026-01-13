@@ -427,7 +427,7 @@ const IDocumentPage = () => {
 
     return (
         <UserSpaceLayout>
-            <div className="h-full flex flex-col gap-3 relative">
+            <div className="h-full flex flex-col gap-2 relative">
                 <input {...getInputProps()} />
 
                 {/* Dropzone overlay - only captures drag events */}

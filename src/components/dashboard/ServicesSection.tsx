@@ -92,10 +92,10 @@ export default function ServicesSection({ onServiceClick }: ServicesSectionProps
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                    Services Publics
+                    Applications Connectées
                 </h3>
                 <button className="text-xs text-primary font-medium hover:underline flex items-center gap-1">
-                    Tout voir <ChevronRight className="w-3 h-3" />
+                    Gérer <ChevronRight className="w-3 h-3" />
                 </button>
             </div>
 

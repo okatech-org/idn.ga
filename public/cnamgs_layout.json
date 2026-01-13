@@ -1,0 +1,34 @@
+{
+  "template": "CNAMGS-layout",
+  "canvas": {
+    "width": 1050,
+    "height": 650
+  },
+  "fields": [
+    {
+      "id": "field-card-number",
+      "type": "text",
+      "bbox": [485, 300, 400, 40]
+    },
+    {
+      "id": "field-name",
+      "type": "text",
+      "bbox": [99, 455, 400, 35]
+    },
+    {
+      "id": "field-given-names",
+      "type": "text",
+      "bbox": [99, 537, 400, 35]
+    },
+    {
+      "id": "field-birthdate",
+      "type": "text",
+      "bbox": [99, 619, 250, 35]
+    },
+    {
+      "id": "field-sex",
+      "type": "text",
+      "bbox": [548, 557, 100, 35]
+    }
+  ]
+}

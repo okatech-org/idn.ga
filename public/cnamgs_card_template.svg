@@ -1,0 +1,76 @@
+<svg id="cnamgs-card" width="1050" height="650" viewBox="0 0 1050 650" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip-photo">
+      <ellipse cx="847" cy="447" rx="130" ry="160"/>
+    </clipPath>
+    
+    <!-- Dégradés pour la puce -->
+    <linearGradient id="chipGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f4e4b3;stop-opacity:1" />
+      <stop offset="45%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="55%" style="stop-color:#b8941e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b7220;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="chipContactGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3a3420;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#554d2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a2418;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="chipShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="1" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.4"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- fond beige clair -->
+  <rect x="0" y="0" width="1050" height="650" rx="28" fill="#e9f2e9"/>
+  
+  <!-- fond blanc partie haute -->
+  <rect x="0" y="0" width="1050" height="165" fill="#ffffff"/>
+  
+  <!-- bande verte horizontale -->
+  <rect id="sepTop" x="0" y="165" width="1050" height="8" fill="#2aa84a"/>
+  
+  <!-- filigrane partie basse -->
+  <image x="0" y="173" width="1050" height="477" href="/fili_cnamgs.png" preserveAspectRatio="xMidYMid slice" opacity="0.35"/>
+
+  <!-- logos -->
+  <image id="img-coat-of-arms" x="37" y="15" width="138" height="138" href="/emblem_gabon.png" preserveAspectRatio="xMidYMid meet"/>
+  <image id="img-cnamgs-logo" x="610" y="29" width="400" height="110" href="/cnamgs_logo.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- titres en haut gauche -->
+  <text id="txt-republique" x="198" y="80" style="font:700 30px Arial;fill:#111;letter-spacing:-1px">RÉPUBLIQUE</text>
+  <text id="txt-gabonaise" x="198" y="116" style="font:700 30px Arial;fill:#111;letter-spacing:-1px">GABONAISE</text>
+  
+  <!-- titres centrés -->
+  <text id="txt-secteur" x="700" y="210" text-anchor="middle" style="font:700 31px Arial;fill:#555">Secteur Privé</text>
+  <text id="txt-carte" x="700" y="245" text-anchor="middle" style="font:700 31px Arial;fill:#555">Carte d'Assurance Maladie</text>
+
+  <!-- puce SIM image -->
+  <image id="chip" x="93" y="223" width="162" height="125" href="/puce_cnamgs.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- zone photo elliptique -->
+  <ellipse id="photo-placeholder" cx="847" cy="447" rx="130" ry="160" fill="#d9d9d9"/>
+
+  <!-- libellés des champs -->
+  <text id="label-nom" x="62" y="410" style="font:400 26px Arial;fill:#666">Nom</text>
+  <text id="label-prenoms" x="62" y="492" style="font:400 26px Arial;fill:#666">Prénoms</text>
+  <text id="label-dob" x="62" y="574" style="font:400 26px Arial;fill:#666">Date de naissance</text>
+  <text id="label-sex" x="511" y="574" style="font:400 26px Arial;fill:#666">Sexe</text>
+
+  <!-- CHAMPS dynamiques -->
+  <text id="field-card-number" x="501" y="288" text-anchor="start" style="font:900 34px Arial;fill:#111;letter-spacing:1px"></text>
+  <text id="field-name" x="99" y="467" style="font:700 32px Arial;fill:#000"></text>
+  <text id="field-given-names" x="99" y="549" style="font:700 32px Arial;fill:#000"></text>
+  <text id="field-birthdate" x="99" y="631" style="font:700 32px Arial;fill:#000"></text>
+  <text id="field-sex" x="548" y="569" style="font:700 32px Arial;fill:#000"></text>
+</svg>

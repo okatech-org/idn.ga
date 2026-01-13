@@ -23,6 +23,8 @@ import GeneralSettings from "./pages/settings/GeneralSettings";
 import SecuritySettings from "./pages/settings/SecuritySettings";
 import NotificationCenter from "./pages/notifications/NotificationCenter";
 import ICartePage from "./pages/icarte/ICartePage";
+import HealthCNAMGSPage from "./pages/health/HealthCNAMGSPage";
+import ConsularPage from "./pages/consular/ConsularPage";
 import IBoitePage from "./pages/iboite/IBoitePage";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminUsers from "@/pages/admin/AdminUsers";
@@ -76,8 +78,9 @@ const App = () => (
               <Route path="/biometric-login" element={<BiometricLogin />} />
 
               {/* Dashboard & Main App */}
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/documents" element={<IDocumentPage />} />
+              <Route path="/profil" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Navigate to="/profil" replace />} />
+              <Route path="/idocument" element={<IDocumentPage />} />
               <Route path="/documents/:id" element={<DocumentDetail />} />
               <Route path="/documents/add" element={<AddDocument />} />
               <Route path="/documents/request" element={<RequestDocument />} />
@@ -85,10 +88,13 @@ const App = () => (
               <Route path="/icv" element={<ICVPage />} />
               <Route path="/icv/edit" element={<ICVPage />} />
               <Route path="/icv/dashboard" element={<CVDashboard />} />
-              <Route path="/settings" element={<GeneralSettings />} />
+              <Route path="/parametres" element={<GeneralSettings />} />
+              <Route path="/settings" element={<Navigate to="/parametres" replace />} />
               <Route path="/settings/security" element={<SecuritySettings />} />
               <Route path="/notifications" element={<NotificationCenter />} />
               <Route path="/icarte" element={<ICartePage />} />
+              <Route path="/health/cnamgs" element={<HealthCNAMGSPage />} />
+              <Route path="/consular" element={<ConsularPage />} />
               <Route path="/vault" element={<DocumentVault />} />
               <Route path="/iboite" element={<IBoitePage />} />
               <Route path="/admin" element={<AdminDashboard />} />

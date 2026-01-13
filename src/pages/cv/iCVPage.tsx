@@ -174,7 +174,7 @@ export default function ICVPage() {
         <UserSpaceLayout>
             <div className="h-[calc(100vh-8rem)] flex flex-col overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-3 shrink-0">
+                <div className="flex items-center justify-between mb-2 shrink-0">
                     <div className="flex items-center gap-3">
                         <h1 className="text-xl font-bold text-foreground">iCV</h1>
                         <span className="text-sm text-muted-foreground hidden lg:inline">
@@ -195,7 +195,7 @@ export default function ICVPage() {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 flex gap-4 min-h-0 overflow-hidden">
+                <div className="flex-1 flex gap-2 min-h-0 overflow-hidden">
                     {/* Left Panel - Theme & AI */}
                     <div className={cn(
                         "w-64 shrink-0 rounded-xl flex flex-col overflow-hidden",

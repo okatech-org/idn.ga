@@ -187,7 +187,7 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        {/* Bottom: Services - Compact Row */}
+        {/* Bottom: Accès Rapides - Favorite sites/apps */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -199,33 +199,35 @@ const Dashboard = () => {
           )}
         >
           <div className="flex items-center justify-between">
-            <p className="text-sm font-bold text-slate-600 dark:text-muted-foreground uppercase tracking-wider">Services Publics</p>
-            <button className="text-sm text-primary font-semibold hover:underline">Tout voir</button>
+            <p className="text-sm font-bold text-slate-600 dark:text-muted-foreground uppercase tracking-wider">Accès Rapides</p>
+            <button
+              onClick={() => navigate("/settings")}
+              className="text-sm text-primary font-semibold hover:underline"
+            >
+              Gérer
+            </button>
           </div>
           <div className="flex gap-3 mt-3">
-            {services.map((service) => (
+            {[
+              { id: "mairie", name: "Mairie", url: "https://mairie.ga", icon: "🏛️", color: "bg-emerald-500/10 ring-emerald-500/30" },
+              { id: "impots", name: "Impôts", url: "https://dgi.ga", icon: "💰", color: "bg-blue-500/10 ring-blue-500/30" },
+              { id: "cnss", name: "CNSS", url: "https://cnss.ga", icon: "🏥", color: "bg-red-500/10 ring-red-500/30" },
+              { id: "emploi", name: "Emploi", url: "https://one.ga", icon: "💼", color: "bg-indigo-500/10 ring-indigo-500/30" },
+            ].map((site) => (
               <button
-                key={service.id}
-                onClick={() => { setSelectedService(service.id); setShowApiModal(true); }}
+                key={site.id}
+                onClick={() => window.open(site.url, "_blank")}
                 className={cn(
                   "flex-1 py-3 px-4 rounded-lg text-center transition-all",
                   "bg-slate-100/90 dark:bg-white/5",
                   "hover:bg-slate-200/90 dark:hover:bg-white/10",
                   "border border-slate-300/60 dark:border-transparent",
-                  "shadow-sm hover:shadow-md",
-                  service.connected && "ring-1 ring-green-500/30"
+                  "shadow-sm hover:shadow-md hover:scale-[1.02]",
+                  "ring-1", site.color
                 )}
               >
-                <p className="text-base font-semibold text-foreground">{service.name}</p>
-                <div className="flex items-center justify-center gap-2 mt-1.5">
-                  <span className={cn(
-                    "w-2.5 h-2.5 rounded-full",
-                    service.connected ? "bg-green-500" : "bg-slate-400"
-                  )} />
-                  <p className={cn("text-sm font-medium", service.connected ? "text-green-600" : "text-slate-500")}>
-                    {service.connected ? "Connecté" : "Non connecté"}
-                  </p>
-                </div>
+                <span className="text-2xl mb-1 block">{site.icon}</span>
+                <p className="text-sm font-semibold text-foreground">{site.name}</p>
               </button>
             ))}
           </div>

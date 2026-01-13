@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sun, Moon, Settings, LogOut, LayoutDashboard, FileText, User, Shield, CreditCard, FolderLock, Mail, Sparkles } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import IAstedButtonFull from '../iasted/IAstedButtonFull';
+import { IAstedChatModal } from '../iasted/IAstedChatModal';
 import { useTheme } from '@/context/ThemeContext';
 import { IAstedProvider } from '@/context/IAstedContext';
 
@@ -18,6 +19,9 @@ export default function UserSpaceLayout({
     const location = useLocation();
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === 'dark';
+
+    // State pour le modal de chat texte (double-clic)
+    const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
     const isActive = (path: string) => location.pathname === path;
 
@@ -43,13 +47,13 @@ export default function UserSpaceLayout({
                             {/* Navigation */}
                             <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
                                 {[
-                                    { path: '/dashboard', icon: LayoutDashboard, label: 'iProfil' },
-                                    { path: '/documents', icon: FileText, label: 'iDocument' },
+                                    { path: '/profil', icon: LayoutDashboard, label: 'iProfil' },
+                                    { path: '/idocument', icon: FileText, label: 'iDocument' },
                                     { path: '/iboite', icon: Mail, label: 'iBoîte' },
                                     { path: '/icarte', icon: CreditCard, label: 'iCarte' },
                                     { path: '/icv', icon: User, label: 'iCV' },
                                     { path: '/iasted', icon: Sparkles, label: 'iAsted' },
-                                    { path: '/settings', icon: Settings, label: 'Paramètres' },
+                                    { path: '/parametres', icon: Settings, label: 'Paramètres' },
                                 ].map((item) => (
                                     <button
                                         key={item.path}
@@ -111,18 +115,18 @@ export default function UserSpaceLayout({
                                     {/* Left Icons */}
                                     <div className="flex space-x-8">
                                         <button
-                                            onClick={() => navigate('/dashboard')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/dashboard') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            onClick={() => navigate('/profil')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/profil') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <LayoutDashboard size={24} strokeWidth={isActive('/dashboard') ? 2.5 : 2} />
-                                            {isActive('/dashboard') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <LayoutDashboard size={24} strokeWidth={isActive('/profil') ? 2.5 : 2} />
+                                            {isActive('/profil') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
                                         </button>
                                         <button
-                                            onClick={() => navigate('/documents')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/documents') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            onClick={() => navigate('/idocument')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/idocument') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <FileText size={24} strokeWidth={isActive('/documents') ? 2.5 : 2} />
-                                            {isActive('/documents') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <FileText size={24} strokeWidth={isActive('/idocument') ? 2.5 : 2} />
+                                            {isActive('/idocument') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
                                         </button>
                                     </div>
 
@@ -139,11 +143,11 @@ export default function UserSpaceLayout({
                                             {isActive('/icv') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
                                         </button>
                                         <button
-                                            onClick={() => navigate('/settings')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/settings') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            onClick={() => navigate('/parametres')}
+                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/parametres') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <Settings size={24} strokeWidth={isActive('/settings') ? 2.5 : 2} />
-                                            {isActive('/settings') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <Settings size={24} strokeWidth={isActive('/parametres') ? 2.5 : 2} />
+                                            {isActive('/parametres') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
                                         </button>
                                     </div>
 
@@ -152,7 +156,11 @@ export default function UserSpaceLayout({
                                         <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 w-20 h-20 flex items-center justify-center pointer-events-none">
                                             {/* The button itself needs pointer-events-auto */}
                                             <div className="pointer-events-auto transform scale-90">
-                                                <IAstedButtonFull fixedPosition={false} size="md" />
+                                                <IAstedButtonFull
+                                                    fixedPosition={false}
+                                                    size="md"
+                                                    onDoubleClick={() => setIsChatModalOpen(true)}
+                                                />
                                             </div>
                                         </div>
                                     )}
@@ -165,12 +173,19 @@ export default function UserSpaceLayout({
                     {/* iAsted Agent - Persistent (Desktop Only) */}
                     {showAgent && (
                         <div className="hidden md:block fixed bottom-6 right-6 z-50">
-                            <IAstedButtonFull />
+                            <IAstedButtonFull onDoubleClick={() => setIsChatModalOpen(true)} />
                         </div>
                     )}
                 </div>
             </div>
+
+            {/* Modal de Chat Texte (ouvert par double-clic) */}
+            <IAstedChatModal
+                isOpen={isChatModalOpen}
+                onClose={() => setIsChatModalOpen(false)}
+            />
         </IAstedProvider>
     );
 }
+
 

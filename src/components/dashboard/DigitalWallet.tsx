@@ -18,6 +18,12 @@ import {
 import { cn } from "@/lib/utils";
 import sceauGabon from "@/assets/sceau_gabon.png";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { generateCNAMGSPdf } from "@/utils/cnamgs-pdf-generator";
+import { MiniCNAMGSCard } from "@/components/health/MiniCNAMGSCard";
+import { ConsularCard } from "@/components/consular/ConsularCard";
+import { Globe } from "lucide-react";
+
 
 interface CardAction {
     icon: React.ElementType;
@@ -27,7 +33,7 @@ interface CardAction {
 
 export interface WalletCard {
     id: string;
-    type: "cni" | "transport" | "bank" | "business" | "driving" | "health";
+    type: "cni" | "transport" | "bank" | "business" | "driving" | "health" | "consular" | "voter" | "loyalty" | "custom";
     name: string;
     subtitle?: string;
     icon: React.ElementType;
@@ -91,8 +97,8 @@ export const defaultCards: WalletCard[] = [
         data: { regime: "Salarié", numero: "CNAM-789012", validite: "12/2025" },
         backData: { employeur: "TechGabon SARL", couverture: "100%" },
         actions: [
-            { icon: Printer, label: "Attestation", onClick: () => console.log("Print CNAMGS") },
-            { icon: Download, label: "Télécharger", onClick: () => console.log("Download CNAMGS") }
+            { icon: Printer, label: "Voir Carte", onClick: () => window.location.href = "/health/cnamgs" },
+            { icon: Download, label: "Attestation", onClick: () => window.location.href = "/health/cnamgs" }
         ]
     },
     {
@@ -121,6 +127,20 @@ export const defaultCards: WalletCard[] = [
         actions: [
             { icon: Share2, label: "Partager", onClick: () => console.log("Share Business") },
             { icon: QrCode, label: "QR Code", onClick: () => console.log("QR Business") }
+        ]
+    },
+    {
+        id: "consular",
+        type: "consular",
+        name: "Carte Consulaire",
+        subtitle: "République Gabonaise",
+        icon: Globe,
+        gradient: "from-amber-500 via-amber-600 to-yellow-700",
+        data: { numero: "GAB-2024-123456", nip: "1234", validite: "01/2029" },
+        backData: { consulat: "Paris, France", zone: "Île-de-France" },
+        actions: [
+            { icon: Printer, label: "Voir Carte", onClick: () => window.location.href = "/consular" },
+            { icon: Download, label: "Télécharger", onClick: () => window.location.href = "/consular" }
         ]
     }
 ];
@@ -209,6 +229,41 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                         }
 
                         // Selected card - Full size 85x55 format
+                        // For health cards, use the SVG-based card and navigate to dedicated page
+                        if (isSelected && card.type === "health") {
+                            return (
+                                <motion.div
+                                    key={card.id}
+                                    layout
+                                    initial={{ y: stackPosition }}
+                                    animate={{ y: 0 }}
+                                    onClick={() => navigate("/health/cnamgs")}
+                                    className="absolute left-0 right-0 top-0 cursor-pointer"
+                                    style={{ zIndex: 100 }}
+                                >
+                                    <MiniCNAMGSCard className="w-full shadow-xl" />
+                                </motion.div>
+                            );
+                        }
+
+                        // For consular cards, navigate to dedicated page
+                        if (isSelected && card.type === "consular") {
+                            return (
+                                <motion.div
+                                    key={card.id}
+                                    layout
+                                    initial={{ y: stackPosition }}
+                                    animate={{ y: 0 }}
+                                    onClick={() => navigate("/consular")}
+                                    className="absolute left-0 right-0 top-0 cursor-pointer"
+                                    style={{ zIndex: 100 }}
+                                >
+                                    <ConsularCard variant="mini" className="w-full shadow-xl" />
+                                </motion.div>
+                            );
+                        }
+
+                        // Selected card - Other card types with flip animation
                         if (isSelected) {
                             return (
                                 <motion.div
@@ -303,6 +358,49 @@ export default function CompactWallet({ cards = defaultCards, onCardClick }: Com
                         }
 
                         // Stacked cards - Full card visible, overlapping like Apple Wallet
+                        // For health cards, use the SVG-based MiniCNAMGSCard
+                        if (card.type === "health") {
+                            return (
+                                <motion.div
+                                    key={card.id}
+                                    layout
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.03 }}
+                                    onClick={() => handleCardClick(card.id)}
+                                    className="absolute left-0 right-0 cursor-pointer"
+                                    style={{
+                                        zIndex,
+                                        top: stackPosition
+                                    }}
+                                >
+                                    <MiniCNAMGSCard className="w-full" />
+                                </motion.div>
+                            );
+                        }
+
+                        // For consular cards, use the MiniConsularCard
+                        if (card.type === "consular") {
+                            return (
+                                <motion.div
+                                    key={card.id}
+                                    layout
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.03 }}
+                                    onClick={() => handleCardClick(card.id)}
+                                    className="absolute left-0 right-0 cursor-pointer"
+                                    style={{
+                                        zIndex,
+                                        top: stackPosition
+                                    }}
+                                >
+                                    <ConsularCard variant="mini" className="w-full" />
+                                </motion.div>
+                            );
+                        }
+
+                        // Other cards - gradient style
                         return (
                             <motion.div
                                 key={card.id}

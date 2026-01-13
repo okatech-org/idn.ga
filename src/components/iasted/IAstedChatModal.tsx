@@ -49,7 +49,7 @@ interface Message {
 interface IAstedChatModalProps {
   isOpen: boolean;
   onClose: () => void;
-  openaiRTC: UseRealtimeVoiceWebRTCReturn;
+  openaiRTC?: UseRealtimeVoiceWebRTCReturn;
   pendingDocument?: any;
   onClearPendingDocument?: () => void;
   currentVoice?: 'echo' | 'ash' | 'shimmer';
@@ -459,9 +459,9 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
   // OpenAI WebRTC integration is now passed via props
   // const openaiRTC = useRealtimeVoiceWebRTC();
 
-  // Auto-start voice when modal opens
+  // Auto-start voice when modal opens (only if openaiRTC is provided)
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && openaiRTC) {
       // Petit délai pour laisser l'UI se monter
       const timer = setTimeout(() => {
         if (openaiRTC.status !== 'connected') {
@@ -470,7 +470,7 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, selectedVoice]); // Reconnect if voice changes while open? Maybe not automatically, let user decide.
+  }, [isOpen, selectedVoice, openaiRTC]); // Reconnect if voice changes while open? Maybe not automatically, let user decide.
 
   // Manage local messages for chat UI (voice mode doesn't provide messages array)
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -734,16 +734,16 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
 
           try {
             let blob: Blob, url: string, filename: string;
-            
+
             if (requestedFormat === 'docx') {
               // Génération DOCX locale sans upload vers Supabase
               console.log('📄 [generateDOCX] Génération locale du DOCX');
-              
+
               const { Document, Paragraph, AlignmentType, HeadingLevel, Packer } = await import('docx');
-              
+
               const title = `${args.type} - ${args.recipient}`;
               const contentPoints = args.content_points || [];
-              
+
               const doc = new Document({
                 sections: [{
                   properties: {},
@@ -771,7 +771,7 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
                       text: `Date: ${new Date().toLocaleDateString('fr-FR')}`,
                       spacing: { after: 400 },
                     }),
-                    ...contentPoints.map((point: string) => 
+                    ...contentPoints.map((point: string) =>
                       new Paragraph({
                         text: point,
                         spacing: { before: 200, after: 200 },
@@ -784,7 +784,7 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
               blob = await Packer.toBlob(doc);
               filename = `${args.type}_${args.recipient.replace(/\s+/g, '_')}_${Date.now()}.docx`;
               url = URL.createObjectURL(blob);
-              
+
               console.log('✅ [generateDOCX] Document généré:', filename);
             } else {
               // Génération PDF existante
@@ -796,11 +796,11 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
                 signature_authority: args.signature_authority,
                 serviceContext: args.service_context
               });
-              
+
               blob = pdfResult.blob;
               url = pdfResult.url;
               filename = pdfResult.filename;
-              
+
               console.log('✅ [generatePDF] Document généré:', filename);
             }
 
@@ -837,7 +837,7 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
 
             // Télécharger automatiquement le PDF au lieu de l'ouvrir (évite ERR_BLOCKED_BY_CLIENT)
             // Si on est en mode vocal (connecté), on télécharge auto
-            if (openaiRTC.status === 'connected') {
+            if (openaiRTC?.status === 'connected') {
               console.log('🔊 [generatePDF] Téléchargement automatique (demande vocale)');
               setTimeout(() => {
                 const link = document.createElement('a');
@@ -986,13 +986,14 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
   // Clean up voice connections on unmount
   useEffect(() => {
     return () => {
-      if (openaiRTC.status === 'connected') {
+      if (openaiRTC?.status === 'connected') {
         openaiRTC.disconnect();
       }
     };
-  }, [openaiRTC.status]);
+  }, [openaiRTC?.status]);
 
   const handleConnect = async () => {
+    if (!openaiRTC) return;
     if (openaiRTC.status === 'connected') {
       openaiRTC.disconnect();
     } else {
@@ -1044,11 +1045,11 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
               {/* Voice Selector */}
               <div className="flex items-center gap-2 bg-background/50 rounded-lg p-1 border border-border/50">
                 <button
-                onClick={async () => {
-                  setSelectedVoice('ash');
-                  localStorage.setItem('iasted-voice-selection', 'ash');
-                  toast({ title: 'Voix changée', description: 'Homme (Ash)' });
-                }}
+                  onClick={async () => {
+                    setSelectedVoice('ash');
+                    localStorage.setItem('iasted-voice-selection', 'ash');
+                    toast({ title: 'Voix changée', description: 'Homme (Ash)' });
+                  }}
                   className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${selectedVoice === 'ash'
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-background/80'
@@ -1057,11 +1058,11 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
                   Homme
                 </button>
                 <button
-                onClick={async () => {
-                  setSelectedVoice('shimmer');
-                  localStorage.setItem('iasted-voice-selection', 'shimmer');
-                  toast({ title: 'Voix changée', description: 'Femme (Shimmer)' });
-                }}
+                  onClick={async () => {
+                    setSelectedVoice('shimmer');
+                    localStorage.setItem('iasted-voice-selection', 'shimmer');
+                    toast({ title: 'Voix changée', description: 'Femme (Shimmer)' });
+                  }}
                   className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${selectedVoice === 'shimmer'
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-background/80'
@@ -1113,18 +1114,20 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
 
         {/* Input Area */}
         < div className="p-4 border-t border-border bg-background/50 backdrop-blur-md flex items-end gap-2" >
-          <button
-            onClick={handleConnect}
-            className={`neu-raised p-4 rounded-xl hover:shadow-neo-lg transition-all ${openaiRTC.status === 'connected' ? 'bg-primary text-primary-foreground' : ''
-              }`}
-            title={openaiRTC.status === 'connected' ? 'Arrêter le mode vocal' : 'Activer le mode vocal'}
-          >
-            {openaiRTC.status === 'connected' ? (
-              <MicOff className="w-6 h-6" />
-            ) : (
-              <Mic className="w-6 h-6 text-primary" />
-            )}
-          </button>
+          {openaiRTC && (
+            <button
+              onClick={handleConnect}
+              className={`neu-raised p-4 rounded-xl hover:shadow-neo-lg transition-all ${openaiRTC.status === 'connected' ? 'bg-primary text-primary-foreground' : ''
+                }`}
+              title={openaiRTC.status === 'connected' ? 'Arrêter le mode vocal' : 'Activer le mode vocal'}
+            >
+              {openaiRTC.status === 'connected' ? (
+                <MicOff className="w-6 h-6" />
+              ) : (
+                <Mic className="w-6 h-6 text-primary" />
+              )}
+            </button>
+          )}
 
           <div className="flex-1 relative">
             <textarea
@@ -1132,16 +1135,16 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder={
-                openaiRTC.status === 'connected' ? `🎙️ Mode vocal actif (${selectedVoice === 'echo' ? 'Standard' : 'Africain'})` :
+                openaiRTC?.status === 'connected' ? `🎙️ Mode vocal actif (${selectedVoice === 'echo' ? 'Standard' : 'Africain'})` :
                   "Posez votre question à iAsted..."
               }
               className="w-full neu-inset rounded-xl p-4 pr-12 bg-transparent resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[60px] max-h-[120px]"
               rows={1}
-              disabled={isProcessing || openaiRTC.status === 'connected'}
+              disabled={isProcessing || openaiRTC?.status === 'connected'}
             />
             <button
               onClick={handleSendMessage}
-              disabled={!inputText.trim() || isProcessing || openaiRTC.status === 'connected'}
+              disabled={!inputText.trim() || isProcessing || openaiRTC?.status === 'connected'}
               className="absolute right-2 bottom-2 p-2 rounded-lg hover:bg-primary/10 text-primary disabled:opacity-50 transition-colors"
             >
               {isProcessing ? (
@@ -1154,7 +1157,7 @@ export const IAstedChatModal: React.FC<IAstedChatModalProps> = ({
         </div >
         <div className="text-center text-sm text-muted-foreground mt-3">
           {isProcessing ? '🧠 iAsted analyse...' :
-            openaiRTC.status === 'connected' ? `🎙️ Mode vocal actif (${selectedVoice === 'echo' ? 'Standard' : 'Africain'})` :
+            openaiRTC?.status === 'connected' ? `🎙️ Mode vocal actif (${selectedVoice === 'echo' ? 'Standard' : 'Africain'})` :
               '💬 Conversation stratégique'}
         </div>
       </motion.div >

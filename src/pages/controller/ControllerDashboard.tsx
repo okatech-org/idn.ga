@@ -52,6 +52,8 @@ const generateOverdueRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Oyem',
             nationality: 'Gabonaise',
             gender: 'F',
+            address: 'Quartier Zamaligué, Oyem',
+            phone: '+241 66 12 34 56',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=KassaMapangou'
         },
         documentType: 'cni',
@@ -74,6 +76,8 @@ const generateOverdueRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Bitam',
             nationality: 'Gabonaise',
             gender: 'F',
+            address: 'Avenue des Cocotiers, Bitam',
+            phone: '+241 77 23 45 67',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=OndoMinko'
         },
         documentType: 'passport',
@@ -96,6 +100,8 @@ const generateOverdueRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Franceville',
             nationality: 'Gabonaise',
             gender: 'M',
+            address: 'Rue du Commerce, Franceville',
+            phone: '+241 62 34 56 78',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MbaEssono'
         },
         documentType: 'birth_cert',
@@ -121,6 +127,8 @@ const generateTodayRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Libreville',
             nationality: 'Gabonaise',
             gender: 'M',
+            address: 'Boulevard Triomphal, Libreville',
+            phone: '+241 74 45 67 89',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Moussavou'
         },
         documentType: 'cni',
@@ -143,6 +151,8 @@ const generateTodayRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Port-Gentil',
             nationality: 'Gabonaise',
             gender: 'F',
+            address: 'Rue de la Plage, Port-Gentil',
+            phone: '+241 65 56 78 90',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ObameNguema'
         },
         documentType: 'passport',
@@ -165,6 +175,8 @@ const generateTodayRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Franceville',
             nationality: 'Gabonaise',
             gender: 'M',
+            address: 'Avenue de l\'Indépendance, Franceville',
+            phone: '+241 77 67 89 01',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=BongoOndimba'
         },
         documentType: 'driving',
@@ -187,6 +199,8 @@ const generateTodayRequests = (): VerificationRequest[] => [
             placeOfBirth: 'Lambaréné',
             nationality: 'Gabonaise',
             gender: 'M',
+            address: 'Quartier Isaac, Lambaréné',
+            phone: '+241 66 78 90 12',
             photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=NdongMba'
         },
         documentType: 'cni',
