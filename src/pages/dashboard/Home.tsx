@@ -18,31 +18,36 @@ import ExternalConnectionModal from "@/components/modals/ExternalConnectionModal
 import CompactWallet from "@/components/dashboard/DigitalWallet";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [showApiModal, setShowApiModal] = useState(false);
   const [selectedService, setSelectedService] = useState("");
 
+  // User profile data (mock - replace with actual user context/API)
+  const user = {
+    firstName: "Jean",
+    lastName: "Dupont",
+    email: "jean.dupont@example.com",
+    photoUrl: "https://github.com/shadcn.png",
+    level: 3,
+    stats: { documents: 12, services: 4, cvScore: 78 }
+  };
+
   const stats = [
-    { label: "Documents", value: "12", color: "text-blue-500" },
-    { label: "Services", value: "4", color: "text-green-500" },
-    { label: "Score CV", value: "78%", color: "text-amber-500" }
+    { label: "Documents", value: String(user.stats.documents), color: "text-blue-500", onClick: () => navigate("/idocument") },
+    { label: "Services", value: String(user.stats.services), color: "text-green-500", onClick: () => navigate("/parametres?tab=applications") },
+    { label: "Score CV", value: `${user.stats.cvScore}%`, color: "text-amber-500", onClick: () => navigate("/icv") }
   ];
 
   const quickActions = [
-    { id: "documents", icon: FileText, label: "Documents", onClick: () => navigate("/documents"), color: "text-blue-500", bg: "bg-blue-500/10" },
-    { id: "cv", icon: User, label: "Mon CV", onClick: () => navigate("/cv"), color: "text-amber-500", bg: "bg-amber-500/10" },
-    { id: "scanner", icon: Scan, label: "Scanner", onClick: () => { }, color: "text-purple-500", bg: "bg-purple-500/10" },
+    { id: "documents", icon: FileText, label: "Documents", onClick: () => navigate("/idocument"), color: "text-blue-500", bg: "bg-blue-500/10" },
+    { id: "cv", icon: User, label: "Mon CV", onClick: () => navigate("/icv"), color: "text-amber-500", bg: "bg-amber-500/10" },
+    { id: "scanner", icon: Scan, label: "Scanner", onClick: () => toast.info("Fonctionnalité Scanner bientôt disponible"), color: "text-purple-500", bg: "bg-purple-500/10" },
     { id: "request", icon: Plus, label: "Demander", onClick: () => navigate("/documents/request"), color: "text-emerald-500", bg: "bg-emerald-500/10" },
     { id: "qrcode", icon: QrCode, label: "Mon QR", onClick: () => navigate("/id-card"), color: "text-green-500", bg: "bg-green-500/10" },
     { id: "services", icon: Globe, label: "Services", onClick: () => setShowApiModal(true), color: "text-indigo-500", bg: "bg-indigo-500/10" }
-  ];
-
-  const services = [
-    { id: "impots", name: "Impôts", connected: true },
-    { id: "cnss", name: "CNSS", connected: false },
-    { id: "sante", name: "Santé", connected: true }
   ];
 
   return (
@@ -115,11 +120,11 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="font-bold text-lg text-foreground truncate">Jean Dupont</h2>
-                <p className="text-sm text-slate-500 dark:text-muted-foreground truncate">jean.dupont@example.com</p>
+                <h2 className="font-bold text-lg text-foreground truncate">{user.firstName} {user.lastName}</h2>
+                <p className="text-sm text-slate-500 dark:text-muted-foreground truncate">{user.email}</p>
                 <div className="flex items-center gap-1.5 mt-1">
                   <Shield className="w-4 h-4 text-green-500" />
-                  <span className="text-sm font-semibold text-green-500">Niveau 3</span>
+                  <span className="text-sm font-semibold text-green-500">Niveau {user.level}</span>
                 </div>
               </div>
               <button onClick={() => navigate("/settings")} className="p-2 rounded-lg hover:bg-slate-200/80 dark:hover:bg-white/5 transition-colors">
@@ -130,10 +135,14 @@ const Dashboard = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 py-4 border-b border-slate-300/60 dark:border-white/10">
               {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
+                <button
+                  key={stat.label}
+                  onClick={stat.onClick}
+                  className="text-center p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                >
                   <p className={cn("text-xl font-bold", stat.color)}>{stat.value}</p>
                   <p className="text-sm text-slate-500 dark:text-muted-foreground uppercase font-medium">{stat.label}</p>
-                </div>
+                </button>
               ))}
             </div>
 
