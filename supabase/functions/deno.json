@@ -10,13 +10,7 @@
     },
     "nodeModulesDir": "auto",
     "imports": {
-        "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
-        "openai": "https://esm.sh/openai@4.52.5",
-        "npm:openai@^4.52.5": "https://esm.sh/openai@4.52.5"
-    },
-    "scopes": {
-        "https://jsr.io/": {
-            "npm:openai@^4.52.5": "https://esm.sh/openai@4.52.5"
-        }
+        "@supabase/supabase-js": "npm:@supabase/supabase-js@2",
+        "openai": "npm:openai@^4.52.5"
     }
 }
