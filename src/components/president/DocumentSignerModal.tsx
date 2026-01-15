@@ -297,7 +297,12 @@ export function DocumentSignerModal({ isOpen, onClose, documentId, onSigned }: D
 
                                         <div className="font-serif leading-relaxed text-justify space-y-4">
                                             {document?.content ? (
-                                                <div dangerouslySetInnerHTML={{ __html: document.content.replace(/\n/g, '<br/>') }} />
+                                                document.content.split('\n').map((line, idx) => (
+                                                    <React.Fragment key={idx}>
+                                                        {line}
+                                                        {idx < document.content.split('\n').length - 1 && <br />}
+                                                    </React.Fragment>
+                                                ))
                                             ) : (
                                                 <p className="text-gray-400 italic text-center">[Contenu du document non disponible]</p>
                                             )}
