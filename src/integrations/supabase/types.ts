@@ -787,6 +787,72 @@ export type Database = {
         }
         Relationships: []
       }
+      document_vault: {
+        Row: {
+          created_at: string
+          expiration_date: string | null
+          file_path: string
+          file_size: number
+          file_type: string
+          folder_id: string
+          id: string
+          is_verified: boolean
+          last_used_at: string | null
+          metadata: Json | null
+          mime_type: string | null
+          name: string
+          original_name: string
+          side: string | null
+          source: string
+          status: string
+          updated_at: string
+          user_id: string | null
+          verification_date: string | null
+        }
+        Insert: {
+          created_at?: string
+          expiration_date?: string | null
+          file_path: string
+          file_size: number
+          file_type: string
+          folder_id: string
+          id?: string
+          is_verified?: boolean
+          last_used_at?: string | null
+          metadata?: Json | null
+          mime_type?: string | null
+          name: string
+          original_name: string
+          side?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          verification_date?: string | null
+        }
+        Update: {
+          created_at?: string
+          expiration_date?: string | null
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          folder_id?: string
+          id?: string
+          is_verified?: boolean
+          last_used_at?: string | null
+          metadata?: Json | null
+          mime_type?: string | null
+          name?: string
+          original_name?: string
+          side?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          verification_date?: string | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           content_scan_urls: string[] | null
@@ -1008,6 +1074,66 @@ export type Database = {
           minister_voice_id?: string | null
           president_voice_id?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      iboite_messages: {
+        Row: {
+          attachments: Json | null
+          content: string
+          created_at: string
+          folder: string
+          id: string
+          is_read: boolean
+          is_starred: boolean
+          preview: string
+          recipient_id: string | null
+          recipient_name: string
+          recipient_type: string
+          sender_avatar: string | null
+          sender_name: string
+          sender_type: string
+          subject: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          content: string
+          created_at?: string
+          folder?: string
+          id?: string
+          is_read?: boolean
+          is_starred?: boolean
+          preview: string
+          recipient_id?: string | null
+          recipient_name: string
+          recipient_type: string
+          sender_avatar?: string | null
+          sender_name: string
+          sender_type: string
+          subject: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          content?: string
+          created_at?: string
+          folder?: string
+          id?: string
+          is_read?: boolean
+          is_starred?: boolean
+          preview?: string
+          recipient_id?: string | null
+          recipient_name?: string
+          recipient_type?: string
+          sender_avatar?: string | null
+          sender_name?: string
+          sender_type?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2960,6 +3086,48 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vault_documents: {
+        Row: {
+          category: string
+          created_at: string
+          file_size: string
+          file_type: string
+          file_url: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          thumbnail_url: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          file_size: string
+          file_type: string
+          file_url?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          file_size?: string
+          file_type?: string
+          file_url?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
