@@ -1794,6 +1794,13 @@ export type Database = {
             referencedRelation: "oauth_clients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "oauth_access_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       oauth_access_tokens: {
@@ -1843,6 +1850,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_access_tokens_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients_public"
             referencedColumns: ["id"]
           },
         ]
@@ -1903,6 +1917,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_authorization_codes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients_public"
             referencedColumns: ["id"]
           },
         ]
@@ -2007,6 +2028,13 @@ export type Database = {
             referencedRelation: "oauth_clients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "oauth_consents_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       oauth_refresh_tokens: {
@@ -2053,6 +2081,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_refresh_tokens_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "oauth_clients_public"
             referencedColumns: ["id"]
           },
         ]
@@ -3070,7 +3105,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      oauth_clients_public: {
+        Row: {
+          allowed_scopes: string[] | null
+          client_description: string | null
+          client_id: string | null
+          client_logo_url: string | null
+          client_name: string | null
+          client_website: string | null
+          created_at: string | null
+          grant_types: string[] | null
+          id: string | null
+          is_active: boolean | null
+          is_confidential: boolean | null
+          is_verified: boolean | null
+          owner_id: string | null
+          redirect_uris: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          allowed_scopes?: string[] | null
+          client_description?: string | null
+          client_id?: string | null
+          client_logo_url?: string | null
+          client_name?: string | null
+          client_website?: string | null
+          created_at?: string | null
+          grant_types?: string[] | null
+          id?: string | null
+          is_active?: boolean | null
+          is_confidential?: boolean | null
+          is_verified?: boolean | null
+          owner_id?: string | null
+          redirect_uris?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          allowed_scopes?: string[] | null
+          client_description?: string | null
+          client_id?: string | null
+          client_logo_url?: string | null
+          client_name?: string | null
+          client_website?: string | null
+          created_at?: string | null
+          grant_types?: string[] | null
+          id?: string | null
+          is_active?: boolean | null
+          is_confidential?: boolean | null
+          is_verified?: boolean | null
+          owner_id?: string | null
+          redirect_uris?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_old_messages: { Args: never; Returns: number }
