@@ -13,8 +13,22 @@ Deno.serve(async (req) => {
   try {
     const { password } = await req.json()
     
-    // Verify the 6-digit password
-    if (password !== '011282') {
+    // Get the admin master code from environment variable
+    const ADMIN_CODE = Deno.env.get('ADMIN_MASTER_CODE')
+    if (!ADMIN_CODE) {
+      console.error('ADMIN_MASTER_CODE not configured')
+      return new Response(
+        JSON.stringify({ error: 'Configuration erreur' }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      )
+    }
+    
+    // Verify the password against the secret
+    if (password !== ADMIN_CODE) {
+      console.warn('Invalid admin access attempt')
       return new Response(
         JSON.stringify({ error: 'Mot de passe incorrect' }),
         { 
