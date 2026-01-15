@@ -185,27 +185,24 @@ const Demo = () => {
   const handleAdminCodeChange = async (value: string) => {
     setAdminCode(value);
     if (value.length === 6) {
-      if (value !== "011282") {
-        toast({ title: "Code incorrect", description: "Le code maître est invalide", variant: "destructive" });
-        setAdminCode("");
-        return;
-      }
-
       try {
-        const { error: authError } = await supabase.auth.signInWithPassword({
-          email: "president@presidence.ga",
-          password: "President2025!",
-        });
-
-        if (authError) {
-          toast({ title: "Erreur de connexion", description: "Impossible de se connecter.", variant: "destructive" });
+        // Check if user is already authenticated
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          toast({ title: "Non authentifié", description: "Veuillez vous connecter d'abord.", variant: "destructive" });
           setAdminCode("");
           return;
         }
 
+        // Let the backend validate the code - no hardcoded validation in frontend
         const { data, error } = await supabase.functions.invoke("secure-admin-access", { body: { password: value } });
 
-        if (error) throw error;
+        if (error) {
+          toast({ title: "Code incorrect", description: "Le code maître est invalide", variant: "destructive" });
+          setAdminCode("");
+          return;
+        }
 
         toast({ title: "✅ Accès Admin Système", description: (data as any)?.message ?? "Bienvenue Administrateur", duration: 2000 });
         setShowAdminDialog(false);
