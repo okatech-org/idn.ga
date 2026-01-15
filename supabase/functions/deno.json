@@ -7,7 +7,9 @@
         "strict": true,
         "noImplicitAny": true
     },
+    "nodeModulesDir": "auto",
     "imports": {
-        "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2"
+        "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
+        "openai": "npm:openai@^4.52.5"
     }
 }
