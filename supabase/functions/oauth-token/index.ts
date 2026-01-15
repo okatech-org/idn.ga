@@ -1,33 +1,47 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { encode as base64Encode } from 'https://deno.land/std@0.208.0/encoding/base64.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Simple JWT creation for ID tokens
-function createIdToken(payload: Record<string, unknown>, secret: string): string {
+// Secure JWT creation using Web Crypto API for proper HMAC-SHA256 signatures
+async function createIdToken(payload: Record<string, unknown>, secret: string): Promise<string> {
   const header = { alg: 'HS256', typ: 'JWT' };
   const encoder = new TextEncoder();
   
-  const headerB64 = btoa(JSON.stringify(header)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-  const payloadB64 = btoa(JSON.stringify(payload)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+  const headerB64 = btoa(JSON.stringify(header))
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+  const payloadB64 = btoa(JSON.stringify(payload))
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
   
   const data = `${headerB64}.${payloadB64}`;
   
-  // Simple HMAC-SHA256 signature using Web Crypto
-  const key = encoder.encode(secret);
-  const message = encoder.encode(data);
+  // Proper HMAC-SHA256 signature using Web Crypto API
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
   
-  // For demo purposes, using a simple hash. In production, use proper HMAC.
-  let hash = 0;
-  for (let i = 0; i < message.length; i++) {
-    hash = ((hash << 5) - hash + message[i] + key[i % key.length]) | 0;
-  }
-  const signature = Math.abs(hash).toString(36).padEnd(43, 'x');
+  const signatureBuffer = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(data)
+  );
   
-  return `${data}.${signature}`;
+  const signatureB64 = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)))
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+  
+  return `${data}.${signatureB64}`;
 }
 
 Deno.serve(async (req) => {
@@ -43,10 +57,10 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { grant_type, code, redirect_uri, client_id, client_secret, code_verifier, refresh_token } = body;
 
-    // Fetch client
+    // Fetch client (without exposing secret in queries)
     const { data: client, error: clientError } = await supabase
       .from('oauth_clients')
-      .select('*')
+      .select('id, client_id, client_name, is_confidential, is_active, allowed_scopes, redirect_uris, grant_types, client_secret')
       .eq('client_id', client_id)
       .eq('is_active', true)
       .single();
@@ -58,12 +72,31 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Verify client secret for confidential clients
-    if (client.is_confidential && client.client_secret !== client_secret) {
-      return new Response(JSON.stringify({ error: 'invalid_client' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    // Verify client secret for confidential clients using timing-safe comparison
+    if (client.is_confidential) {
+      const encoder = new TextEncoder();
+      const storedSecret = encoder.encode(client.client_secret);
+      const providedSecret = encoder.encode(client_secret || '');
+      
+      // Timing-safe comparison
+      if (storedSecret.length !== providedSecret.length) {
+        return new Response(JSON.stringify({ error: 'invalid_client' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      
+      let mismatch = 0;
+      for (let i = 0; i < storedSecret.length; i++) {
+        mismatch |= storedSecret[i] ^ providedSecret[i];
+      }
+      
+      if (mismatch !== 0) {
+        return new Response(JSON.stringify({ error: 'invalid_client' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     if (grant_type === 'authorization_code') {
@@ -101,7 +134,7 @@ Deno.serve(async (req) => {
 
       // PKCE validation
       if (authCode.code_challenge && code_verifier) {
-        // Simple S256 validation
+        // S256 validation using Web Crypto
         const encoder = new TextEncoder();
         const data = encoder.encode(code_verifier);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -142,7 +175,7 @@ Deno.serve(async (req) => {
       }
 
       // Create refresh token
-      const { data: refreshToken } = await supabase
+      const { data: refreshTokenData } = await supabase
         .from('oauth_refresh_tokens')
         .insert({
           access_token_id: accessToken.id,
@@ -187,7 +220,8 @@ Deno.serve(async (req) => {
           idTokenPayload.phone_number_verified = true;
         }
 
-        id_token = createIdToken(idTokenPayload, supabaseServiceKey);
+        // Use proper HMAC-SHA256 JWT signature
+        id_token = await createIdToken(idTokenPayload, supabaseServiceKey);
       }
 
       // Log token issuance
@@ -203,7 +237,7 @@ Deno.serve(async (req) => {
         access_token: accessToken.token,
         token_type: 'Bearer',
         expires_in: 3600,
-        refresh_token: refreshToken?.token,
+        refresh_token: refreshTokenData?.token,
         scope: (authCode.scopes as string[]).join(' '),
         id_token,
       }), {
@@ -291,7 +325,7 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('OAuth token error:', error);
-    return new Response(JSON.stringify({ error: 'server_error', error_description: error.message }), {
+    return new Response(JSON.stringify({ error: 'server_error' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
