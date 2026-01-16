@@ -52,8 +52,10 @@ export const FolderIcon: React.FC<FolderIconProps> = ({
                 {/* DOCUMENT (visible sauf si closed-empty) */}
                 {type !== 'closed-empty' && (
                     <g
-                        className={`transition-all duration-500 ease-in-out ${type === 'open-filled' ? 'translate-y-[-15px]' : 'translate-y-0'
-                            }`}
+                        style={{
+                            transform: type === 'open-filled' ? 'translateY(-15px)' : 'translateY(0)',
+                            transition: 'transform 0.5s ease-in-out'
+                        }}
                     >
                         <rect
                             x="15"
