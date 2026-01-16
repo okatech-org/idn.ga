@@ -1,10 +1,11 @@
 /**
- * FolderIcon - Dossier style Windows vertical
+ * FolderIcon - Dossier Réaliste 3D
  * 
- * États:
- * - closed-empty: Dossier vide (pas de fichiers) - ne s'ouvre jamais
- * - closed-filled: Dossier avec fichiers mais jamais ouvert (première visite)
- * - open-filled: Dossier avec fichiers déjà visité/ouvert une fois
+ * Design basé sur le style "High Quality 3D Render":
+ * - Surfaces lisses avec gradients subtils
+ * - Ombres douces (ambient occlusion)
+ * - Piles de papier réalistes
+ * - Animation fluide
  */
 
 import React from 'react';
@@ -19,17 +20,16 @@ interface FolderIconProps {
 export const FolderIcon: React.FC<FolderIconProps> = ({
     type,
     size = 80,
-    color = '#f5d87a', // Jaune Windows classique
+    color = '#fbbf24', // Base jaune/orange chaud
     className = ''
 }) => {
-    // Couleurs dérivées
-    const darkerColor = adjustColor(color, -30);
-    const lighterColor = adjustColor(color, 30);
-    const borderColor = adjustColor(color, -50);
-
-    // Animation du document basée sur le type
-    const docOffset = type === 'open-filled' ? -15 : 0;
-    const frontPanelRotate = type === 'open-filled' ? 8 : 0;
+    // Calcul des variantes de couleur pour le réalisme 3D
+    // Face avant (plus claire)
+    const frontColor = color;
+    // Face arrière/intérieur (plus sombre)
+    const backColor = adjustColor(color, -20);
+    // Bordures/Accents
+    const strokeColor = adjustColor(color, -40);
 
     return (
         <div
@@ -42,111 +42,114 @@ export const FolderIcon: React.FC<FolderIconProps> = ({
                 height="100%"
                 style={{ overflow: 'visible' }}
             >
-                {/* OMBRE AU SOL */}
+                <defs>
+                    {/* Gradients pour effet 3D */}
+                    <linearGradient id={`grad-front-${color}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={adjustColor(color, 20)} />
+                        <stop offset="100%" stopColor={color} />
+                    </linearGradient>
+                    <linearGradient id={`grad-back-${color}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor={adjustColor(color, -10)} />
+                        <stop offset="100%" stopColor={adjustColor(color, -30)} />
+                    </linearGradient>
+                    {/* Ombre portée douce */}
+                    <filter id="shadow-soft" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+                        <feOffset dx="0" dy="4" result="offsetblur" />
+                        <feComponentTransfer>
+                            <feFuncA type="linear" slope="0.2" />
+                        </feComponentTransfer>
+                        <feMerge>
+                            <feMergeNode />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                {/* OMBRE GLOBALE */}
                 <ellipse
-                    cx="55"
-                    cy="115"
-                    rx="30"
+                    cx="50"
+                    cy="105"
+                    rx="35"
                     ry="6"
-                    fill="rgba(0,0,0,0.12)"
+                    fill="rgba(0,0,0,0.15)"
+                    filter="url(#shadow-soft)"
                 />
 
-                {/* FEUILLES A4 (visibles si dossier contient des fichiers) */}
+                {/* CONTENU (PAPIERS) - Visible si open-filled ou closed-filled */}
                 {type !== 'closed-empty' && (
                     <g
                         style={{
-                            transform: `translateY(${docOffset}px)`,
-                            transition: 'transform 0.35s ease-out'
+                            transform: type === 'open-filled' ? 'translateY(-18px)' : 'translateY(0)',
+                            transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
                         }}
                     >
-                        {/* Feuille arrière (légèrement décalée) */}
-                        <rect
-                            x="32"
-                            y="18"
-                            width="40"
-                            height="55"
-                            rx="1"
-                            fill="#f8f9fa"
-                            stroke="#d1d5db"
+                        {/* Papier 3 (Fond) */}
+                        <path
+                            d="M 28 20 L 78 20 L 78 80 L 28 80 Z"
+                            fill="#f1f5f9"
+                            stroke="#cbd5e1"
                             strokeWidth="0.5"
+                            transform="rotate(-2 53 50)"
                         />
-
-                        {/* Feuille principale */}
+                        {/* Papier 2 (Milieu) */}
+                        <path
+                            d="M 30 18 L 80 18 L 80 78 L 30 78 Z"
+                            fill="#f8fafc"
+                            stroke="#cbd5e1"
+                            strokeWidth="0.5"
+                            transform="rotate(1 55 48)"
+                        />
+                        {/* Papier 1 (Devant) - Blanc pur */}
                         <rect
-                            x="35"
+                            x="25"
                             y="15"
-                            width="40"
-                            height="55"
+                            width="50"
+                            height="65"
                             rx="1"
                             fill="#ffffff"
-                            stroke="#e5e7eb"
+                            stroke="#e2e8f0"
                             strokeWidth="0.5"
-                            style={{ filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.08))' }}
+                            filter="url(#shadow-soft)"
                         />
 
-                        {/* Bande bleue en bas (comme Windows) */}
-                        <rect
-                            x="35"
-                            y="62"
-                            width="40"
-                            height="8"
-                            fill="#60a5fa"
-                        />
-
-                        {/* Lignes de texte simulées */}
-                        <line x1="40" y1="25" x2="68" y2="25" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" />
-                        <line x1="40" y1="32" x2="65" y2="32" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" />
-                        <line x1="40" y1="39" x2="60" y2="39" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" />
+                        {/* Lignes de texte subtiles (gris très clair) */}
+                        <line x1="32" y1="25" x2="68" y2="25" stroke="#f1f5f9" strokeWidth="3" strokeLinecap="round" />
+                        <line x1="32" y1="35" x2="60" y2="35" stroke="#f1f5f9" strokeWidth="3" strokeLinecap="round" />
                     </g>
                 )}
 
-                {/* DOSSIER - PANNEAU ARRIÈRE (côté gauche en perspective) */}
+                {/* DOSSIER - ÉLÉMENT ARRIÈRE (Backplate) */}
                 <path
-                    d="M 15 20 L 15 105 L 25 110 L 25 25 Z"
-                    fill={darkerColor}
-                    stroke={borderColor}
+                    d="M 15 25 L 15 100 Q 15 105 20 105 L 85 105 Q 90 105 90 100 L 90 25 L 55 25 L 50 18 L 20 18 Q 15 18 15 25 Z"
+                    fill={`url(#grad-back-${color})`}
+                    stroke={strokeColor}
                     strokeWidth="0.5"
                 />
 
-                {/* DOSSIER - FOND/DOS */}
-                <path
-                    d="M 15 20 L 25 25 L 85 25 L 85 20 Z"
-                    fill={lighterColor}
-                    stroke={borderColor}
-                    strokeWidth="0.5"
-                />
-
-                {/* DOSSIER - LANGUETTE SUPÉRIEURE */}
-                <path
-                    d="M 55 15 L 85 15 L 85 25 L 55 25 L 50 20 Z"
-                    fill={lighterColor}
-                    stroke={borderColor}
-                    strokeWidth="0.5"
-                />
-
-                {/* DOSSIER - PANNEAU AVANT PRINCIPAL */}
+                {/* DOSSIER - FACE AVANT (Frontplate) */}
                 <g
                     style={{
-                        transformOrigin: '25px 110px',
-                        transform: `rotateY(${frontPanelRotate}deg)`,
-                        transition: 'transform 0.35s ease-out'
+                        transformOrigin: '50% 105px',
+                        transform: type === 'open-filled' ? 'rotateX(15deg)' : 'rotateX(0deg)',
+                        transition: 'transform 0.4s ease-out'
                     }}
                 >
                     <path
-                        d="M 25 25 L 25 110 L 85 105 L 85 25 Z"
-                        fill={color}
-                        stroke={borderColor}
+                        d="M 15 35 L 15 100 Q 15 105 20 105 L 85 105 Q 90 105 90 100 L 90 35 L 15 35 Z"
+                        fill={`url(#grad-front-${color})`}
+                        stroke={strokeColor}
                         strokeWidth="0.5"
+                        filter="url(#shadow-soft)"
                     />
 
-                    {/* Reflet/highlight sur le panneau avant */}
+                    {/* Biseau lumineux (Highlight) sur le bord supérieur */}
                     <path
-                        d="M 25 35 L 25 55 L 85 52 L 85 32 Z"
-                        fill={lighterColor}
-                        opacity="0.4"
+                        d="M 15 35 L 90 35"
+                        stroke="rgba(255,255,255,0.4)"
+                        strokeWidth="1"
                     />
                 </g>
-
             </svg>
         </div>
     );
