@@ -146,54 +146,78 @@ export const FolderIcon: React.FC<FolderIconProps> = ({
                     opacity="0.9"
                 />
 
-                {/* === PAPERS STACK (visible through notch for filled types) === */}
+                {/* === PAPERS STACK A4 (visible through notch) === */}
                 {type !== 'closed-empty' && (
                     <g
                         style={{
                             transform: type === 'open-filled' 
-                                ? 'translateY(-18px)' 
-                                : 'translateY(-4px)',
+                                ? 'translateY(-12px)' 
+                                : 'translateY(-2px)',
                             transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                             opacity: type === 'closed-filled' ? 0.85 : 1
                         }}
                     >
-                        {/* Paper 3 - Back (slightly rotated) */}
+                        {/* Paper 4 - Far back */}
+                        <rect
+                            x="51"
+                            y="18"
+                            width="16"
+                            height="48"
+                            rx="1"
+                            fill="#dde3e9"
+                            stroke="#c5cdd5"
+                            strokeWidth="0.3"
+                            transform="rotate(1.5 59 42)"
+                        />
+
+                        {/* Paper 3 - Back */}
                         <rect
                             x="52"
-                            y="12"
-                            width="12"
-                            height="35"
-                            rx="1.5"
-                            fill="#e8ecf0"
+                            y="15"
+                            width="16"
+                            height="50"
+                            rx="1"
+                            fill="#e8ecf1"
                             stroke="#d1d5db"
                             strokeWidth="0.3"
-                            transform="rotate(2 58 30)"
+                            transform="rotate(-1 60 40)"
                         />
                         
                         {/* Paper 2 - Middle */}
                         <rect
                             x="53"
-                            y="10"
-                            width="12"
-                            height="36"
-                            rx="1.5"
-                            fill="#f3f4f6"
+                            y="12"
+                            width="16"
+                            height="52"
+                            rx="1"
+                            fill="#f1f4f8"
                             stroke="#d1d5db"
                             strokeWidth="0.3"
-                            transform="rotate(-1 59 28)"
+                            transform="rotate(0.5 61 38)"
                         />
                         
-                        {/* Paper 1 - Front (main visible paper) */}
+                        {/* Paper 1 - Front (main visible A4) */}
                         <rect
                             x="54"
-                            y="8"
-                            width="12"
-                            height="38"
-                            rx="1.5"
+                            y="10"
+                            width="16"
+                            height="54"
+                            rx="1"
                             fill={`url(#paperGrad-${uid})`}
-                            stroke="#d1d5db"
+                            stroke="#c5cdd5"
                             strokeWidth="0.4"
                             filter={`url(#paperShadow-${uid})`}
+                        />
+
+                        {/* Blue tab/label on front paper */}
+                        <rect
+                            x="64"
+                            y="58"
+                            width="5"
+                            height="8"
+                            rx="0.5"
+                            fill="#60a5fa"
+                            opacity="0.9"
                         />
 
                         {/* Subtle lines on paper for realism */}
