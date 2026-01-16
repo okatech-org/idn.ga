@@ -1,10 +1,10 @@
 /**
- * FolderIcon - Composant SVG de dossier style Windows
+ * FolderIcon - Dossier style Windows vertical
  * 
- * États:
- * - closed-empty: Dossier fermé sans document
- * - closed-filled: Dossier fermé avec document visible
- * - open-filled: Dossier ouvert avec document qui dépasse (au survol)
+ * Reproduit fidèlement l'icône de dossier Windows avec:
+ * - Perspective 3D verticale (dossier debout)
+ * - Feuilles A4 visibles à l'intérieur
+ * - Animation d'ouverture au survol (si contient des fichiers)
  */
 
 import React from 'react';
@@ -13,128 +13,140 @@ interface FolderIconProps {
     type: 'closed-empty' | 'closed-filled' | 'open-filled';
     size?: number;
     color?: string;
-    docColor?: string;
     className?: string;
 }
 
 export const FolderIcon: React.FC<FolderIconProps> = ({
     type,
-    size = 64,
-    color = '#f5d67a',
-    docColor = '#ffffff',
+    size = 80,
+    color = '#f5d87a', // Jaune Windows classique
     className = ''
 }) => {
-    const width = size;
-    const height = size;
+    // Couleurs dérivées
+    const darkerColor = adjustColor(color, -30);
+    const lighterColor = adjustColor(color, 30);
+    const borderColor = adjustColor(color, -50);
 
-    // Couleur plus foncée pour les ombres
-    const darkerColor = adjustColor(color, -20);
-    const lighterColor = adjustColor(color, 20);
+    // Animation du document basée sur le type
+    const docOffset = type === 'open-filled' ? -15 : 0;
+    const frontPanelRotate = type === 'open-filled' ? 8 : 0;
 
     return (
         <div
             className={`relative flex items-center justify-center ${className}`}
-            style={{ width, height }}
+            style={{ width: size, height: size }}
         >
             <svg
-                viewBox="0 0 100 100"
+                viewBox="0 0 100 120"
                 width="100%"
                 height="100%"
                 style={{ overflow: 'visible' }}
             >
-                {/* Ombre portée */}
+                {/* OMBRE AU SOL */}
                 <ellipse
-                    cx="50"
-                    cy="95"
-                    rx="35"
-                    ry="5"
-                    fill="rgba(0,0,0,0.15)"
+                    cx="55"
+                    cy="115"
+                    rx="30"
+                    ry="6"
+                    fill="rgba(0,0,0,0.12)"
                 />
 
-                {/* DOCUMENT DERRIÈRE (visible si filled) */}
+                {/* FEUILLES A4 (visibles si dossier contient des fichiers) */}
                 {type !== 'closed-empty' && (
                     <g
                         style={{
-                            transform: type === 'open-filled' ? 'translateY(-12px)' : 'translateY(0)',
-                            transition: 'transform 0.4s ease-out'
+                            transform: `translateY(${docOffset}px)`,
+                            transition: 'transform 0.35s ease-out'
                         }}
                     >
-                        {/* Document blanc */}
+                        {/* Feuille arrière (légèrement décalée) */}
                         <rect
-                            x="25"
-                            y={type === 'open-filled' ? 8 : 18}
-                            width="50"
-                            height="60"
-                            fill={docColor}
-                            stroke="#d1d5db"
-                            strokeWidth="1"
-                            rx="2"
-                            style={{
-                                filter: 'drop-shadow(1px 2px 3px rgba(0,0,0,0.1))'
-                            }}
-                        />
-                        {/* Coin plié */}
-                        <path
-                            d={type === 'open-filled'
-                                ? "M 63 8 L 75 8 L 75 20 Z"
-                                : "M 63 18 L 75 18 L 75 30 Z"
-                            }
-                            fill="#e5e7eb"
+                            x="32"
+                            y="18"
+                            width="40"
+                            height="55"
+                            rx="1"
+                            fill="#f8f9fa"
                             stroke="#d1d5db"
                             strokeWidth="0.5"
                         />
-                        {/* Lignes de texte */}
-                        <line x1="32" y1={type === 'open-filled' ? 22 : 32} x2="60" y2={type === 'open-filled' ? 22 : 32} stroke="#93c5fd" strokeWidth="3" strokeLinecap="round" />
-                        <line x1="32" y1={type === 'open-filled' ? 30 : 40} x2="55" y2={type === 'open-filled' ? 30 : 40} stroke="#d1d5db" strokeWidth="2" strokeLinecap="round" />
-                        <line x1="32" y1={type === 'open-filled' ? 38 : 48} x2="58" y2={type === 'open-filled' ? 38 : 48} stroke="#d1d5db" strokeWidth="2" strokeLinecap="round" />
+
+                        {/* Feuille principale */}
+                        <rect
+                            x="35"
+                            y="15"
+                            width="40"
+                            height="55"
+                            rx="1"
+                            fill="#ffffff"
+                            stroke="#e5e7eb"
+                            strokeWidth="0.5"
+                            style={{ filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.08))' }}
+                        />
+
+                        {/* Bande bleue en bas (comme Windows) */}
+                        <rect
+                            x="35"
+                            y="62"
+                            width="40"
+                            height="8"
+                            fill="#60a5fa"
+                        />
+
+                        {/* Lignes de texte simulées */}
+                        <line x1="40" y1="25" x2="68" y2="25" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" />
+                        <line x1="40" y1="32" x2="65" y2="32" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" />
+                        <line x1="40" y1="39" x2="60" y2="39" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" />
                     </g>
                 )}
 
-                {/* DOSSIER - Panneau arrière */}
+                {/* DOSSIER - PANNEAU ARRIÈRE (côté gauche en perspective) */}
                 <path
-                    d="M 10 25 L 10 90 L 90 90 L 90 25 L 55 25 L 50 18 L 15 18 L 10 25 Z"
+                    d="M 15 20 L 15 105 L 25 110 L 25 25 Z"
                     fill={darkerColor}
-                />
-
-                {/* DOSSIER - Panneau avant (avec ouverture si open) */}
-                {type === 'open-filled' ? (
-                    // Panneau ouvert - incliné vers l'avant
-                    <path
-                        d="M 8 92 L 15 45 L 85 45 L 92 92 Z"
-                        fill={color}
-                        stroke={darkerColor}
-                        strokeWidth="1"
-                        style={{
-                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
-                        }}
-                    />
-                ) : (
-                    // Panneau fermé
-                    <path
-                        d="M 10 35 L 10 90 L 90 90 L 90 35 Z"
-                        fill={color}
-                        stroke={darkerColor}
-                        strokeWidth="0.5"
-                    />
-                )}
-
-                {/* Reflet/Highlight sur le dossier */}
-                <path
-                    d={type === 'open-filled'
-                        ? "M 15 50 L 20 75 L 80 75 L 85 50 Z"
-                        : "M 10 40 L 10 55 L 90 55 L 90 40 Z"
-                    }
-                    fill={lighterColor}
-                    opacity="0.3"
-                />
-
-                {/* Languette du haut */}
-                <path
-                    d="M 15 18 L 50 18 L 55 25 L 15 25 Z"
-                    fill={lighterColor}
-                    stroke={color}
+                    stroke={borderColor}
                     strokeWidth="0.5"
                 />
+
+                {/* DOSSIER - FOND/DOS */}
+                <path
+                    d="M 15 20 L 25 25 L 85 25 L 85 20 Z"
+                    fill={lighterColor}
+                    stroke={borderColor}
+                    strokeWidth="0.5"
+                />
+
+                {/* DOSSIER - LANGUETTE SUPÉRIEURE */}
+                <path
+                    d="M 55 15 L 85 15 L 85 25 L 55 25 L 50 20 Z"
+                    fill={lighterColor}
+                    stroke={borderColor}
+                    strokeWidth="0.5"
+                />
+
+                {/* DOSSIER - PANNEAU AVANT PRINCIPAL */}
+                <g
+                    style={{
+                        transformOrigin: '25px 110px',
+                        transform: `rotateY(${frontPanelRotate}deg)`,
+                        transition: 'transform 0.35s ease-out'
+                    }}
+                >
+                    <path
+                        d="M 25 25 L 25 110 L 85 105 L 85 25 Z"
+                        fill={color}
+                        stroke={borderColor}
+                        strokeWidth="0.5"
+                    />
+
+                    {/* Reflet/highlight sur le panneau avant */}
+                    <path
+                        d="M 25 35 L 25 55 L 85 52 L 85 32 Z"
+                        fill={lighterColor}
+                        opacity="0.4"
+                    />
+                </g>
+
             </svg>
         </div>
     );
