@@ -1,10 +1,10 @@
 /**
  * FolderIcon - Dossier style Windows vertical
  * 
- * Reproduit fidèlement l'icône de dossier Windows avec:
- * - Perspective 3D verticale (dossier debout)
- * - Feuilles A4 visibles à l'intérieur
- * - Animation d'ouverture au survol (si contient des fichiers)
+ * États:
+ * - closed-empty: Dossier vide (pas de fichiers) - ne s'ouvre jamais
+ * - closed-filled: Dossier avec fichiers mais jamais ouvert (première visite)
+ * - open-filled: Dossier avec fichiers déjà visité/ouvert une fois
  */
 
 import React from 'react';

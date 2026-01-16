@@ -172,6 +172,12 @@ const IDocumentPage = () => {
     // Hover state for folder icons
     const [hoveredFolderId, setHoveredFolderId] = useState<string | null>(null);
 
+    // Track visited folders (persisted in localStorage)
+    const [visitedFolders, setVisitedFolders] = useState<Set<string>>(() => {
+        const stored = localStorage.getItem('idocument-visited-folders');
+        return stored ? new Set(JSON.parse(stored)) : new Set();
+    });
+
     // Initialize with mock data if empty
     useEffect(() => {
         if (documents.length === 0) {
@@ -294,15 +300,29 @@ const IDocumentPage = () => {
     // Folder card component with FolderIcon
     const FolderCard = ({ category }: { category: DocumentCategory }) => {
         const count = folderStats[category];
-        const isHovered = hoveredFolderId === category;
+        const isVisited = visitedFolders.has(category);
 
-        // Determine folder icon state
+        // Determine folder icon state based on visit history
+        // - closed-empty: no files (never opens)
+        // - closed-filled: has files but never visited
+        // - open-filled: has files AND already visited
         let folderType: 'closed-empty' | 'closed-filled' | 'open-filled' = 'closed-empty';
-        if (isHovered && count > 0) {
+        if (count > 0 && isVisited) {
             folderType = 'open-filled';
         } else if (count > 0) {
             folderType = 'closed-filled';
         }
+
+        const handleClick = () => {
+            // Mark as visited when clicking a folder with files
+            if (count > 0 && !isVisited) {
+                const newVisited = new Set(visitedFolders);
+                newVisited.add(category);
+                setVisitedFolders(newVisited);
+                localStorage.setItem('idocument-visited-folders', JSON.stringify([...newVisited]));
+            }
+            selectFolder(category);
+        };
 
         return (
             <motion.button
@@ -310,9 +330,7 @@ const IDocumentPage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => selectFolder(category)}
-                onMouseEnter={() => setHoveredFolderId(category)}
-                onMouseLeave={() => setHoveredFolderId(null)}
+                onClick={handleClick}
                 className={cn(
                     "relative flex flex-col items-center p-4 rounded-2xl text-center transition-all group overflow-hidden",
                     "bg-white/95 dark:bg-white/5 backdrop-blur-sm",
