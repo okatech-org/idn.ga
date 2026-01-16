@@ -4,17 +4,16 @@ import {
   FileText,
   User,
   QrCode,
-  Plus,
   Scan,
-  Globe,
   Bell,
   Settings,
   ChevronRight,
   Shield,
-  CheckCircle2
+  CheckCircle2,
+  CreditCard,
+  Mail
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ExternalConnectionModal from "@/components/modals/ExternalConnectionModal";
 import CompactWallet from "@/components/dashboard/DigitalWallet";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -22,8 +21,6 @@ import { toast } from "sonner";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [showApiModal, setShowApiModal] = useState(false);
-  const [selectedService, setSelectedService] = useState("");
 
   // User profile data (mock - replace with actual user context/API)
   const user = {
@@ -44,21 +41,14 @@ const Dashboard = () => {
   const quickActions = [
     { id: "documents", icon: FileText, label: "Documents", onClick: () => navigate("/idocument"), color: "text-blue-500", bg: "bg-blue-500/10" },
     { id: "cv", icon: User, label: "Mon CV", onClick: () => navigate("/icv"), color: "text-amber-500", bg: "bg-amber-500/10" },
-    { id: "scanner", icon: Scan, label: "Scanner", onClick: () => toast.info("Fonctionnalité Scanner bientôt disponible"), color: "text-purple-500", bg: "bg-purple-500/10" },
-    { id: "request", icon: Plus, label: "Demander", onClick: () => navigate("/documents/request"), color: "text-emerald-500", bg: "bg-emerald-500/10" },
+    { id: "cartes", icon: CreditCard, label: "Mes Cartes", onClick: () => navigate("/icarte"), color: "text-emerald-500", bg: "bg-emerald-500/10" },
+    { id: "boite", icon: Mail, label: "iBoîte", onClick: () => navigate("/iboite"), color: "text-indigo-500", bg: "bg-indigo-500/10" },
     { id: "qrcode", icon: QrCode, label: "Mon QR", onClick: () => navigate("/id-card"), color: "text-green-500", bg: "bg-green-500/10" },
-    { id: "services", icon: Globe, label: "Services", onClick: () => setShowApiModal(true), color: "text-indigo-500", bg: "bg-indigo-500/10" }
+    { id: "scanner", icon: Scan, label: "Scanner", onClick: () => toast.info("Fonctionnalité Scanner bientôt disponible"), color: "text-purple-500", bg: "bg-purple-500/10" }
   ];
 
   return (
     <UserSpaceLayout>
-      <ExternalConnectionModal
-        isOpen={showApiModal}
-        onClose={() => setShowApiModal(false)}
-        serviceName={selectedService || "Service"}
-        serviceUrl={`https://${selectedService}.ga/auth/callback`}
-      />
-
       <div className="h-full flex flex-col gap-4">
         {/* Header */}
         <div className="flex items-center justify-between shrink-0">
