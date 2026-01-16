@@ -56,6 +56,7 @@ import {
 import { DocumentFlipCard, groupDocuments, ExpirationBadge, StatusBadge } from '@/components/documents/DocumentFlipCard';
 import { NotificationsPanel } from '@/components/documents/NotificationsPanel';
 import { ShareModal } from '@/components/documents/ShareModal';
+import { FolderIcon, FOLDER_ICON_COLORS } from '@/components/documents/FolderIcon';
 import { detectDocumentType, detectDocumentSide, getSuggestedFolder } from '@/services/documentOCRService';
 import { generateDocumentNotifications, DocumentNotification } from '@/services/documentNotificationService';
 import { generateDossier, downloadDossier, getDossierPreview } from '@/services/documentDossierService';
@@ -167,6 +168,9 @@ const IDocumentPage = () => {
     const [shareModalMode, setShareModalMode] = useState<'share' | 'export'>('export');
     const [selectedDocs, setSelectedDocs] = useState<VaultDocument[]>([]); // For multi-select
     const [isSelectionMode, setIsSelectionMode] = useState(false);
+
+    // Hover state for folder icons
+    const [hoveredFolderId, setHoveredFolderId] = useState<string | null>(null);
 
     // Initialize with mock data if empty
     useEffect(() => {
@@ -287,11 +291,18 @@ const IDocumentPage = () => {
         toast.success('Document supprimé');
     };
 
-    // Folder card component
+    // Folder card component with FolderIcon
     const FolderCard = ({ category }: { category: DocumentCategory }) => {
-        const Icon = FOLDER_ICON_MAP[category];
         const count = folderStats[category];
-        const color = FOLDER_COLORS[category];
+        const isHovered = hoveredFolderId === category;
+
+        // Determine folder icon state
+        let folderType: 'closed-empty' | 'closed-filled' | 'open-filled' = 'closed-empty';
+        if (isHovered && count > 0) {
+            folderType = 'open-filled';
+        } else if (count > 0) {
+            folderType = 'closed-filled';
+        }
 
         return (
             <motion.button
@@ -300,49 +311,34 @@ const IDocumentPage = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => selectFolder(category)}
+                onMouseEnter={() => setHoveredFolderId(category)}
+                onMouseLeave={() => setHoveredFolderId(null)}
                 className={cn(
-                    "relative p-4 rounded-2xl text-left transition-all group overflow-hidden",
+                    "relative flex flex-col items-center p-4 rounded-2xl text-center transition-all group overflow-hidden",
                     "bg-white/95 dark:bg-white/5 backdrop-blur-sm",
                     "border border-slate-300/80 dark:border-white/10",
-                    "hover:border-primary/30 hover:shadow-lg",
+                    "hover:border-primary/30 hover:shadow-lg hover:bg-blue-50/50 dark:hover:bg-white/10",
                     "shadow-sm dark:shadow-none"
                 )}
             >
-                {/* Gradient background accent */}
-                <div className={cn(
-                    "absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-20 -translate-y-1/2 translate-x-1/2",
-                    `bg-gradient-to-br ${color}`
-                )} />
-
-                <div className="relative">
-                    {/* Icon */}
-                    <div className={cn(
-                        "w-12 h-12 rounded-xl flex items-center justify-center mb-3",
-                        `bg-gradient-to-br ${color}`
-                    )}>
-                        <Icon className="w-6 h-6 text-white" />
-                    </div>
-
-                    {/* Label */}
-                    <h3 className="text-sm font-bold text-foreground mb-1">
-                        {FOLDER_LABELS[category]}
-                    </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-1">
-                        {FOLDER_DESCRIPTIONS[category]}
-                    </p>
-
-                    {/* Count badge */}
-                    <div className="absolute top-0 right-0">
-                        <span className={cn(
-                            "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold",
-                            count > 0
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted text-muted-foreground"
-                        )}>
-                            {count}
-                        </span>
-                    </div>
+                {/* Folder Icon */}
+                <div className="mb-2">
+                    <FolderIcon
+                        type={folderType}
+                        size={80}
+                        color={FOLDER_ICON_COLORS[category] || '#fbbf24'}
+                    />
                 </div>
+
+                {/* Label */}
+                <h3 className="text-sm font-bold text-foreground mb-0.5 truncate w-full">
+                    {FOLDER_LABELS[category]}
+                </h3>
+
+                {/* Count */}
+                <p className="text-xs text-muted-foreground">
+                    {count} {count === 1 ? 'document' : 'documents'}
+                </p>
             </motion.button>
         );
     };
