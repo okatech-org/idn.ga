@@ -110,44 +110,58 @@ export default function UserSpaceLayout({
                         <div className="fixed bottom-0 left-0 right-0 md:hidden z-40">
                             {/* Background Container with Neomorphic Style */}
                             <div className="bg-background/95 backdrop-blur-md border-t border-white/20 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pb-safe">
-                                <div className="flex justify-between items-center px-6 h-16 relative">
+                                <div className="flex justify-between items-center px-3 h-16 relative">
 
-                                    {/* Left Icons */}
-                                    <div className="flex space-x-8">
+                                    {/* Left Icons (3 items) */}
+                                    <div className="flex space-x-4">
                                         <button
                                             onClick={() => navigate('/profil')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/profil') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            className={`flex flex-col items-center justify-center space-y-0.5 min-w-[44px] ${isActive('/profil') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <LayoutDashboard size={24} strokeWidth={isActive('/profil') ? 2.5 : 2} />
-                                            {isActive('/profil') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <LayoutDashboard size={20} strokeWidth={isActive('/profil') ? 2.5 : 2} />
+                                            <span className="text-[9px] font-medium">Profil</span>
                                         </button>
                                         <button
                                             onClick={() => navigate('/idocument')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/idocument') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            className={`flex flex-col items-center justify-center space-y-0.5 min-w-[44px] ${isActive('/idocument') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <FileText size={24} strokeWidth={isActive('/idocument') ? 2.5 : 2} />
-                                            {isActive('/idocument') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <FileText size={20} strokeWidth={isActive('/idocument') ? 2.5 : 2} />
+                                            <span className="text-[9px] font-medium">Docs</span>
+                                        </button>
+                                        <button
+                                            onClick={() => navigate('/iboite')}
+                                            className={`flex flex-col items-center justify-center space-y-0.5 min-w-[44px] ${isActive('/iboite') ? 'text-primary' : 'text-muted-foreground'}`}
+                                        >
+                                            <Mail size={20} strokeWidth={isActive('/iboite') ? 2.5 : 2} />
+                                            <span className="text-[9px] font-medium">Boîte</span>
                                         </button>
                                     </div>
 
                                     {/* Center Space for iAsted */}
                                     <div className="w-16 h-16"></div>
 
-                                    {/* Right Icons */}
-                                    <div className="flex space-x-8">
+                                    {/* Right Icons (3 items) */}
+                                    <div className="flex space-x-4">
+                                        <button
+                                            onClick={() => navigate('/icarte')}
+                                            className={`flex flex-col items-center justify-center space-y-0.5 min-w-[44px] ${isActive('/icarte') ? 'text-primary' : 'text-muted-foreground'}`}
+                                        >
+                                            <CreditCard size={20} strokeWidth={isActive('/icarte') ? 2.5 : 2} />
+                                            <span className="text-[9px] font-medium">Cartes</span>
+                                        </button>
                                         <button
                                             onClick={() => navigate('/icv')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/icv') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            className={`flex flex-col items-center justify-center space-y-0.5 min-w-[44px] ${isActive('/icv') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <User size={24} strokeWidth={isActive('/icv') ? 2.5 : 2} />
-                                            {isActive('/icv') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <User size={20} strokeWidth={isActive('/icv') ? 2.5 : 2} />
+                                            <span className="text-[9px] font-medium">CV</span>
                                         </button>
                                         <button
                                             onClick={() => navigate('/parametres')}
-                                            className={`flex flex-col items-center justify-center space-y-1 ${isActive('/parametres') ? 'text-primary' : 'text-muted-foreground'}`}
+                                            className={`flex flex-col items-center justify-center space-y-0.5 min-w-[44px] ${isActive('/parametres') ? 'text-primary' : 'text-muted-foreground'}`}
                                         >
-                                            <Settings size={24} strokeWidth={isActive('/parametres') ? 2.5 : 2} />
-                                            {isActive('/parametres') && <span className="w-1 h-1 bg-primary rounded-full"></span>}
+                                            <Settings size={20} strokeWidth={isActive('/parametres') ? 2.5 : 2} />
+                                            <span className="text-[9px] font-medium">Réglages</span>
                                         </button>
                                     </div>
 
