@@ -1,379 +1,296 @@
 /**
- * FolderIcon - Design "Clean 3D" Vertical Premium
+ * FolderIcon - Dossier Manila 3D Réaliste
  * 
- * ✨ Design épuré avec formes lisses, gradients subtils, ombres douces
- * 📄 Papiers réalistes: pile de feuilles blanches sortant par l'encoche
- * 🧠 Logique intelligente:
- *    - Fermé vide: dossier fermé simple
- *    - Fermé avec contenu: dossier fermé avec indice de papiers (légèrement visible)
- *    - Ouvert: dossier avec papiers qui sortent clairement
+ * Design inspiré des dossiers manila physiques avec:
+ * - Perspective 3D avec rotation
+ * - Documents PDF visibles à l'ouverture
+ * - Animation fluide d'ouverture/fermeture
+ * - Badge compteur de documents
  * 
- * Style: Dossier vertical inspiré du design Windows/macOS moderne
+ * États:
+ * - closed-empty: Dossier vide (toujours semi-ouvert, couleur carton)
+ * - closed-filled: Dossier avec fichiers, fermé
+ * - open-filled: Dossier avec fichiers, ouvert
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface FolderIconProps {
     type: 'closed-empty' | 'closed-filled' | 'open-filled';
     size?: number;
     color?: string;
+    documentCount?: number;
     className?: string;
-    isHovered?: boolean;
+}
+
+// Configuration des couleurs par catégorie
+export const FOLDER_ICON_COLORS: Record<string, string> = {
+    identity: '#3b82f6',      // blue
+    civil_status: '#8b5cf6',  // violet
+    residence: '#10b981',     // emerald
+    education: '#f59e0b',     // amber
+    work: '#0ea5e9',          // sky
+    health: '#ef4444',        // red
+    vehicle: '#6366f1',       // indigo
+    other: '#64748b',         // slate
+    administrative: '#3b82f6',
+    financial: '#10b981',
+    medical: '#ef4444',
+    professional: '#f59e0b'
+};
+
+// Couleur carton pour dossiers vides
+const CARTON = {
+    light: '#f0e4c4',
+    base: '#e8d5a3',
+    medium: '#dcc88a',
+    dark: '#c9ad5c',
+    shadow: '#b89b4a',
+};
+
+// Génère les variantes de couleur à partir d'une couleur de base
+function generateColorVariants(hexColor: string) {
+    return {
+        light: adjustColor(hexColor, 40),
+        base: hexColor,
+        medium: adjustColor(hexColor, -10),
+        dark: adjustColor(hexColor, -30),
+        shadow: adjustColor(hexColor, -50),
+    };
+}
+
+function adjustColor(hex: string, amount: number): string {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+    const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+    const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+    return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
 }
 
 export const FolderIcon: React.FC<FolderIconProps> = ({
     type,
     size = 80,
-    color = '#f5b041',
-    className = '',
-    isHovered = false
+    color = '#4a90d9',
+    documentCount = 0,
+    className = ''
 }) => {
-    // Unique ID for gradients to avoid conflicts
-    const uid = React.useId().replace(/:/g, '');
-    
-    // Calculate color variants for 3D realism
-    const frontLight = adjustColor(color, 30);
-    const frontMid = color;
-    const frontDark = adjustColor(color, -20);
-    const backColor = adjustColor(color, -35);
-    const shadowColor = adjustColor(color, -50);
-    const edgeHighlight = adjustColor(color, 45);
+    const [showDocs, setShowDocs] = useState(false);
+
+    const isVide = type === 'closed-empty';
+    const estOuvert = isVide ? true : type === 'open-filled';
+
+    // Gérer l'affichage des documents pendant l'animation
+    useEffect(() => {
+        if (!isVide && estOuvert) {
+            const timer = setTimeout(() => setShowDocs(true), 200);
+            return () => clearTimeout(timer);
+        } else {
+            setShowDocs(false);
+        }
+    }, [estOuvert, isVide]);
+
+    // Sélection des couleurs
+    const c = isVide ? CARTON : generateColorVariants(color);
+
+    // Angles d'ouverture
+    // Vide: -25° (semi-ouvert)
+    // Fermé avec docs: -5°
+    // Ouvert avec docs: -50°
+    const angleOuverture = isVide ? -25 : (estOuvert ? -50 : -5);
+
+    // Dimensions proportionnelles
+    const scale = size / 80;
+    const largeurFaceArriere = 60 * scale;
+    const largeurExtension = 6 * scale;
+    const largeurTotale = largeurFaceArriere + largeurExtension;
+    const hauteurTotale = 90 * scale;
+    const hauteurExtension = 36 * scale;
 
     return (
         <div
-            className={`relative flex items-center justify-center transition-transform duration-300 ${isHovered ? 'scale-105' : ''} ${className}`}
-            style={{ width: size, height: size * 1.2 }}
+            className={`relative ${className}`}
+            style={{
+                perspective: '500px',
+                width: size,
+                height: size * 1.15,
+            }}
         >
-            <svg
-                viewBox="0 0 80 100"
-                width="100%"
-                height="100%"
-                style={{ overflow: 'visible' }}
+            <div
+                className="relative h-full w-full"
+                style={{ transformStyle: 'preserve-3d' }}
             >
-                <defs>
-                    {/* Main folder front gradient - vertical smooth 3D */}
-                    <linearGradient id={`folderFront-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor={frontLight} />
-                        <stop offset="30%" stopColor={frontMid} />
-                        <stop offset="100%" stopColor={frontDark} />
-                    </linearGradient>
-                    
-                    {/* Back panel gradient (darker) */}
-                    <linearGradient id={`folderBack-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor={adjustColor(color, -15)} />
-                        <stop offset="100%" stopColor={backColor} />
-                    </linearGradient>
-
-                    {/* Inner fold gradient */}
-                    <linearGradient id={`folderInner-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor={adjustColor(color, -30)} />
-                        <stop offset="100%" stopColor={adjustColor(color, -45)} />
-                    </linearGradient>
-
-                    {/* Paper gradient for subtle depth */}
-                    <linearGradient id={`paperGrad-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#ffffff" />
-                        <stop offset="100%" stopColor="#f0f4f8" />
-                    </linearGradient>
-
-                    {/* Edge highlight gradient */}
-                    <linearGradient id={`edgeHighlight-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="rgba(255,255,255,0.6)" />
-                        <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-                    </linearGradient>
-                    
-                    {/* Soft drop shadow filter */}
-                    <filter id={`dropShadow-${uid}`} x="-50%" y="-30%" width="200%" height="180%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
-                        <feOffset dx="4" dy="8" result="offsetblur" />
-                        <feComponentTransfer>
-                            <feFuncA type="linear" slope="0.35" />
-                        </feComponentTransfer>
-                        <feMerge>
-                            <feMergeNode />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-
-                    {/* Paper shadow - more subtle */}
-                    <filter id={`paperShadow-${uid}`} x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
-                        <feOffset dx="1" dy="2" result="offsetblur" />
-                        <feComponentTransfer>
-                            <feFuncA type="linear" slope="0.2" />
-                        </feComponentTransfer>
-                        <feMerge>
-                            <feMergeNode />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-
-                    {/* Inner shadow for the notch */}
-                    <filter id={`innerShadow-${uid}`} x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-                        <feOffset dx="-1" dy="1" result="offsetblur" />
-                        <feComponentTransfer>
-                            <feFuncA type="linear" slope="0.4" />
-                        </feComponentTransfer>
-                    </filter>
-                </defs>
-
-                {/* GROUND SHADOW - ellipse under the folder */}
-                <ellipse
-                    cx="40"
-                    cy="98"
-                    rx={type === 'open-filled' ? 28 : 24}
-                    ry="4"
-                    fill="rgba(0,0,0,0.15)"
+                {/* ===== PARTIE ARRIÈRE DU DOSSIER ===== */}
+                <div
+                    className="absolute"
                     style={{
-                        transition: 'all 0.4s ease-out'
+                        width: largeurTotale,
+                        height: hauteurTotale,
+                        left: '8%',
+                        top: '8%',
+                        transform: 'translateZ(-6px)',
+                    }}
+                >
+                    <svg width="100%" height="100%" viewBox={`0 0 ${largeurTotale / scale} ${hauteurTotale / scale}`}>
+                        <defs>
+                            <linearGradient id={`backGrad-${color}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor={c.dark} />
+                                <stop offset="100%" stopColor={c.medium} />
+                            </linearGradient>
+                        </defs>
+                        <path
+                            d={`M 0 2.5 
+                               Q 0 0 2.5 0 
+                               L ${60 - 2.5} 0
+                               Q ${60} 0 ${60} 2.5
+                               L ${60} ${90 - 36}
+                               L ${66 - 2.5} ${90 - 36}
+                               Q ${66} ${90 - 36} ${66} ${90 - 36 + 2.5}
+                               L ${66} ${90 - 2.5}
+                               Q ${66} ${90} ${66 - 2.5} ${90}
+                               L 2.5 ${90}
+                               Q 0 ${90} 0 ${90 - 2.5}
+                               Z`}
+                            fill={`url(#backGrad-${color})`}
+                        />
+                    </svg>
+                </div>
+
+                {/* ===== TRANCHE GAUCHE ===== */}
+                <div
+                    className="absolute"
+                    style={{
+                        width: 3 * scale,
+                        height: 80 * scale,
+                        left: '6%',
+                        top: '12%',
+                        background: `linear-gradient(to right, ${c.shadow}, ${c.dark})`,
+                        borderRadius: '1px 0 0 1px',
+                        transform: 'translateZ(-4px)',
                     }}
                 />
 
-                {/* === BACK PANEL (visible on sides) === */}
-                <path
-                    d="M 8 8
-                       L 8 88
-                       Q 8 92 12 92
-                       L 68 92
-                       Q 72 92 72 88
-                       L 72 8
-                       Q 72 4 68 4
-                       L 12 4
-                       Q 8 4 8 8
-                       Z"
-                    fill={`url(#folderBack-${uid})`}
-                    opacity="0.9"
-                />
-
-                {/* === PAPERS STACK A4 (visible through notch) === */}
-                {type !== 'closed-empty' && (
-                    <g
+                {/* ===== DOCUMENTS PDF ===== */}
+                {!isVide && (
+                    <div
+                        className="absolute transition-all duration-300 ease-out"
                         style={{
-                            transform: type === 'open-filled' 
-                                ? 'translateY(-12px)' 
-                                : 'translateY(-2px)',
-                            transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            opacity: type === 'closed-filled' ? 0.85 : 1
+                            left: '25%',
+                            top: '15%',
+                            transform: 'translateZ(-2px)',
+                            opacity: showDocs ? 1 : 0,
                         }}
                     >
-                        {/* Paper 4 - Far back */}
-                        <rect
-                            x="51"
-                            y="18"
-                            width="16"
-                            height="48"
-                            rx="1"
-                            fill="#dde3e9"
-                            stroke="#c5cdd5"
-                            strokeWidth="0.3"
-                            transform="rotate(1.5 59 42)"
-                        />
-
-                        {/* Paper 3 - Back */}
-                        <rect
-                            x="52"
-                            y="15"
-                            width="16"
-                            height="50"
-                            rx="1"
-                            fill="#e8ecf1"
-                            stroke="#d1d5db"
-                            strokeWidth="0.3"
-                            transform="rotate(-1 60 40)"
-                        />
-                        
-                        {/* Paper 2 - Middle */}
-                        <rect
-                            x="53"
-                            y="12"
-                            width="16"
-                            height="52"
-                            rx="1"
-                            fill="#f1f4f8"
-                            stroke="#d1d5db"
-                            strokeWidth="0.3"
-                            transform="rotate(0.5 61 38)"
-                        />
-                        
-                        {/* Paper 1 - Front (main visible A4) */}
-                        <rect
-                            x="54"
-                            y="10"
-                            width="16"
-                            height="54"
-                            rx="1"
-                            fill={`url(#paperGrad-${uid})`}
-                            stroke="#c5cdd5"
-                            strokeWidth="0.4"
-                            filter={`url(#paperShadow-${uid})`}
-                        />
-
-                        {/* Blue tab/label on front paper */}
-                        <rect
-                            x="64"
-                            y="58"
-                            width="5"
-                            height="8"
-                            rx="0.5"
-                            fill="#60a5fa"
-                            opacity="0.9"
-                        />
-
-                        {/* Subtle lines on paper for realism */}
-                        <g opacity="0.35">
-                            <line x1="56" y1="14" x2="63" y2="14" stroke="#cbd5e1" strokeWidth="1.2" strokeLinecap="round" />
-                            <line x1="56" y1="18" x2="62" y2="18" stroke="#cbd5e1" strokeWidth="1" strokeLinecap="round" />
-                            <line x1="56" y1="22" x2="61" y2="22" stroke="#cbd5e1" strokeWidth="0.8" strokeLinecap="round" />
-                        </g>
-                    </g>
+                        {[...Array(Math.min(documentCount || 1, 2))].map((_, i) => (
+                            <div
+                                key={i}
+                                className="absolute bg-white border border-slate-200 rounded-sm"
+                                style={{
+                                    width: 36 * scale,
+                                    height: 50 * scale,
+                                    left: i * 2 * scale,
+                                    top: i * 3 * scale,
+                                    transform: `rotate(${-1 + i * 0.5}deg)`,
+                                    boxShadow: '1px 2px 4px rgba(0,0,0,0.1)',
+                                    transition: `opacity 0.3s ease ${i * 50}ms`,
+                                }}
+                            >
+                                {/* Lignes de texte */}
+                                <div className="p-1.5 space-y-1">
+                                    <div className="h-0.5 bg-slate-300 rounded w-4/5" />
+                                    <div className="h-0.5 bg-slate-200 rounded w-3/5" />
+                                    <div className="h-0.5 bg-slate-200 rounded w-full" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
 
-                {/* === MAIN FOLDER FRONT (vertical rectangle with notch) === */}
-                <g filter={`url(#dropShadow-${uid})`}>
-                    {/* Main body with notch cutout */}
-                    <path
-                        d="M 10 6
-                           L 10 86
-                           Q 10 90 14 90
-                           L 66 90
-                           Q 70 90 70 86
-                           L 70 50
-                           L 70 40
-                           L 50 40
-                           L 50 6
-                           Q 50 2 46 2
-                           L 14 2
-                           Q 10 2 10 6
-                           Z"
-                        fill={`url(#folderFront-${uid})`}
-                    />
+                {/* ===== PARTIE AVANT DU DOSSIER (RABAT) ===== */}
+                <div
+                    className="absolute transition-all duration-500 ease-out"
+                    style={{
+                        width: largeurTotale,
+                        height: hauteurTotale,
+                        left: '12%',
+                        top: '8%',
+                        transformOrigin: 'left center',
+                        transform: `rotateY(${angleOuverture}deg) translateZ(2px)`,
+                    }}
+                >
+                    <svg
+                        width="100%"
+                        height="100%"
+                        viewBox={`0 0 ${largeurTotale / scale} ${hauteurTotale / scale}`}
+                        style={{ filter: 'drop-shadow(2px 3px 4px rgba(0,0,0,0.15))' }}
+                    >
+                        <defs>
+                            <linearGradient id={`frontGrad-${color}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor={c.light} />
+                                <stop offset="40%" stopColor={c.base} />
+                                <stop offset="100%" stopColor={c.medium} />
+                            </linearGradient>
+                        </defs>
 
-                    {/* Inner notch shadow/depth */}
-                    <path
-                        d="M 50 40
-                           L 70 40
-                           L 70 50
-                           L 50 50
-                           L 50 40
-                           Z"
-                        fill={`url(#folderInner-${uid})`}
-                    />
+                        <path
+                            d={`M 0 2.5 
+                               Q 0 0 2.5 0 
+                               L ${60 - 2.5} 0
+                               Q ${60} 0 ${60} 2.5
+                               L ${60} ${90 - 36}
+                               L ${66 - 2.5} ${90 - 36}
+                               Q ${66} ${90 - 36} ${66} ${90 - 36 + 2.5}
+                               L ${66} ${90 - 2.5}
+                               Q ${66} ${90} ${66 - 2.5} ${90}
+                               L 2.5 ${90}
+                               Q 0 ${90} 0 ${90 - 2.5}
+                               Z`}
+                            fill={`url(#frontGrad-${color})`}
+                            stroke={c.dark}
+                            strokeWidth="0.3"
+                        />
 
-                    {/* Notch bottom edge line */}
-                    <path
-                        d="M 50 50 L 70 50"
-                        stroke={shadowColor}
-                        strokeWidth="0.5"
-                        opacity="0.4"
-                    />
+                        {/* Reflet lumineux */}
+                        <path
+                            d={`M 0 2.5 
+                               Q 0 0 2.5 0 
+                               L 12 0
+                               L 12 ${90}
+                               L 2.5 ${90}
+                               Q 0 ${90} 0 ${90 - 2.5}
+                               Z`}
+                            fill={c.light}
+                            opacity="0.4"
+                        />
+                    </svg>
 
-                    {/* Top edge highlight */}
-                    <path
-                        d="M 14 2 L 46 2"
-                        stroke={edgeHighlight}
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        opacity="0.7"
-                    />
+                    {/* Badge VIDE */}
+                    {isVide && (
+                        <div
+                            className="absolute px-1.5 py-0.5 bg-amber-100/90 text-amber-700 rounded text-[8px] font-semibold border border-amber-300"
+                            style={{
+                                bottom: '12%',
+                                right: '8%',
+                            }}
+                        >
+                            Vide
+                        </div>
+                    )}
+                </div>
 
-                    {/* Left edge highlight for 3D */}
-                    <path
-                        d="M 10 6 L 10 86"
-                        stroke="rgba(255,255,255,0.35)"
-                        strokeWidth="1"
-                    />
-
-                    {/* Right edge shadow */}
-                    <path
-                        d="M 70 50 L 70 86 Q 70 90 66 90"
-                        stroke={shadowColor}
-                        strokeWidth="0.6"
-                        fill="none"
-                        opacity="0.3"
-                    />
-
-                    {/* Bottom edge line */}
-                    <path
-                        d="M 14 90 L 66 90"
-                        stroke={shadowColor}
-                        strokeWidth="0.4"
-                        opacity="0.2"
-                    />
-                </g>
-
-                {/* === CORNER FOLD (top right folded corner) === */}
-                <g opacity={type === 'closed-empty' ? 1 : 0.9}>
-                    {/* Folded corner triangle */}
-                    <path
-                        d="M 50 2
-                           L 50 16
-                           Q 50 20 54 20
-                           L 70 20
-                           L 50 2
-                           Z"
-                        fill={adjustColor(color, -10)}
-                        stroke={shadowColor}
-                        strokeWidth="0.3"
-                        opacity="0.95"
-                    />
-                    
-                    {/* Fold shadow underneath */}
-                    <path
-                        d="M 50 16 L 54 20 L 50 20 Z"
-                        fill="rgba(0,0,0,0.15)"
-                    />
-                    
-                    {/* Fold edge highlight */}
-                    <path
-                        d="M 50 2 L 70 20"
-                        stroke="rgba(255,255,255,0.25)"
-                        strokeWidth="0.6"
-                    />
-                </g>
-            </svg>
+                {/* ===== OMBRE PORTÉE ===== */}
+                <div
+                    className="absolute rounded-full blur-md"
+                    style={{
+                        width: '70%',
+                        height: 8 * scale,
+                        left: '15%',
+                        bottom: '2%',
+                        backgroundColor: 'rgba(0,0,0,0.15)',
+                    }}
+                />
+            </div>
         </div>
     );
-};
-
-/**
- * Utility function to adjust color brightness
- */
-function adjustColor(hex: string, amount: number): string {
-    // Handle rgb/rgba colors
-    if (hex.startsWith('rgb')) {
-        return hex;
-    }
-    
-    const cleanHex = hex.replace('#', '');
-    const num = parseInt(cleanHex, 16);
-    
-    if (isNaN(num)) return hex;
-    
-    const r = Math.min(255, Math.max(0, (num >> 16) + amount));
-    const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
-    const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
-    
-    return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-}
-
-/**
- * Predefined colors for document categories
- * Using warm, friendly tones for the 3D effect
- */
-export const FOLDER_ICON_COLORS: Record<string, string> = {
-    identity: '#4f9cf9',      // bright blue
-    civil_status: '#a78bfa',  // soft purple
-    residence: '#34d399',     // fresh green
-    education: '#f5b041',     // warm amber/orange
-    work: '#60a5fa',          // sky blue
-    health: '#f87171',        // soft red
-    vehicle: '#818cf8',       // indigo
-    other: '#94a3b8',         // neutral slate
-    administrative: '#4f9cf9',
-    financial: '#34d399',
-    medical: '#f87171',
-    professional: '#f5b041'
 };
 
 export default FolderIcon;
