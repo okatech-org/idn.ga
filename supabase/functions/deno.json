@@ -12,6 +12,6 @@
     "lock": false,
     "imports": {
         "@supabase/supabase-js": "npm:@supabase/supabase-js@2",
-        "openai": "npm:openai@^4.52.5"
+        "openai": "npm:openai@4.77.0"
     }
 }
