@@ -9,7 +9,7 @@ const corsHeaders = {
 async function createIdToken(payload: Record<string, unknown>, secret: string): Promise<string> {
   const header = { alg: 'HS256', typ: 'JWT' };
   const encoder = new TextEncoder();
-  
+
   const headerB64 = btoa(JSON.stringify(header))
     .replace(/=/g, '')
     .replace(/\+/g, '-')
@@ -18,9 +18,9 @@ async function createIdToken(payload: Record<string, unknown>, secret: string): 
     .replace(/=/g, '')
     .replace(/\+/g, '-')
     .replace(/\//g, '_');
-  
+
   const data = `${headerB64}.${payloadB64}`;
-  
+
   // Proper HMAC-SHA256 signature using Web Crypto API
   const key = await crypto.subtle.importKey(
     'raw',
@@ -29,18 +29,18 @@ async function createIdToken(payload: Record<string, unknown>, secret: string): 
     false,
     ['sign']
   );
-  
+
   const signatureBuffer = await crypto.subtle.sign(
     'HMAC',
     key,
     encoder.encode(data)
   );
-  
+
   const signatureB64 = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)))
     .replace(/=/g, '')
     .replace(/\+/g, '-')
     .replace(/\//g, '_');
-  
+
   return `${data}.${signatureB64}`;
 }
 
@@ -54,8 +54,39 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const body = await req.json();
-    const { grant_type, code, redirect_uri, client_id, client_secret, code_verifier, refresh_token } = body;
+    // Parse body - support both JSON and form-urlencoded (OAuth standard)
+    let grant_type: string | null = null;
+    let code: string | null = null;
+    let redirect_uri: string | null = null;
+    let client_id: string | null = null;
+    let client_secret: string | null = null;
+    let code_verifier: string | null = null;
+    let refresh_token: string | null = null;
+
+    const contentType = req.headers.get('content-type') || '';
+
+    if (contentType.includes('application/x-www-form-urlencoded')) {
+      // Standard OAuth form-urlencoded format
+      const formData = await req.text();
+      const params = new URLSearchParams(formData);
+      grant_type = params.get('grant_type');
+      code = params.get('code');
+      redirect_uri = params.get('redirect_uri');
+      client_id = params.get('client_id');
+      client_secret = params.get('client_secret');
+      code_verifier = params.get('code_verifier');
+      refresh_token = params.get('refresh_token');
+    } else {
+      // JSON format (alternative)
+      const body = await req.json();
+      grant_type = body.grant_type;
+      code = body.code;
+      redirect_uri = body.redirect_uri;
+      client_id = body.client_id;
+      client_secret = body.client_secret;
+      code_verifier = body.code_verifier;
+      refresh_token = body.refresh_token;
+    }
 
     // Fetch client (without exposing secret in queries)
     const { data: client, error: clientError } = await supabase
@@ -77,7 +108,7 @@ Deno.serve(async (req) => {
       const encoder = new TextEncoder();
       const storedSecret = encoder.encode(client.client_secret);
       const providedSecret = encoder.encode(client_secret || '');
-      
+
       // Timing-safe comparison
       if (storedSecret.length !== providedSecret.length) {
         return new Response(JSON.stringify({ error: 'invalid_client' }), {
@@ -85,12 +116,12 @@ Deno.serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
+
       let mismatch = 0;
       for (let i = 0; i < storedSecret.length; i++) {
         mismatch |= storedSecret[i] ^ providedSecret[i];
       }
-      
+
       if (mismatch !== 0) {
         return new Response(JSON.stringify({ error: 'invalid_client' }), {
           status: 401,
@@ -143,7 +174,7 @@ Deno.serve(async (req) => {
           .replace(/=/g, '')
           .replace(/\+/g, '-')
           .replace(/\//g, '_');
-        
+
         if (calculatedChallenge !== authCode.code_challenge) {
           return new Response(JSON.stringify({ error: 'invalid_grant', error_description: 'Invalid code_verifier' }), {
             status: 400,
