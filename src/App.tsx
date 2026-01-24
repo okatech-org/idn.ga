@@ -75,6 +75,7 @@ const App = () => (
 
               {/* Authentication */}
               <Route path="/login" element={<Login />} />
+              <Route path="/auth" element={<Login />} />
               <Route path="/biometric-login" element={<BiometricLogin />} />
 
               {/* Dashboard & Main App */}

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, User, ScanFace, ArrowRight, Eye, EyeOff, Shield, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,22 @@ import sceauGabon from "@/assets/sceau_gabon.png";
 
 const Login = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { theme, toggleTheme } = useTheme();
     const [nip, setNip] = useState("");
     const [pin, setPin] = useState("");
     const [showPin, setShowPin] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [returnUrl, setReturnUrl] = useState<string | null>(null);
+
+    // Capture returnUrl from query parameters for OAuth redirect flow
+    useEffect(() => {
+        const url = searchParams.get('returnUrl');
+        if (url) {
+            setReturnUrl(url);
+        }
+    }, [searchParams]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,7 +35,12 @@ const Login = () => {
         // Simulate API call
         setTimeout(() => {
             if (nip.length >= 5 && pin.length >= 4) {
-                navigate("/dashboard");
+                // If returnUrl exists (OAuth flow), redirect there; otherwise go to profile
+                if (returnUrl) {
+                    window.location.href = returnUrl;
+                } else {
+                    navigate("/profil");
+                }
             } else {
                 setError("Identifiants invalides. Veuillez réessayer.");
                 setIsLoading(false);
