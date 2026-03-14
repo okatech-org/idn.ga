@@ -131,7 +131,7 @@ export default function DeveloperPortal() {
         scopes: ['openid', 'profile'],
       });
       toast.success('Application créée avec succès');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error creating app:', error);
       toast.error(error.message || 'Erreur lors de la création');
     } finally {

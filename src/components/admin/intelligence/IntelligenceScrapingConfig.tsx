@@ -48,7 +48,7 @@ export function IntelligenceScrapingConfig() {
       };
       
       setConfig(typedConfig);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading config:", error);
       toast.error("Erreur lors du chargement de la configuration");
     } finally {
@@ -72,7 +72,7 @@ export function IntelligenceScrapingConfig() {
 
       if (error) throw error;
       toast.success("Configuration enregistrée");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving config:", error);
       toast.error("Erreur lors de l'enregistrement");
     } finally {
@@ -88,7 +88,7 @@ export function IntelligenceScrapingConfig() {
       if (error) throw error;
       toast.success("Collecte lancée avec succès");
       loadConfig(); // Recharger pour voir la nouvelle date
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error triggering scraping:", error);
       toast.error("Erreur lors du lancement de la collecte");
     } finally {

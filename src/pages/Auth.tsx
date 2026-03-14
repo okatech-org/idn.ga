@@ -117,7 +117,7 @@ const Auth = () => {
 
       // Redirection directe selon le rôle
       navigate(destination, { replace: true });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erreur de connexion",
         description: error.message,
@@ -152,7 +152,7 @@ const Auth = () => {
       setEmail("president@presidence.ga");
       setPassword("President2025!");
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ Erreur complète:', error);
       toast({
         title: "Erreur d'initialisation",

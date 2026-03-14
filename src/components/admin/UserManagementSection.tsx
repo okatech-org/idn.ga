@@ -17,7 +17,7 @@ interface AdminUser {
     last_sign_in_at: string;
     created_at: string;
     roles: AppRole[];
-    user_metadata: any;
+    user_metadata: Record<string, unknown>;
 }
 
 export const UserManagementSection = () => {
@@ -39,7 +39,7 @@ export const UserManagementSection = () => {
             const { data, error } = await supabase.functions.invoke('admin-users');
             if (error) throw error;
             setUsers(data.users);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error fetching users:', error);
             toast({
                 title: "Erreur",
@@ -87,7 +87,7 @@ export const UserManagementSection = () => {
             });
             setIsEditRoleOpen(false);
             fetchUsers();
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

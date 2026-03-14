@@ -147,7 +147,7 @@ export const RoleFeedbackModal = ({ isOpen, onClose, roleName, userEmail }: Role
       });
       setFiles([]);
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error submitting feedback:', error);
       toast({
         title: "Erreur",

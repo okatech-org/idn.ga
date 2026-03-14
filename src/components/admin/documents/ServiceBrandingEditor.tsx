@@ -113,7 +113,7 @@ export const ServiceBrandingEditor: React.FC<ServiceBrandingEditorProps> = ({ se
                 description: "Paramètres enregistrés avec succès.",
             });
             fetchSettings(); // Refresh to get ID if it was a new insert
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error saving settings:', error);
             toast({
                 title: "Erreur",

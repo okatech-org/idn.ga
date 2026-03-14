@@ -46,7 +46,7 @@ export const KnowledgeBaseSection = () => {
 
             if (error) throw error;
             setDocuments(data as any[]);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error fetching documents:', error);
             toast({
                 title: "Erreur",
@@ -84,7 +84,7 @@ export const KnowledgeBaseSection = () => {
             setNewDocTitle('');
             setNewDocPath('');
             fetchDocuments();
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,
@@ -111,7 +111,7 @@ export const KnowledgeBaseSection = () => {
                 description: "Le document a été retiré de la base"
             });
             fetchDocuments();
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,
@@ -134,7 +134,7 @@ export const KnowledgeBaseSection = () => {
                 description: "Le statut sera mis à jour une fois terminé"
             });
             fetchDocuments();
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

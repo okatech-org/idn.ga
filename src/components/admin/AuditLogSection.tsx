@@ -12,7 +12,7 @@ interface AuditLog {
     user_id: string;
     action: string;
     resource: string;
-    details: any;
+    details: Record<string, unknown>;
     ip_address: string;
     created_at: string;
 }
@@ -38,7 +38,7 @@ export const AuditLogSection = () => {
 
             if (error) throw error;
             setLogs(data as any[]);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error fetching logs:', error);
             toast({
                 title: "Erreur",

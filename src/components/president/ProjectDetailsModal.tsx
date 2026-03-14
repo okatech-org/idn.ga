@@ -88,7 +88,7 @@ export function ProjectDetailsModal({ isOpen, onClose, projectId, projectType }:
                 if (photosData) setPhotos(photosData);
             }
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error loading project:", error);
             toast({
                 title: "Erreur",

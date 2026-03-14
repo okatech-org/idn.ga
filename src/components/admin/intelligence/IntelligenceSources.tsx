@@ -137,7 +137,7 @@ export const IntelligenceSources = () => {
             });
             setNewSource({ name: '', type: 'web_search', url: '' });
             fetchSources();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error adding source:', error);
             toast({ 
                 title: "Erreur", 
@@ -165,7 +165,7 @@ export const IntelligenceSources = () => {
                 description: `La surveillance est maintenant ${newStatus === 'active' ? 'active' : 'en pause'}`
             });
             fetchSources();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error toggling status:', error);
             toast({ 
                 title: "Erreur", 
@@ -193,7 +193,7 @@ export const IntelligenceSources = () => {
             });
             setDeleteConfirm(null);
             fetchSources();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error deleting source:', error);
             toast({ 
                 title: "Erreur", 
@@ -255,7 +255,7 @@ export const IntelligenceSources = () => {
                                 <label className="text-sm font-medium">Type de source *</label>
                                 <Select
                                     value={newSource.type}
-                                    onValueChange={(v: any) => setNewSource({ ...newSource, type: v })}
+                                    onValueChange={(v: string) => setNewSource({ ...newSource, type: v })}
                                     disabled={addLoading}
                                 >
                                     <SelectTrigger>

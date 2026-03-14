@@ -13,8 +13,8 @@ interface IAstedContextType {
     open: (mode?: IAstedMode) => void;
     mode: IAstedMode;
     setMode: (mode: IAstedMode) => void;
-    currentContext: any;
-    setContext: (context: any) => void;
+    currentContext: Record<string, unknown>;
+    setContext: (context: Record<string, unknown>) => void;
 
     // === Consciousness State ===
     soulState: SoulState;

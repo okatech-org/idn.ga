@@ -64,7 +64,7 @@ export const SuperAdminProvider: React.FC<SuperAdminProviderProps> = ({ children
         return !isLoading && (role === 'admin' || role === 'president');
     }, [role, isLoading]);
 
-    const handleToolCall = useCallback(async (toolName: string, args: any): Promise<{ success: boolean; message: string } | void> => {
+    const handleToolCall = useCallback(async (toolName: string, args: Record<string, unknown>): Promise<{ success: boolean; message: string } | void> => {
         switch (toolName) {
             case 'global_navigate':
                 const query = args.query || args.route;
@@ -207,14 +207,14 @@ export const SuperAdminProvider: React.FC<SuperAdminProviderProps> = ({ children
                     if (error) throw error;
 
                     if (data.results && data.results.length > 0) {
-                        const formattedResults = data.results.map((r: any) =>
+                        const formattedResults = data.results.map((r: Record<string, unknown>) =>
                             `- [${r.category?.toUpperCase() || 'INFO'}] ${r.summary || r.content.substring(0, 100)}... (Source: ${r.author})`
                         ).join('\n');
                         return { success: true, message: `Voici les informations trouvées :\n${formattedResults}` };
                     } else {
                         return { success: true, message: "Aucune information pertinente trouvée dans la base de connaissances." };
                     }
-                } catch (err: any) {
+                } catch (err: unknown) {
                     console.error('❌ [Super Admin Context] Search error:', err);
                     return { success: false, message: "Erreur lors de la recherche d'informations." };
                 }

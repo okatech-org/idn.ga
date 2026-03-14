@@ -36,13 +36,13 @@ export const AIConfigSection = () => {
             if (error) throw error;
 
             if (data) {
-                const prompts = data.find((d: any) => d.key === 'ai_system_prompts')?.value;
-                const voice = data.find((d: any) => d.key === 'ai_voice_config')?.value;
+                const prompts = data.find((d: Record<string, unknown>) => d.key === 'ai_system_prompts')?.value;
+                const voice = data.find((d: Record<string, unknown>) => d.key === 'ai_voice_config')?.value;
 
                 if (prompts) setSystemPrompts(prompts as Record<string, string>);
                 if (voice) setVoiceConfig(voice as any);
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error fetching AI config:', error);
             toast({
                 title: "Erreur",
@@ -71,7 +71,7 @@ export const AIConfigSection = () => {
                 title: "Succès",
                 description: "Prompts système mis à jour"
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,
@@ -99,7 +99,7 @@ export const AIConfigSection = () => {
                 title: "Succès",
                 description: "Configuration vocale mise à jour"
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

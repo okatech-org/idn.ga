@@ -225,7 +225,7 @@ const SecretariatGeneralSpace = () => {
   };
 
   // Tool call handler for iAsted
-  const handleToolCall = useCallback(async (toolName: string, args: any) => {
+  const handleToolCall = useCallback(async (toolName: string, args: Record<string, unknown>) => {
     console.log(`🔧 [SecretariatGeneralSpace] Tool call: ${toolName}`, args);
     switch (toolName) {
       case 'control_ui':

@@ -81,7 +81,7 @@ export const AdminUnlock = ({ onUnlocked }: AdminUnlockProps) => {
         onUnlocked();
       }, 500);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Unlock error:', error);
       toast({
         title: 'Erreur de déblocage',

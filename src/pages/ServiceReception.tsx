@@ -73,7 +73,7 @@ export default function ServiceReception({ embedded = false }: ServiceReceptionP
                 description: "L'enveloppe a été traitée avec succès.",
             });
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error processing mail:', error);
             toast({
                 title: "Erreur",

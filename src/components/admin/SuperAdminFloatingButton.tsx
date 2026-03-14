@@ -21,7 +21,7 @@ export const SuperAdminFloatingButton: React.FC = () => {
     const [originRoute, setOriginRoute] = useState<string | null>(null);
     const [securityOverrideActive, setSecurityOverrideActive] = useState(false);
 
-    const handleToolCall = useCallback(async (toolName: string, args: any) => {
+    const handleToolCall = useCallback(async (toolName: string, args: Record<string, unknown>) => {
         switch (toolName) {
             case 'global_navigate':
                 // Intelligent route resolution

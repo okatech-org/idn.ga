@@ -362,7 +362,7 @@ const PrivateCabinetDirectorSpace = () => {
   };
 
   // Tool call handler for iAsted
-  const handleToolCall = useCallback(async (toolName: string, args: any) => {
+  const handleToolCall = useCallback(async (toolName: string, args: Record<string, unknown>) => {
     console.log(`🔧 [PrivateCabinetDirectorSpace] Tool call: ${toolName}`, args);
     switch (toolName) {
       case 'control_ui':

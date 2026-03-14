@@ -40,7 +40,7 @@ export const VueEnsemble = () => {
       "Ogooué-Ivindo", "Ogooué-Lolo", "Ogooué-Maritime", "Woleu-Ntem"
     ];
     provinces.forEach(p => counts.set(p, 0));
-    signalements.forEach((r: any) => {
+    signalements.forEach((r: Record<string, unknown>) => {
       const p = r.province || "Estuaire";
       counts.set(p, (counts.get(p) || 0) + 1);
     });

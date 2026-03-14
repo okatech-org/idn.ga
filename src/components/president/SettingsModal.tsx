@@ -140,7 +140,7 @@ export function SettingsModal({ isOpen, onClose, userRole = "president" }: Setti
             });
 
             onClose();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error saving settings:", error);
             toast({
                 title: "Erreur",
@@ -167,7 +167,7 @@ export function SettingsModal({ isOpen, onClose, userRole = "president" }: Setti
                 title: "Email envoyé",
                 description: "Vérifiez votre boîte de réception",
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

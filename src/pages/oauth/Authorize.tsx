@@ -95,7 +95,7 @@ export default function OAuthAuthorize() {
         } else if (data.requires_consent) {
           setAuthData(data);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('OAuth authorize error:', err);
         setError(err.message || 'Une erreur est survenue');
       } finally {
@@ -132,7 +132,7 @@ export default function OAuthAuthorize() {
       } else if (data.error) {
         setError(`${data.error}: ${data.error_description || ''}`);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('OAuth consent error:', err);
       setError(err.message || 'Erreur lors de l\'autorisation');
     } finally {
@@ -162,7 +162,7 @@ export default function OAuthAuthorize() {
       if (data.redirect_url) {
         window.location.href = data.redirect_url;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('OAuth deny error:', err);
       // Redirect with error anyway
       if (redirect_uri) {

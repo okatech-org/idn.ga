@@ -9,7 +9,7 @@ import { fr } from "date-fns/locale";
 import { useState, useEffect, useRef } from "react";
 
 interface CNAMGSCardProps {
-    profile: any;
+    profile: Record<string, unknown>;
 }
 
 interface LayoutField {
@@ -116,7 +116,7 @@ export const CNAMGSCard = ({ profile }: CNAMGSCardProps) => {
         const esc = (id: string) => '#' + CSS.escape(id);
 
         // Fonction pour placer un texte selon bbox
-        const placeText = (id: string, bbox: [number, number, number, number], opts: any = {}) => {
+        const placeText = (id: string, bbox: [number, number, number, number], opts: Record<string, unknown> = {}) => {
             const node = $(esc(id));
             if (!node) return;
             const [x, y, w, h] = bbox;

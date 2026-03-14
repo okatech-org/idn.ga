@@ -53,7 +53,7 @@ export function ConseilSessionModal({ isOpen, onClose, sessionId }: ConseilSessi
             if (agendaError) throw agendaError;
             setAgendaItems(agendaData || []);
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error loading session:", error);
             toast({
                 title: "Erreur",
@@ -89,7 +89,7 @@ export function ConseilSessionModal({ isOpen, onClose, sessionId }: ConseilSessi
                 title: "Point ajouté",
                 description: "Le point a été ajouté à l'ordre du jour",
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,
@@ -112,7 +112,7 @@ export function ConseilSessionModal({ isOpen, onClose, sessionId }: ConseilSessi
                 title: "Point supprimé",
                 description: "Le point a été retiré de l'ordre du jour",
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

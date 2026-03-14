@@ -17,7 +17,7 @@ interface IntelligenceItem {
     summary: string | null;
     category: 'securite' | 'economie' | 'social' | 'politique' | 'rumeur' | 'autre' | null;
     sentiment: 'positif' | 'negatif' | 'neutre' | 'colere' | 'peur' | 'joie' | null;
-    entities: any;
+    entities: Record<string, unknown>[];
     author: string | null;
     published_at: string;
     source_id: string | null;

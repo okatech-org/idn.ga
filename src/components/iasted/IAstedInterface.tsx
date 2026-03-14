@@ -17,7 +17,7 @@ const IAstedInterface: React.FC<IAstedInterfaceProps> = ({ userRole = 'citizen',
     const { isOpen, toggle, open, close, mode, setMode } = useIAsted();
 
     // Tool Execution Logic
-    const handleToolCall = async (toolName: string, args: any) => {
+    const handleToolCall = async (toolName: string, args: Record<string, unknown>) => {
         console.log(`[iAsted] Tool Call: ${toolName}`, args);
 
         try {

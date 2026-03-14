@@ -42,7 +42,7 @@ export function NominationDetailsModal({ isOpen, onClose, nominationId, onDecide
 
             if (error) throw error;
             setNomination(data);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error loading nomination:", error);
             toast({
                 title: "Erreur",
@@ -91,7 +91,7 @@ export function NominationDetailsModal({ isOpen, onClose, nominationId, onDecide
 
             if (onDecided) onDecided();
             onClose();
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

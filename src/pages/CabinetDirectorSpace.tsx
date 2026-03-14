@@ -307,7 +307,7 @@ const CabinetDirectorSpace = () => {
       queryClient.invalidateQueries({ queryKey: ["ministerial_projects"] });
       toast({ title: "Succès", description: "Projet créé avec succès" });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     },
   });
@@ -327,7 +327,7 @@ const CabinetDirectorSpace = () => {
       queryClient.invalidateQueries({ queryKey: ["presidential_instructions"] });
       toast({ title: "Succès", description: "Instruction créée avec succès" });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     },
   });
@@ -348,7 +348,7 @@ const CabinetDirectorSpace = () => {
       queryClient.invalidateQueries({ queryKey: ["interministerial_coordination"] });
       toast({ title: "Succès", description: "Coordination créée avec succès" });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     },
   });
@@ -369,7 +369,7 @@ const CabinetDirectorSpace = () => {
       queryClient.invalidateQueries({ queryKey: ["council_preparations"] });
       toast({ title: "Succès", description: "Préparation de conseil créée avec succès" });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     },
   });

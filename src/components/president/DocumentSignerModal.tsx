@@ -49,7 +49,7 @@ export function DocumentSignerModal({ isOpen, onClose, documentId, onSigned }: D
 
             if (error) throw error;
             setDocument(data);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error loading document:", error);
             toast({
                 title: "Erreur",
@@ -100,7 +100,7 @@ export function DocumentSignerModal({ isOpen, onClose, documentId, onSigned }: D
                 title: "Commentaire ajouté",
                 description: "Votre commentaire a été enregistré",
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,
@@ -152,7 +152,7 @@ export function DocumentSignerModal({ isOpen, onClose, documentId, onSigned }: D
 
             if (onSigned) onSigned();
             onClose();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error signing document:", error);
             toast({
                 title: "Erreur",
@@ -197,7 +197,7 @@ export function DocumentSignerModal({ isOpen, onClose, documentId, onSigned }: D
 
             if (onSigned) onSigned(); // Refresh parent list
             onClose();
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

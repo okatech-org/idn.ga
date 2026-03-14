@@ -52,7 +52,7 @@ export const ConfigSection = () => {
             if (data?.value) {
                 setConfig(data.value as PlatformConfig);
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error fetching config:', error);
             // Don't show error toast on initial load if config doesn't exist
         } finally {
@@ -77,7 +77,7 @@ export const ConfigSection = () => {
                 title: "Configuration enregistrée",
                 description: "Les paramètres ont été mis à jour avec succès"
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({
                 title: "Erreur",
                 description: error.message,

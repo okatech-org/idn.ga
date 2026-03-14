@@ -177,7 +177,7 @@ export const DocumentTemplatesManager = ({ serviceRole = 'president' }: Document
 
             if (error) throw error;
             setTemplates((data as any) || []);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error fetching templates:', error);
             toast({
                 title: "Erreur",
@@ -270,7 +270,7 @@ export const DocumentTemplatesManager = ({ serviceRole = 'president' }: Document
             fetchTemplates();
             setIsEditing(false);
             setSelectedTemplate(null);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error saving template:', error);
             toast({
                 title: "Erreur",
@@ -300,7 +300,7 @@ export const DocumentTemplatesManager = ({ serviceRole = 'president' }: Document
             fetchTemplates();
             setIsEditing(false);
             setSelectedTemplate(null);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error deleting template:', error);
             toast({
                 title: "Erreur",

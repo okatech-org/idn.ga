@@ -121,7 +121,7 @@ export default function ServiceCourrier() {
             // Refresh mail status
             fetchMails();
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error analyzing content:', error);
             toast({ title: "Erreur", description: error.message, variant: "destructive" });
         } finally {
@@ -157,7 +157,7 @@ export default function ServiceCourrier() {
             fetchMails();
             setSelectedMail(null);
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             toast({ title: "Erreur", description: error.message, variant: "destructive" });
         }
     };

@@ -135,7 +135,7 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({ onDocume
                 onDocumentAnalyzed(document.id, analysisResult.analysis);
             }
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error uploading/analyzing file:', error);
             updateFileStatus(uploadedFile.id, 'error', 0, null, error.message);
 

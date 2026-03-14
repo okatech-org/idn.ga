@@ -16,7 +16,7 @@ interface SearchResult {
     summary: string;
     category: string;
     sentiment: string;
-    entities: any;
+    entities: Record<string, unknown>[];
     author: string;
     published_at: string;
     similarity: number;
@@ -74,7 +74,7 @@ export const IntelligenceSearch = () => {
                     description: `${data.results.length} résultat(s) trouvé(s)`
                 });
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Search error:', error);
             toast({
                 title: "Erreur de recherche",
