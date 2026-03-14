@@ -1,5 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect, useMemo } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { hasIAstedAccess, getRoleContext, SPACE_CONTEXTS, type AppRole, type RoleContext, type SpaceContext } from '@/config/role-contexts';
 
 export interface UserProfile {

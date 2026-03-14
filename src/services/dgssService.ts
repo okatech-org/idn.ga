@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import type { IntelligenceReport, SurveillanceTarget, ThreatIndicator } from '@/types/dgss';
 
 export const dgssService = {

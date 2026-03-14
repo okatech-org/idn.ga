@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -8,7 +9,6 @@ import IAstedButtonFull from '@/components/iasted/IAstedButtonFull';
 import { generateSystemPrompt } from '@/utils/generateSystemPrompt';
 import { resolveRoute } from '@/utils/route-mapping';
 import { IAstedChatModal } from '@/components/iasted/IAstedChatModal';
-import { supabase } from '@/integrations/supabase/client';
 
 interface SuperAdminContextValue {
     isAdmin: boolean;

@@ -1,5 +1,4 @@
 
-import { supabase } from "@/integrations/supabase/client";
 import { VisitorLog, AccreditationRequest } from "@/types/reception";
 
 export const receptionService = {

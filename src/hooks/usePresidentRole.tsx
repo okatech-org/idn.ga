@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState, useCallback } from "react";
 
 export const usePresidentRole = () => {
   const [isPresident, setIsPresident] = useState(false);

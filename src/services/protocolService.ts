@@ -1,5 +1,4 @@
 
-import { supabase } from "@/integrations/supabase/client";
 import { OfficialEvent, Guest, ProtocolProcedure } from "@/types/protocol";
 
 export const protocolService = {

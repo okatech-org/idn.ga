@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 /**
  * Document Dossier Service
  * Handles PDF generation for consolidated documents and secure sharing
@@ -7,7 +8,6 @@ import { VaultDocument, FOLDER_LABELS, DocumentCategory } from '@/types/document
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { jsPDF } from 'jspdf';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface DossierConfig {
     title: string;

@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useState } from 'react';
 import { IncomingMail } from "@/types/service-courriers-types";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import {
     CheckCircle2,

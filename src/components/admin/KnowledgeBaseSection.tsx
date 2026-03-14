@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { FileText, Upload, Trash2, RefreshCw, Search, Database } from 'lucide-react';
 import { IASTED_AUTHORIZED_ROLES, type AppRole } from '@/config/role-contexts';
 

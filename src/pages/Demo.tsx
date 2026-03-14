@@ -1,10 +1,11 @@
+import type { Database } from "@/integrations/supabase/types";
+import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, LogIn, Shield, Users, Lock, UserCheck, Lightbulb, Moon, Sun, Languages, Zap, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { RoleFeedbackModal } from "@/components/RoleFeedbackModal";
 import sceauGabon from "@/assets/sceau_gabon.png";
 import { usePrefetch } from "@/hooks/usePrefetch";
@@ -12,7 +13,6 @@ import { useTheme } from "@/context/ThemeContext";
 import { useLanguage, languages } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import type { Database } from "@/integrations/supabase/types";
 import {
   DropdownMenu,
   DropdownMenuContent,

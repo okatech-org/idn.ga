@@ -6,7 +6,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { Calendar, MapPin, DollarSign, TrendingUp, Clock, CheckCircle, AlertTriangle, Image as ImageIcon, FileText, Activity } from "lucide-react";
 
 export type ProjectType = 'presidential' | 'state' | 'construction';

@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,7 +6,6 @@ import { IntelligenceFeed } from './IntelligenceFeed';
 import { IntelligenceSources } from './IntelligenceSources';
 import { IntelligenceSearch } from './IntelligenceSearch';
 import { IntelligenceScrapingConfig } from './IntelligenceScrapingConfig';
-import { supabase } from "@/integrations/supabase/client";
 import { Activity, Database, AlertCircle, ShieldAlert, Search as SearchIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

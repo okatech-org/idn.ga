@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 /**
  * Document Vault Service
  * 
@@ -5,7 +6,6 @@
  * Fallback sur localStorage si l'utilisateur n'est pas connecté
  */
 
-import { supabase } from "@/integrations/supabase/client";
 
 // Document types
 export interface VaultDocument {

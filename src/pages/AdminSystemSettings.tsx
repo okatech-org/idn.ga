@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +13,6 @@ import { toast } from "sonner";
 import { Settings, Database, Shield, FileText, Activity, ArrowLeft } from "lucide-react";
 import { systemSettingsService, type SystemSetting } from "@/services/systemSettingsService";
 import { auditLogService, type AuditLog } from "@/services/auditLogService";
-import { supabase } from "@/integrations/supabase/client";
 
 export default function AdminSystemSettings() {
   const navigate = useNavigate();

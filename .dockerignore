@@ -1,0 +1,16 @@
+node_modules
+.git
+.github
+.husky
+.DS_Store
+*.md
+docs
+.mairie-reference
+.tmp-mairie-cv
+backend
+supabase
+scripts
+.env
+.env.local
+.env.*
+bun.lockb

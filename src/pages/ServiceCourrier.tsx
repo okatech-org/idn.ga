@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -5,7 +6,6 @@ import {
     ChevronRight, Search, Filter, Eye, Send, Upload
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { DocumentUploadZone } from '@/components/iasted/DocumentUploadZone';
 
 // Types

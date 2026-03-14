@@ -1,4 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
 import { IncomingMail, MailStats } from "@/types/service-courriers-types";
 
 export const courrierService = {

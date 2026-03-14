@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { User, Briefcase, GraduationCap, Calendar, CheckCircle, XCircle, FileText } from "lucide-react";
 
 interface NominationDetailsModalProps {

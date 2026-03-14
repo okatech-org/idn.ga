@@ -1,8 +1,8 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Printer, Check, Loader2, FileText, Scan } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 // Components
 import { DocumentUploadZone } from '@/components/iasted/DocumentUploadZone';

@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { Calendar, Clock, MapPin, FileText, Plus, Trash2, CheckCircle, Users } from "lucide-react";
 
 interface ConseilSessionModalProps {

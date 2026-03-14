@@ -1,9 +1,9 @@
+import type { Database } from "@/integrations/supabase/types";
 /**
  * Role Context Configuration
  * Defines metadata and permissions for each role that has access to iAsted
  */
 
-import type { Database } from '@/integrations/supabase/types';
 
 export type AppRole = Database['public']['Enums']['app_role'];
 

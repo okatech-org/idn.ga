@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "idn-identite-ga"
+  },
+  "targets": {
+    "idn-identite-ga": {
+      "hosting": {
+        "idn-ga": [
+          "idn-ga"
+        ],
+        "identite-ga": [
+          "identite-ga"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

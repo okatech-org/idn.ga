@@ -1,3 +1,4 @@
+import type { Database } from "@/integrations/supabase/types";
 import { Folder, FolderOpen, Plus, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -6,7 +7,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { Database } from '@/integrations/supabase/types';
 
 type Folder = Database['public']['Tables']['document_folders']['Row'];
 

@@ -1,6 +1,5 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { supabase } from '@/integrations/supabase/client';
 import emblemGabon from '@/assets/emblem_gabon.png';
 
 // Flag pour s'assurer qu'on initialise qu'une seule fois

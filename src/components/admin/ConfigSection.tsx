@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { Settings, Save, AlertCircle, Bell, Shield } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 

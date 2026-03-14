@@ -1,10 +1,10 @@
+import { supabase } from "@/integrations/supabase/client";
 /**
  * Service iDocument
  * Gestion du coffre-fort de documents avec Supabase Storage
  * Inspiré de mairie.ga
  */
 
-import { supabase } from '@/integrations/supabase/client';
 import {
     VaultDocument,
     DocumentCategory,

@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Hook pour précharger les données lors du survol des liens

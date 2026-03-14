@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Environment
+.env.local
+.env.*.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +26,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase
+.firebase/
+
+# Convex
+convex/_generated/

@@ -1,6 +1,6 @@
+import { supabase } from "@/integrations/supabase/client";
 import { useState, useRef, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 export const useAudioRecording = () => {
   const [isRecording, setIsRecording] = useState(false);

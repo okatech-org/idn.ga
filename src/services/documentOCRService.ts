@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 /**
  * Document OCR Service
  * Uses Gemini Vision API to extract structured data from identity documents
@@ -162,7 +163,6 @@ export function getSuggestedFolder(docType: OCRDocumentType): string {
     return DOC_TYPE_TO_FOLDER[docType] || 'other';
 }
 
-import { supabase } from '@/integrations/supabase/client';
 
 /**
  * Analyze a single document using Gemini Vision API via Supabase Edge Function

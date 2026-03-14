@@ -1,6 +1,6 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { OAuthConsentScreen } from '@/components/oauth/OAuthConsentScreen';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -3,7 +3,6 @@ import { StatCard } from "@/components/StatCard";
 import { AlertTriangle, TrendingUp, CheckCircle, DollarSign } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useMemo, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import type { NationalKPITrend, RegionData } from "@/types/analytics";
 import RegionHeatmap from "./RegionHeatmap";

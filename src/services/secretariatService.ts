@@ -1,4 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
 import type { OfficialDecree, LegalReview, AdministrativeArchive } from "@/types/secretariat-general";
 
 export const secretariatService = {

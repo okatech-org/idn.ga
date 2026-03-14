@@ -1,5 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
 import React, { useState, useRef, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'next-themes';

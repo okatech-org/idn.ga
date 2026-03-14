@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 /**
  * iBoîte Message Service
  * 
@@ -5,7 +6,6 @@
  * Utilise Supabase avec fallback localStorage
  */
 
-import { supabase } from "@/integrations/supabase/client";
 
 // Message types
 export interface IBoiteMessage {

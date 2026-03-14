@@ -1,3 +1,5 @@
+import type { Database } from "@/integrations/supabase/types";
+import { supabase } from "@/integrations/supabase/client";
 import { useState } from 'react';
 import { FileText, FolderPlus, Search, Filter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -7,8 +9,6 @@ import { FolderManager } from './FolderManager';
 import { DocumentList } from './DocumentList';
 import { DocumentViewer } from './DocumentViewer';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import type { Database } from '@/integrations/supabase/types';
 
 type Document = Database['public']['Tables']['documents']['Row'];
 type Folder = Database['public']['Tables']['document_folders']['Row'];
